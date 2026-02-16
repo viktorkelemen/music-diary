@@ -1,0 +1,30 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EntryCard from "../components/EntryCard.astro";
+import { getCollection } from "astro:content";
+
+const entries = await getCollection("entries");
+entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<Layout>
+  {entries.length === 0 ? (
+    <p class="empty">No entries yet. Add a markdown file to <code>src/content/entries/</code> to get started.</p>
+  ) : (
+    entries.map((entry) => <EntryCard entry={entry} />)
+  )}
+</Layout>
+
+<style>
+  .empty {
+    color: #888;
+    font-style: italic;
+  }
+
+  .empty code {
+    background: #f3f4f6;
+    padding: 0.15em 0.35em;
+    border-radius: 3px;
+    font-style: normal;
+  }
+</style>

@@ -1,0 +1,94 @@
+---
+import VideoEmbed from "./VideoEmbed.astro";
+import MoodBoard from "./MoodBoard.astro";
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"entries">;
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const formattedDate = data.date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<article class="entry-card">
+  <header>
+    <time datetime={data.date.toISOString()}>{formattedDate}</time>
+    <h2>{data.title}</h2>
+  </header>
+
+  {data.videoUrl && <VideoEmbed url={data.videoUrl} />}
+
+  {data.moodboard && data.moodboard.length > 0 && (
+    <MoodBoard items={data.moodboard} />
+  )}
+
+  <div class="entry-notes">
+    <Content />
+  </div>
+</article>
+
+<style>
+  .entry-card {
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .entry-card:last-child {
+    border-bottom: none;
+  }
+
+  header {
+    margin-bottom: 1rem;
+  }
+
+  time {
+    font-size: 0.85rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  h2 {
+    margin: 0.25rem 0 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .entry-notes {
+    margin-top: 1rem;
+    line-height: 1.7;
+    color: #333;
+  }
+
+  .entry-notes :global(p) {
+    margin: 0.75rem 0;
+  }
+
+  .entry-notes :global(ul),
+  .entry-notes :global(ol) {
+    padding-left: 1.5rem;
+  }
+
+  .entry-notes :global(a) {
+    color: #2563eb;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  .entry-notes :global(code) {
+    background: #f3f4f6;
+    padding: 0.15em 0.35em;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+</style>

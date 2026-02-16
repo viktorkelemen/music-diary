@@ -1,0 +1,67 @@
+---
+interface Props {
+  url: string;
+}
+
+const { url } = Astro.props;
+
+function getYouTubeId(url: string): string | null {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  return match ? match[1] : null;
+}
+
+function isSoundCloud(url: string): boolean {
+  return url.includes("soundcloud.com");
+}
+
+const youtubeId = getYouTubeId(url);
+const soundcloud = !youtubeId && isSoundCloud(url);
+---
+
+{youtubeId && (
+  <div class="video-embed">
+    <iframe
+      src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+      title="YouTube video"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      loading="lazy"
+    />
+  </div>
+)}
+
+{soundcloud && (
+  <div class="video-embed">
+    <iframe
+      src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23333&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true`}
+      title="SoundCloud player"
+      allow="autoplay"
+      loading="lazy"
+      scrolling="no"
+      frameborder="no"
+    />
+  </div>
+)}
+
+<style>
+  .video-embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    margin: 1rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1a1a1a;
+  }
+
+  .video-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
