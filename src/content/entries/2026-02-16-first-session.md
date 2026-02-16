@@ -50,6 +50,19 @@ Deep dive into **Clicks & Cuts** — a movement in experimental electronic music
 
 Microscopic clicks & pops, digital buffer glitches, extreme frequency exploration, pointillist textures, dub-influenced bass and space, granular clouds, and silence as a compositional element.
 
+## Modular Synth Artists
+
+The original C&C movement was largely laptop/software-based — the modular world inherited and evolved the aesthetic as Eurorack exploded. These artists bridge the two worlds:
+
+- **Richard Devine** — the most direct overlap. Last three records made entirely out-of-the-box on his massive Eurorack system. Rapid clicks, metallic thrums, scattering beats — clicks & cuts realized in hardware
+- **Keith Fullerton Whitman** — moved from laptop glitch (*Playthroughs*) into hybrid digital-analog modular. His album *Occlusions* is subtitled "Real Time Music for Hybrid Digital-Analogue Modular Synthesizer"
+- **Pan Sonic** (Mika Vainio) — self-built electronics and raw analog circuits. Not Eurorack, but fully in the spirit of DIY hardware minimalism
+- **Marcus Fischer** — Eurorack, tape loops, and field recordings in a quiet microsound aesthetic. More restrained than Devine but very much in the genre
+- **Mouse on Mars** — Jan St. Werner collaborated with Peter Blasser (Ciat-Lonbarde) to create the Clicker, a synth for "microsecond orchestras" — clicks & cuts philosophy made physical
+- **Hainbach** — Ciat-Lonbarde synths, test equipment, and Eurorack for glitchy ambient textures
+
+Notable hardware: **Møffenzeef Mødular** built Eurorack modules specifically for clicks & cuts style glitch percussion.
+
 ## Modular Synth Takeaways
 
 - **Sound sources:** Granular modules (Morphagene, Arbhar), ultrashort envelopes (<1ms = click), FM at extreme ratios, self-oscillating filters
