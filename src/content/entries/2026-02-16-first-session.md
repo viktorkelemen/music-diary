@@ -1,26 +1,16 @@
 ---
-title: "Scales Practice"
+title: "Clicks & Cuts Research"
 date: 2026-02-16
 videoUrl: "https://youtube.com/shorts/4TkQUPIvmw8"
 moodboard:
-  - type: image
-    src: "/moodboards/placeholder.svg"
-    caption: "Winter vibes"
   - type: link
-    url: "https://soundcloud.com/discover"
-    title: "Inspiration track"
+    url: "/clicks-and-cuts-moodboard.html"
+    title: "Clicks & Cuts Mood Board"
+  - type: link
+    url: "https://youtube.com/shorts/xHe_F-GLuCM"
+    title: "Video 2"
 ---
 
-Worked through **C major** and **A minor** scales today, focusing on evenness and tone.
+Deep dive into **Clicks & Cuts** — glitch, microsound, and digital minimalism for modular synth exploration.
 
-## What went well
-
-- Smooth transitions between positions
-- Consistent tempo at 80 BPM
-
-## What to improve
-
-- Right hand pinky needs more strength
-- Try the same exercises in **D major** next time
-
-*Mood: Focused and calm.*
+Check out the full [Clicks & Cuts mood board](/clicks-and-cuts-moodboard.html) for artists, albums, labels, timeline, and modular synth techniques.

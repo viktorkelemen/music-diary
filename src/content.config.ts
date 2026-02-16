@@ -18,7 +18,7 @@ const entries = defineCollection({
           }),
           z.object({
             type: z.literal("link"),
-            url: z.string().url(),
+            url: z.string(),
             title: z.string(),
           }),
         ])

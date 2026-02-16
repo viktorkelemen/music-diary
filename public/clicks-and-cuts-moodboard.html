@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLICKS_+_CUTS // Mood Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f3f0;
+    --fg: #1a1a1a;
+    --accent: #0055cc;
+    --accent2: #cc2244;
+    --dim: #888;
+    --border: #d4d0ca;
+    --mono: 'Space Mono', 'IBM Plex Mono', 'Courier New', monospace;
+    --plex: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--plex);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ── SCANLINE OVERLAY ── */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  section {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── HEADER / HERO ── */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-title {
+    font-family: var(--mono);
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: #1a1a1a;
+    position: relative;
+  }
+
+  .hero-title .glitch {
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero-title .glitch::before,
+  .hero-title .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+  }
+
+  .hero-title .glitch::before {
+    color: var(--accent);
+    clip-path: inset(0 0 60% 0);
+    animation: glitch-top 3s infinite steps(1);
+  }
+
+  .hero-title .glitch::after {
+    color: var(--accent2);
+    clip-path: inset(60% 0 0 0);
+    animation: glitch-bottom 2.5s infinite steps(1);
+  }
+
+  @keyframes glitch-top {
+    0%, 90% { transform: translate(0); }
+    91% { transform: translate(-2px, -1px); }
+    93% { transform: translate(2px, 1px); }
+    95% { transform: translate(-1px, 2px); }
+    97% { transform: translate(1px, -1px); }
+    100% { transform: translate(0); }
+  }
+
+  @keyframes glitch-bottom {
+    0%, 88% { transform: translate(0); }
+    89% { transform: translate(3px, 1px); }
+    92% { transform: translate(-2px, -1px); }
+    94% { transform: translate(1px, 2px); }
+    96% { transform: translate(-1px, -2px); }
+    100% { transform: translate(0); }
+  }
+
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--dim);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .hero-sub span { color: var(--accent); }
+
+  .hero-meta {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.05em;
+  }
+
+  .hero-grid {
+    position: absolute;
+    top: 0; right: 0;
+    width: 40%;
+    height: 100%;
+    opacity: 0.08;
+    background-image:
+      linear-gradient(var(--accent) 1px, transparent 1px),
+      linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: var(--mono);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 32px;
+  }
+
+  .section-desc {
+    max-width: 700px;
+    color: #666;
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 48px;
+  }
+
+  /* ── GENRE OVERVIEW ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .overview-block {
+    padding: 32px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .overview-block::before {
+    content: attr(data-index);
+    position: absolute;
+    top: -10px; left: 16px;
+    background: var(--bg);
+    padding: 0 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  .overview-block h3 {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .overview-block p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  .overview-block ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .overview-block ul li {
+    font-size: 13px;
+    color: #555;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .overview-block ul li::before {
+    content: '//';
+    color: var(--accent);
+    margin-right: 8px;
+    font-size: 11px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 1px;
+    height: 100%;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 32px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -44px; top: 4px;
+    width: 8px; height: 8px;
+    background: var(--accent);
+  }
+
+  .timeline-year {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .timeline-text {
+    font-size: 13px;
+    color: #555;
+  }
+
+  .timeline-text strong { color: #1a1a1a; }
+
+  /* ── ARTIST CARDS ── */
+  .artist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .artist-card {
+    background: var(--bg);
+    padding: 32px;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .artist-card:hover {
+    background: #ece9e4;
+  }
+
+  .artist-card .artist-name {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+
+  .artist-card .artist-real {
+    font-size: 11px;
+    color: var(--dim);
+    margin-bottom: 12px;
+  }
+
+  .artist-card .artist-origin {
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .artist-card .artist-desc {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.7;
+  }
+
+  .artist-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    margin-top: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .artist-tag.modular {
+    border-color: #cc2244;
+    color: #cc2244;
+  }
+
+  /* ── MODULAR SPOTLIGHT ── */
+  .modular-spotlight {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .modular-card {
+    border: 1px solid var(--border);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .modular-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, transparent 50%, #cc224410 50%);
+  }
+
+  .modular-card .m-name {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+
+  .modular-card .m-real {
+    font-size: 12px;
+    color: #cc2244;
+    margin-bottom: 16px;
+  }
+
+  .modular-card .m-gear {
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding: 8px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modular-card .m-desc {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  .modular-card .m-albums {
+    margin-top: 16px;
+    font-size: 12px;
+    color: #777;
+  }
+
+  .modular-card .m-albums strong {
+    color: #333;
+  }
+
+  /* ── ALBUMS ── */
+  .album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+  }
+
+  .album-item {
+    border: 1px solid var(--border);
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .album-item:hover {
+    border-color: var(--dim);
+  }
+
+  .album-viz {
+    width: 100%;
+    aspect-ratio: 1;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* generative album art placeholders */
+  .album-viz canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .album-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+  }
+
+  .album-artist {
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .album-meta {
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  /* ── LABELS ── */
+  .label-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .label-card {
+    background: var(--bg);
+    padding: 32px;
+  }
+
+  .label-name {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+
+  .label-info {
+    font-size: 11px;
+    color: var(--dim);
+    margin-bottom: 12px;
+  }
+
+  .label-desc {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  /* ── VISUAL LANGUAGE ── */
+  .visual-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .visual-cell {
+    aspect-ratio: 1;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+  }
+
+  .visual-cell canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .visual-cell .visual-label {
+    position: absolute;
+    bottom: 8px; left: 8px;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .visual-cell:hover .visual-label {
+    opacity: 1;
+  }
+
+  /* ── PALETTE ── */
+  .palette-row {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 32px;
+  }
+
+  .palette-swatch {
+    flex: 1;
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+    padding: 8px;
+    font-size: 10px;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SONIC CHARACTERISTICS ── */
+  .sonic-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .sonic-item {
+    background: var(--bg);
+    padding: 24px;
+    font-size: 13px;
+    color: #555;
+  }
+
+  .sonic-item .sonic-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* ── FOR MODULAR ── */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+
+  .takeaway-card {
+    border: 1px solid var(--border);
+    padding: 32px;
+  }
+
+  .takeaway-card h3 {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: #cc2244;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+
+  .takeaway-card ul {
+    list-style: none;
+  }
+
+  .takeaway-card ul li {
+    font-size: 12px;
+    color: #555;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+  }
+
+  .takeaway-card ul li::before {
+    content: '\25A0';
+    color: var(--accent);
+    margin-right: 8px;
+    font-size: 8px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 0;
+    font-size: 11px;
+    color: var(--dim);
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .container { padding: 0 20px; }
+    .overview-grid,
+    .modular-spotlight,
+    .takeaway-grid { grid-template-columns: 1fr; }
+    .visual-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── BARCODE DECORATION ── */
+  .barcode {
+    display: flex;
+    gap: 1px;
+    align-items: flex-end;
+    height: 40px;
+    margin: 24px 0;
+    opacity: 0.3;
+  }
+
+  .barcode span {
+    display: block;
+    background: var(--fg);
+    width: 2px;
+  }
+
+  /* ── WAVEFORM ── */
+  .waveform-container {
+    width: 100%;
+    height: 60px;
+    margin: 32px 0;
+    opacity: 0.15;
+  }
+
+  .waveform-container canvas {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-title">
+      <span class="glitch" data-text="CLICKS">CLICKS</span><br>
+      <span style="color: var(--accent)">_+_</span><br>
+      <span class="glitch" data-text="CUTS">CUTS</span>
+    </div>
+    <div class="hero-sub">
+      <span>//</span> mood board for modular synthesis <span>//</span> glitch &middot; microsound &middot; digital minimalism
+    </div>
+  </div>
+  <div class="hero-meta">
+    PURPOSE: MODULAR SYNTH EXPLORATION &nbsp;&nbsp;|&nbsp;&nbsp; REF: MILLE_PLATEAUX.2000 &nbsp;&nbsp;|&nbsp;&nbsp; STATUS: RESEARCH
+  </div>
+</section>
+
+<!-- ═══════════════════ GENRE OVERVIEW ═══════════════════ -->
+<section id="overview">
+  <div class="container">
+    <div class="section-label">001 // DEFINITION</div>
+    <div class="section-title">What Is Clicks &amp; Cuts?</div>
+    <div class="section-desc">
+      A movement in experimental electronic music emerging circa 1999&ndash;2001 where artists deliberately
+      embraced digital errors, glitches, and sonic artifacts as primary creative material. The name was
+      codified by the German label Mille Plateaux through their compilation series
+      <em>clicks_+_cuts</em>, first released in 2000. It was never a rigid genre&mdash;more a shared
+      aesthetic sensibility among artists who amplified the sounds others sought to erase.
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-block" data-index="01_ORIGINS">
+        <h3>Origins</h3>
+        <p>
+          Rooted in Oval's CD-scratching experiments (1991&ndash;94), Pole's broken Waldorf filter (1998),
+          and the broader late-'90s laptop revolution. Mille Plateaux&mdash;named after Deleuze &amp;
+          Guattari's philosophical work&mdash;gave the movement its name and platform through six
+          compilation volumes (2000&ndash;2005).
+        </p>
+      </div>
+      <div class="overview-block" data-index="02_ADJACENT">
+        <h3>Related Genres</h3>
+        <ul>
+          <li>Glitch (the broad umbrella)</li>
+          <li>IDM / Intelligent Dance Music</li>
+          <li>Microhouse (danceable end)</li>
+          <li>Dub Techno (Pole, Vladislav Delay)</li>
+          <li>Microsound / Lowercase (ambient end)</li>
+          <li>Musique Concr&egrave;te (historical ancestor)</li>
+          <li>Electroacoustic composition</li>
+        </ul>
+      </div>
+      <div class="overview-block" data-index="03_SONIC">
+        <h3>Sonic Palette</h3>
+        <ul>
+          <li>Microscopic clicks, pops, crackles</li>
+          <li>Digital buffer glitches &amp; bit-reduction</li>
+          <li>Extreme frequency exploration</li>
+          <li>Pointillist textures</li>
+          <li>Dub-influenced bass and space</li>
+          <li>Processed field recordings</li>
+          <li>Silence as compositional element</li>
+        </ul>
+      </div>
+      <div class="overview-block" data-index="04_PURPOSE">
+        <h3>Why This Matters for Modular</h3>
+        <p>
+          Clicks &amp; Cuts aesthetics translate directly to modular synthesis: granular textures from
+          clock-synced noise, bit-crushed oscillators, chaotic clocking, sample-and-hold randomness,
+          envelope followers on external noise, and extreme filtering. Several key artists in this
+          scene actively use Eurorack and analog modular systems.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ SONIC CHARACTERISTICS ═══════════════════ -->
+<section id="sonic">
+  <div class="container">
+    <div class="section-label">002 // SONIC DNA</div>
+    <div class="section-title">Characteristic Sound Elements</div>
+    <div class="sonic-list">
+      <div class="sonic-item">
+        <div class="sonic-label">Micro-Events</div>
+        Tiny individual sonic particles: clicks, pops, ticks, crackles scattered in time like pointillist dots on canvas
+      </div>
+      <div class="sonic-item">
+        <div class="sonic-label">Digital Artifacts</div>
+        Buffer overruns, bit-reduction, aliasing, sample-rate errors, quantization noise&mdash;embraced as musical material
+      </div>
+      <div class="sonic-item">
+        <div class="sonic-label">Extreme Frequencies</div>
+        Sub-bass rumbles pushing speaker limits alongside ultrasonic sine tones at the edge of perception
+      </div>
+      <div class="sonic-item">
+        <div class="sonic-label">Negative Space</div>
+        Silence treated as an equal compositional element. Sparse arrangements where what is absent matters as much as what is present
+      </div>
+      <div class="sonic-item">
+        <div class="sonic-label">Dub Space</div>
+        Heavy low-end, cavernous reverb, and delay feedback inherited from dub reggae, recontextualized in digital minimalism
+      </div>
+      <div class="sonic-item">
+        <div class="sonic-label">Granular Textures</div>
+        Sound decomposed into microsecond grains and reassembled into clouds, swarms, and cascading streams
+      </div>
+      <div class="sonic-item">
+        <div class="sonic-label">Error as Structure</div>
+        Broken hardware, corrupted files, and feedback loops as compositional starting points rather than problems to fix
+      </div>
+      <div class="sonic-item">
+        <div class="sonic-label">Minimal Rhythm</div>
+        Stripped-back pulse built from tiny percussive events&mdash;the hi-hat replaced by a sibilant tic, the kick by a sub-rumble
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ TIMELINE ═══════════════════ -->
+<section id="timeline">
+  <div class="container">
+    <div class="section-label">003 // CHRONOLOGY</div>
+    <div class="section-title">Key Moments</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">1991</div>
+        <div class="timeline-text"><strong>Oval</strong> founded in Germany. Markus Popp begins scratching CDs with scissors to create glitch loops</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1993</div>
+        <div class="timeline-text"><strong>Mille Plateaux</strong> label founded by Achim Szepanski in Frankfurt. <strong>Pan Sonic</strong> (as Panasonic) forms in Finland</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1994</div>
+        <div class="timeline-text">Oval releases <strong>Systemisch</strong> on Mille Plateaux&mdash;foundational text of glitch music. <strong>Mego</strong> label founded in Vienna</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1996</div>
+        <div class="timeline-text"><strong>Rastermusik</strong> founded (precursor to Raster-Noton). Ryoji Ikeda releases <strong>+/-</strong> on Touch. <strong>Noton</strong> (Archive for Sound and Non-Sound) founded by Carsten Nicolai</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1997</div>
+        <div class="timeline-text"><strong>12k</strong> label founded by Taylor Deupree in New York. Monolake releases <strong>Hongkong</strong> on Chain Reaction</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1998</div>
+        <div class="timeline-text"><strong>Pole</strong> releases <strong>1</strong>&mdash;made with a broken Waldorf 4-Pole filter. Dub meets glitch</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1999</div>
+        <div class="timeline-text"><strong>Raster-Noton</strong> formed from merger of Rastermusik + Noton. <strong>~scape</strong> label founded by Pole. SND releases <strong>Makesnd Cassette</strong> on Mille Plateaux</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2000</div>
+        <div class="timeline-text"><strong>Clicks_+_Cuts Vol. 1</strong> released on Mille Plateaux&mdash;the genre gets its name. Vladislav Delay releases <strong>Entain</strong> and <strong>Multila</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2001</div>
+        <div class="timeline-text">Fennesz releases <strong>Endless Summer</strong> on Mego. Jan Jelinek releases <strong>Loop-Finding-Jazz-Records</strong>. Alva Noto releases <strong>Transform</strong>. <strong>Cyclo.</strong> collaboration begins (Ikeda + Nicolai)</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2002</div>
+        <div class="timeline-text">Historic <strong>Vainio + Ikeda + Alva Noto</strong> live collaboration at BALTIC Centre, Newcastle. Only time the trio performed together</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2007&ndash;2024</div>
+        <div class="timeline-text">Alva Noto's <strong>Xerrox</strong> pentalogy spans nearly two decades (Vol. 1 through Vol. 5). Genre aesthetics continue evolving through Eurorack modular synthesis</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ARTISTS ═══════════════════ -->
+<section id="artists">
+  <div class="container">
+    <div class="section-label">004 // ARTISTS</div>
+    <div class="section-title">Key Figures</div>
+    <div class="section-desc">Pioneers, core artists, and contemporary practitioners of the clicks &amp; cuts aesthetic.</div>
+
+    <div class="artist-grid">
+      <div class="artist-card">
+        <div class="artist-name">Oval</div>
+        <div class="artist-real">Markus Popp</div>
+        <div class="artist-origin">Berlin, Germany</div>
+        <div class="artist-desc">Pioneer of glitch. Physically damaged CDs with scissors and knives to create skipping sounds and randomly generated loops. Albums Systemisch and 94diskont. are foundational.</div>
+        <span class="artist-tag">Pioneer</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Alva Noto</div>
+        <div class="artist-real">Carsten Nicolai</div>
+        <div class="artist-origin">Chemnitz, Germany</div>
+        <div class="artist-desc">Audio-visual artist, co-founded Raster-Noton. Works with sine waves, granular synthesis, data-driven sound. Iconic collaborations with Ryuichi Sakamoto.</div>
+        <span class="artist-tag">Pioneer</span>
+        <span class="artist-tag modular">EMS Synthi / Doepfer</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Ryoji Ikeda</div>
+        <div class="artist-real">&nbsp;</div>
+        <div class="artist-origin">Gifu, Japan</div>
+        <div class="artist-desc">Ultra-minimalist working across sound and visual media. Converts data into barcode patterns and binary. Created datamatics and test pattern series.</div>
+        <span class="artist-tag">Pioneer</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Pole</div>
+        <div class="artist-real">Stefan Betke</div>
+        <div class="artist-origin">Berlin, Germany</div>
+        <div class="artist-desc">Created dub-glitch by using a broken Waldorf 4-Pole filter. Founded ~scape label. Trilogy of albums (1, 2, 3) defined a subgenre.</div>
+        <span class="artist-tag">Pioneer</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Pan Sonic</div>
+        <div class="artist-real">Mika Vainio + Ilpo V&auml;is&auml;nen</div>
+        <div class="artist-origin">Turku, Finland</div>
+        <div class="artist-desc">Raw analog minimalism using self-built electronics. Influenced by musique concr&egrave;te, Suicide, and Kraftwerk. Brutal sub-bass and piercing sine tones.</div>
+        <span class="artist-tag">Pioneer</span>
+        <span class="artist-tag modular">Self-built Hardware</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Fennesz</div>
+        <div class="artist-real">Christian Fennesz</div>
+        <div class="artist-origin">Vienna, Austria</div>
+        <div class="artist-desc">Guitar processed through laptops into lush glitch textures. Endless Summer (2001) merged melody with digital noise&mdash;a landmark album.</div>
+        <span class="artist-tag">Pioneer</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Jan Jelinek</div>
+        <div class="artist-real">also: Farben</div>
+        <div class="artist-origin">Berlin, Germany</div>
+        <div class="artist-desc">Micro-sampled jazz and funk records into glitch-house textures. Loop-Finding-Jazz-Records on ~scape is a masterpiece of the genre.</div>
+        <span class="artist-tag">Core</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Frank Bretschneider</div>
+        <div class="artist-real">aka Komet</div>
+        <div class="artist-origin">Chemnitz, Germany</div>
+        <div class="artist-desc">Co-founded Rastermusik. Minimalist rhythmic structures with integrated visual elements. Rhythm (2007) was Wire magazine's top release.</div>
+        <span class="artist-tag">Core</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">SND</div>
+        <div class="artist-real">Mark Fell + Mat Steel</div>
+        <div class="artist-origin">Sheffield, UK</div>
+        <div class="artist-desc">Precise, minimal rhythmic works on Mille Plateaux. Simultaneously experimental and danceable. Mathematical precision in sound.</div>
+        <span class="artist-tag">Core</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Vladislav Delay</div>
+        <div class="artist-real">Sasu Ripatti</div>
+        <div class="artist-origin">Finland</div>
+        <div class="artist-desc">Dub-inflected glitch with extraordinary depth. Entain on Mille Plateaux and Multila on Chain Reaction are essential documents.</div>
+        <span class="artist-tag">Core</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Taylor Deupree</div>
+        <div class="artist-real">&nbsp;</div>
+        <div class="artist-origin">New York, USA</div>
+        <div class="artist-desc">Founded 12k label. Pioneer of microsound&mdash;miniature blips, acoustic/electronic fusion. Gentle but precise.</div>
+        <span class="artist-tag">Core</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Thomas Brinkmann</div>
+        <div class="artist-real">&nbsp;</div>
+        <div class="artist-origin">Cologne, Germany</div>
+        <div class="artist-desc">Turntable manipulation and experimental electronics. Featured on Clicks &amp; Cuts Vol. 1. Cologne school of sound.</div>
+        <span class="artist-tag">Core</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Monolake</div>
+        <div class="artist-real">Robert Henke</div>
+        <div class="artist-origin">Berlin, Germany</div>
+        <div class="artist-desc">Co-created Ableton Live. Pioneered Berlin club culture with deep, textural techno. Hongkong on Chain Reaction is a classic.</div>
+        <span class="artist-tag">Core</span>
+        <span class="artist-tag modular">Eurorack / Cirklon / Max</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Byetone</div>
+        <div class="artist-real">Olaf Bender</div>
+        <div class="artist-origin">Germany</div>
+        <div class="artist-desc">Co-founder of Raster-Noton and the label's visual designer. Dance-floor-centric minimalism with precise visual identity.</div>
+        <span class="artist-tag">Core</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Emptyset</div>
+        <div class="artist-real">James Ginzburg + Paul Purgas</div>
+        <div class="artist-origin">Bristol, UK</div>
+        <div class="artist-desc">Explore analogue signal chains and architecture-as-instrument. Everything in the analogue domain except computer as capture device.</div>
+        <span class="artist-tag">Contemporary</span>
+        <span class="artist-tag modular">Analogue Signal Chains</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Kit Clayton</div>
+        <div class="artist-real">&nbsp;</div>
+        <div class="artist-origin">USA</div>
+        <div class="artist-desc">Key Mille Plateaux artist. Featured on the foundational Clicks &amp; Cuts Vol. 1 compilation.</div>
+        <span class="artist-tag">Core</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Rashad Becker</div>
+        <div class="artist-real">&nbsp;</div>
+        <div class="artist-origin">Berlin, Germany</div>
+        <div class="artist-desc">Legendary mastering engineer and composer. Uses Eurorack modular synthesis alongside additional processing techniques.</div>
+        <span class="artist-tag">Contemporary</span>
+        <span class="artist-tag modular">Eurorack</span>
+      </div>
+
+      <div class="artist-card">
+        <div class="artist-name">Sutekh</div>
+        <div class="artist-real">Travis Thatcher</div>
+        <div class="artist-origin">USA</div>
+        <div class="artist-desc">Glitch-house artist featured on Clicks &amp; Cuts compilations. Dancefloor-oriented glitch textures.</div>
+        <span class="artist-tag">Core</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ MODULAR SPOTLIGHT ═══════════════════ -->
+<section id="modular">
+  <div class="container">
+    <div class="section-label">005 // MODULAR SYNTH INTERSECTION</div>
+    <div class="section-title">Clicks &amp; Cuts &times; Modular</div>
+    <div class="section-desc">
+      Artists who bridge clicks &amp; cuts aesthetics with hardware modular synthesis.
+      These are your primary references for recreating this sound world with a modular rig.
+    </div>
+
+    <div class="modular-spotlight">
+      <div class="modular-card">
+        <div class="m-name">Richard Devine</div>
+        <div class="m-real">Atlanta, USA &mdash; Detroit Underground / Schematic</div>
+        <div class="m-gear">Massive Eurorack system // Uses modular almost every day</div>
+        <div class="m-desc">
+          His last three records were created entirely out-of-the-box using modular and hardware.
+          Released all-modular records "Creature I" and "Creature II" on MakeNoise Records. Rapid
+          clicks, metallic thrums, and scattered glitch beats. Has a sprawling modular collection
+          built over more than a decade. Essential reference for translating C&amp;C to Eurorack.
+        </div>
+        <div class="m-albums"><strong>Key:</strong> Creature I, Creature II, Sort\Lave, Lipswitch</div>
+      </div>
+
+      <div class="modular-card">
+        <div class="m-name">Keith Fullerton Whitman</div>
+        <div class="m-real">Brooklyn, USA &mdash; Kranky / Various</div>
+        <div class="m-gear">Eurorack // Serge Modular // Buchla</div>
+        <div class="m-desc">
+          Performs exclusively on Eurorack-format modular synthesizers. Occlusions (2012&ndash;14):
+          hybrid digital/analogue modular pieces aiming for free jazz sensibility. Brilliantly
+          utilizes control voltage that feeds back with audio. Has worked with Max/MSP and was
+          granted access to the GRM studio.
+        </div>
+        <div class="m-albums"><strong>Key:</strong> Playthroughs, Occlusions, Multiples, Redactions</div>
+      </div>
+
+      <div class="modular-card">
+        <div class="m-name">Robert Henke</div>
+        <div class="m-real">Monolake &mdash; Berlin, Germany</div>
+        <div class="m-gear">Eurorack // Cirklon sequencer // Max/MSP // CBM 8032</div>
+        <div class="m-desc">
+          Co-creator of Ableton Live. Integrates Cirklon hardware sequencer into modular synthesis
+          rig. Created a Eurorack module interfacing a Commodore CBM 8032 with a modular system.
+          Deep Web laser installation bridges club aesthetics with gallery art.
+        </div>
+        <div class="m-albums"><strong>Key:</strong> Hongkong, Momentum, Ghosts, Silence</div>
+      </div>
+
+      <div class="modular-card">
+        <div class="m-name">Alva Noto</div>
+        <div class="m-real">Carsten Nicolai &mdash; Chemnitz/Berlin, Germany</div>
+        <div class="m-gear">EMS Synthi // Doepfer modules // Theremin-controlled LFOs</div>
+        <div class="m-desc">
+          Uses an EMS Synthi synthesizer extensively, and Doepfer modular systems with theremin
+          modules for LFO/frequency modulation. Reportedly prefers programming from his EMS over
+          pure modular. Also works with granular synthesis, iPad apps, and natural sound sources
+          (water droplets, snowflakes).
+        </div>
+        <div class="m-albums"><strong>Key:</strong> Transform, Unitxt, Xerrox series, Vrioon (w/ Sakamoto)</div>
+      </div>
+
+      <div class="modular-card">
+        <div class="m-name">Rashad Becker</div>
+        <div class="m-real">Berlin, Germany &mdash; PAN</div>
+        <div class="m-gear">Eurorack (documented on ModularGrid)</div>
+        <div class="m-desc">
+          Legendary mastering engineer who has cut countless electronic/experimental records. His
+          own compositions are built with modular synthesis plus additional processing techniques
+          like timestretch. The music is alien and deeply strange.
+        </div>
+        <div class="m-albums"><strong>Key:</strong> Traditional Music of Notional Species Vol. I &amp; II</div>
+      </div>
+
+      <div class="modular-card">
+        <div class="m-name">Emptyset</div>
+        <div class="m-real">James Ginzburg + Paul Purgas &mdash; Bristol, UK</div>
+        <div class="m-gear">Analogue signal chains // Hardware-only (except capture)</div>
+        <div class="m-desc">
+          Everything in the analogue domain. Explore complex "rule-sets" with hardware in
+          labyrinthine signal chains. Architecture as instrument&mdash;have recorded in
+          resonant spaces like abandoned power stations.
+        </div>
+        <div class="m-albums"><strong>Key:</strong> Collapsed, Recur, Signal, Borders</div>
+      </div>
+    </div>
+
+    <!-- Eurorack modules for this style -->
+    <div style="margin-top: 48px; padding: 32px; border: 1px solid var(--border);">
+      <h3 style="font-family: var(--mono); font-size: 13px; color: #cc2244; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">
+        Eurorack Modules for C&amp;C Aesthetics
+      </h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 12px; color: #555; line-height: 1.8;">
+        <div>
+          <strong style="color: #333;">Moffenzeef Modular</strong><br>
+          Specializes in clicks &amp; cuts style glitch percussion. Their mission is Eurorack drum
+          machines built for this exact aesthetic.
+        </div>
+        <div>
+          <strong style="color: #333;">Perfect Circuit Glitch Systems</strong><br>
+          Systems incorporating granular synthesis, FM, VOSIM, wavetables, and physical modeling&mdash;
+          inspired by Autechre, Ryoji Ikeda, Kim Cascone.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ KEY ALBUMS ═══════════════════ -->
+<section id="albums">
+  <div class="container">
+    <div class="section-label">006 // DISCOGRAPHY</div>
+    <div class="section-title">Essential Albums</div>
+    <div class="section-desc">Core releases that define the clicks &amp; cuts sound. Each album cover placeholder
+      is generated algorithmically in the spirit of the genre's visual language.</div>
+
+    <div class="album-grid" id="albumGrid">
+      <!-- Albums injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ COMPILATIONS ═══════════════════ -->
+<section id="compilations">
+  <div class="container">
+    <div class="section-label">007 // THE COMPILATIONS</div>
+    <div class="section-title">Mille Plateaux: clicks_+_cuts Series</div>
+    <div class="section-desc">The six compilations that gave the movement its name.</div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border);">
+      <div style="background: var(--bg); padding: 32px;">
+        <div style="font-family: var(--mono); font-size: 14px; color: #1a1a1a; font-weight: 700;">Vol. 1</div>
+        <div style="font-size: 11px; color: var(--accent); margin-bottom: 12px;">2000</div>
+        <div style="font-size: 11px; color: #555; line-height: 1.8;">
+          The foundational volume. Bretschneider, SND, Farben, Vladislav Delay, Pole, Pan Sonic, Alva Noto, Kit Clayton, Dettinger, Sutekh, Neina
+        </div>
+      </div>
+      <div style="background: var(--bg); padding: 32px;">
+        <div style="font-family: var(--mono); font-size: 14px; color: #1a1a1a; font-weight: 700;">Vol. 2</div>
+        <div style="font-size: 11px; color: var(--accent); margin-bottom: 12px;">2001</div>
+        <div style="font-size: 11px; color: #555; line-height: 1.8;">Expanded the roster, deepened the aesthetic</div>
+      </div>
+      <div style="background: var(--bg); padding: 32px;">
+        <div style="font-family: var(--mono); font-size: 14px; color: #1a1a1a; font-weight: 700;">Vol. 3</div>
+        <div style="font-size: 11px; color: var(--accent); margin-bottom: 12px;">2002</div>
+        <div style="font-size: 11px; color: #555; line-height: 1.8;">Continued evolution of the glitch aesthetic</div>
+      </div>
+      <div style="background: var(--bg); padding: 32px;">
+        <div style="font-family: var(--mono); font-size: 14px; color: #1a1a1a; font-weight: 700;">Vol. 4</div>
+        <div style="font-size: 11px; color: var(--accent); margin-bottom: 12px;">2004</div>
+        <div style="font-size: 11px; color: #555; line-height: 1.8;">Mid-era compilation as the scene matured</div>
+      </div>
+      <div style="background: var(--bg); padding: 32px;">
+        <div style="font-family: var(--mono); font-size: 14px; color: #1a1a1a; font-weight: 700;">Vol. 5</div>
+        <div style="font-size: 11px; color: var(--accent); margin-bottom: 12px;">Paradigm Shift</div>
+        <div style="font-size: 11px; color: #555; line-height: 1.8;">New generation: Aoki Takamasa, Manathol, Wyatt Keusch</div>
+      </div>
+      <div style="background: var(--bg); padding: 32px;">
+        <div style="font-family: var(--mono); font-size: 14px; color: #1a1a1a; font-weight: 700;">Vol. 6</div>
+        <div style="font-size: 11px; color: var(--accent); margin-bottom: 12px;">&nbsp;</div>
+        <div style="font-size: 11px; color: #555; line-height: 1.8;">Final installment of the series</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ LABELS ═══════════════════ -->
+<section id="labels">
+  <div class="container">
+    <div class="section-label">008 // INFRASTRUCTURE</div>
+    <div class="section-title">Record Labels</div>
+
+    <div class="label-grid">
+      <div class="label-card">
+        <div class="label-name">Mille Plateaux</div>
+        <div class="label-info">Frankfurt, Germany &middot; Founded 1993 &middot; Achim Szepanski</div>
+        <div class="label-desc">Named after Deleuze &amp; Guattari. Home of the Clicks &amp; Cuts compilation series. Codified the glitch movement.</div>
+      </div>
+      <div class="label-card">
+        <div class="label-name">Raster-Noton</div>
+        <div class="label-info">Chemnitz/Berlin &middot; Founded 1999 &middot; Nicolai, Bender, Bretschneider</div>
+        <div class="label-desc">Now Raster Media. Overlapping borders of pop, art, and science. Transparent CDs, anti-static bag packaging. The gold standard of minimal design.</div>
+      </div>
+      <div class="label-card">
+        <div class="label-name">12k</div>
+        <div class="label-info">New York, USA &middot; Founded 1997 &middot; Taylor Deupree</div>
+        <div class="label-desc">Microsound, fusing ambient + acoustic + digital textures. Quiet, precise, intimate.</div>
+      </div>
+      <div class="label-card">
+        <div class="label-name">LINE</div>
+        <div class="label-info">USA &middot; Founded 2000 &middot; Sub-label of 12k</div>
+        <div class="label-desc">Ultra-minimalist sound. The relationship between sound, silence, and the act of listening.</div>
+      </div>
+      <div class="label-card">
+        <div class="label-name">Editions Mego</div>
+        <div class="label-info">Vienna, Austria &middot; Founded 1994/2005 &middot; Peter Rehberg</div>
+        <div class="label-desc">Name allegedly from "My Eyes Glaze Over." Released Fennesz's landmark Endless Summer. Wildly unpredictable catalog.</div>
+      </div>
+      <div class="label-card">
+        <div class="label-name">~scape</div>
+        <div class="label-info">Berlin, Germany &middot; Founded 1999 &middot; Stefan Betke (Pole)</div>
+        <div class="label-desc">Home to Pole and Jan Jelinek. The dub-glitch-microhouse intersection.</div>
+      </div>
+      <div class="label-card">
+        <div class="label-name">Chain Reaction</div>
+        <div class="label-info">Berlin &middot; Founded 1995 &middot; Ernestus + von Oswald (Basic Channel)</div>
+        <div class="label-desc">Dub techno foundation. Released Vladislav Delay, Monolake. Deep, hypnotic, infinite.</div>
+      </div>
+      <div class="label-card">
+        <div class="label-name">Touch</div>
+        <div class="label-info">London, UK &middot; Founded 1982 &middot; Jon Wozencroft</div>
+        <div class="label-desc">Ryoji Ikeda's home label. Art-focused electroacoustic releases with meticulous packaging.</div>
+      </div>
+      <div class="label-card">
+        <div class="label-name">Schematic</div>
+        <div class="label-info">Miami, USA &middot; Founded 1996</div>
+        <div class="label-desc">Home to Richard Devine. IDM/glitch with bold visual design.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ VISUAL LANGUAGE ═══════════════════ -->
+<section id="visuals">
+  <div class="container">
+    <div class="section-label">009 // VISUAL DNA</div>
+    <div class="section-title">Aesthetic Language</div>
+    <div class="section-desc">
+      The visual identity of clicks &amp; cuts is one of the most cohesive in electronic music.
+      Rooted in Swiss typography, constructivism, and early computer graphics.
+    </div>
+
+    <!-- Generative visual grid -->
+    <div class="visual-grid" id="visualGrid">
+      <!-- Cells injected by JS -->
+    </div>
+
+    <!-- Color Palette -->
+    <div style="margin-top: 48px;">
+      <div style="font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;">Color Palette</div>
+      <div class="palette-row">
+        <div class="palette-swatch" style="background: #f5f3f0; color: #999; border: 1px solid #d4d0ca;">#f5f3f0</div>
+        <div class="palette-swatch" style="background: #e8e4de; color: #888;">#e8e4de</div>
+        <div class="palette-swatch" style="background: #1a1a1a; color: #666;">#1a1a1a</div>
+        <div class="palette-swatch" style="background: #ffffff; color: #999; border: 1px solid #d4d0ca;">#ffffff</div>
+        <div class="palette-swatch" style="background: #0055cc; color: #aaccff;">#0055cc</div>
+        <div class="palette-swatch" style="background: #cc2244; color: #ffaabb;">#cc2244</div>
+        <div class="palette-swatch" style="background: #333333; color: #999;">#333333</div>
+      </div>
+    </div>
+
+    <!-- Design Principles -->
+    <div style="margin-top: 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+      <div style="border: 1px solid var(--border); padding: 24px;">
+        <div style="font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;">Typography</div>
+        <div style="font-size: 12px; color: #555; line-height: 1.8;">
+          Sans-serif, monospaced, code-style. Stark grid-based layouts. Helvetica, DIN, or custom geometric typefaces. Generous tracking.
+        </div>
+      </div>
+      <div style="border: 1px solid var(--border); padding: 24px;">
+        <div style="font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;">Imagery</div>
+        <div style="font-size: 12px; color: #555; line-height: 1.8;">
+          Data visualization, waveforms, spectrograms, barcode patterns, pixel artifacts, glitch art, electron microscopy, molecular structures.
+        </div>
+      </div>
+      <div style="border: 1px solid var(--border); padding: 24px;">
+        <div style="font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;">Principles</div>
+        <div style="font-size: 12px; color: #555; line-height: 1.8;">
+          Reductionism. Negative space. Anti-ornament. Mathematical precision with intentional corruption. The grid, then the glitch.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ MODULAR TAKEAWAYS ═══════════════════ -->
+<section id="takeaway">
+  <div class="container">
+    <div class="section-label">010 // APPLICATION</div>
+    <div class="section-title">Translating to Modular Synth</div>
+    <div class="section-desc">
+      Practical techniques for recreating clicks &amp; cuts aesthetics on a modular synthesizer.
+    </div>
+
+    <div class="takeaway-grid">
+      <div class="takeaway-card">
+        <h3>Sound Sources</h3>
+        <ul>
+          <li>Granular synthesis modules (Morphagene, Nebulae, Arbhar)</li>
+          <li>Digital noise generators bit-crushed through sample-rate reducers</li>
+          <li>Ultrashort envelopes on oscillators (&lt;1ms = click)</li>
+          <li>FM synthesis at audio-rate with extreme ratios</li>
+          <li>Physical modeling for metallic/resonant tones</li>
+          <li>Self-oscillating filters as sine sources</li>
+        </ul>
+      </div>
+      <div class="takeaway-card">
+        <h3>Processing</h3>
+        <ul>
+          <li>Extreme bandpass filtering (isolate micro-frequencies)</li>
+          <li>Sample &amp; hold on audio signals for bit-crush effect</li>
+          <li>Wavefolder at extreme settings for digital-sounding distortion</li>
+          <li>Feedback patching through delay lines</li>
+          <li>Resonant filters with CV-controlled cutoff at audio rate</li>
+          <li>Reverb into distortion into reverb (dub chains)</li>
+        </ul>
+      </div>
+      <div class="takeaway-card">
+        <h3>Sequencing &amp; Control</h3>
+        <ul>
+          <li>Chaotic/random clock sources for irregular rhythms</li>
+          <li>Probabilistic triggers (Marbles, Branches)</li>
+          <li>Clock dividers and multipliers for polyrhythm</li>
+          <li>Envelope followers on external audio (microphone feedback)</li>
+          <li>Bernoulli gates for stochastic event distribution</li>
+          <li>Sub-audio LFOs modulating everything slowly</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Moffenzeef callout -->
+    <div style="margin-top: 32px; padding: 24px; border: 1px solid #cc2244; font-size: 12px; color: #555; line-height: 1.8;">
+      <strong style="color: #cc2244; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;">MODULE TIP:</strong>
+      Moffenzeef Modular specializes in Eurorack drum machines explicitly designed for clicks &amp; cuts style glitch percussion.
+      Perfect Circuit also offers curated "Glitch Systems" inspired by this aesthetic.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div class="container">
+    CLICKS_+_CUTS // MOOD BOARD // MODULAR SYNTH RESEARCH // 2026
+  </div>
+</footer>
+
+<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+<script>
+// ── Album data ──
+const albums = [
+  { title: 'Systemisch', artist: 'Oval', year: 1994, label: 'Mille Plateaux', hue: 0 },
+  { title: '94diskont.', artist: 'Oval', year: 1995, label: 'Mille Plateaux', hue: 30 },
+  { title: '1', artist: 'Pole', year: 1998, label: '~scape', hue: 200 },
+  { title: '2', artist: 'Pole', year: 1999, label: '~scape', hue: 210 },
+  { title: '3', artist: 'Pole', year: 2000, label: '~scape', hue: 220 },
+  { title: 'Endless Summer', artist: 'Fennesz', year: 2001, label: 'Mego', hue: 45 },
+  { title: 'Loop-Finding-Jazz-Records', artist: 'Jan Jelinek', year: 2001, label: '~scape', hue: 120 },
+  { title: 'Entain', artist: 'Vladislav Delay', year: 2000, label: 'Mille Plateaux', hue: 180 },
+  { title: 'Multila', artist: 'Vladislav Delay', year: 2000, label: 'Chain Reaction', hue: 190 },
+  { title: '+/-', artist: 'Ryoji Ikeda', year: 1996, label: 'Touch', hue: 0 },
+  { title: 'Dataplex', artist: 'Ryoji Ikeda', year: 2005, label: 'Raster-Noton', hue: 260 },
+  { title: 'Transform', artist: 'Alva Noto', year: 2001, label: 'Raster-Noton', hue: 280 },
+  { title: 'Unitxt', artist: 'Alva Noto', year: 2008, label: 'Raster-Noton', hue: 300 },
+  { title: 'Vrioon', artist: 'Alva Noto + Ryuichi Sakamoto', year: 2002, label: 'Raster-Noton', hue: 240 },
+  { title: 'Vakio', artist: 'Pan Sonic', year: 1995, label: 'Blast First', hue: 0 },
+  { title: 'Hongkong', artist: 'Monolake', year: 1997, label: 'Chain Reaction', hue: 160 },
+  { title: 'Rhythm', artist: 'Frank Bretschneider', year: 2007, label: 'Raster-Noton', hue: 330 },
+  { title: 'Makesnd Cassette', artist: 'SND', year: 1999, label: 'Mille Plateaux', hue: 90 },
+  { title: 'Collapsed', artist: 'Emptyset', year: 2012, label: 'Raster-Noton', hue: 0 },
+  { title: 'Playthroughs', artist: 'Keith Fullerton Whitman', year: 2002, label: 'Kranky', hue: 140 },
+  { title: 'Creature I', artist: 'Richard Devine', year: 2017, label: 'MakeNoise', hue: 60 },
+  { title: 'Occlusions', artist: 'Keith Fullerton Whitman', year: 2014, label: 'Various', hue: 150 },
+  { title: 'Death of a Typographer', artist: 'Byetone', year: 2008, label: 'Raster-Noton', hue: 350 },
+  { title: 'Live 2002', artist: 'Vainio + Ikeda + Alva Noto', year: 2018, label: 'Noton', hue: 0 },
+];
+
+// ── Generate algorithmic album art ──
+function drawAlbumArt(canvas, album, idx) {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width = 300;
+  const h = canvas.height = 300;
+  const seed = idx * 7919 + album.year;
+
+  function rand(s) {
+    let x = Math.sin(s) * 10000;
+    return x - Math.floor(x);
+  }
+
+  // Background - light warm tone
+  ctx.fillStyle = album.hue === 0 ? '#eae7e2' : `hsl(${album.hue}, 8%, 92%)`;
+  ctx.fillRect(0, 0, w, h);
+
+  const style = idx % 6;
+
+  if (style === 0) {
+    // Barcode
+    for (let x = 0; x < w; x += 2) {
+      const r = rand(seed + x);
+      if (r > 0.4) {
+        ctx.fillStyle = `rgba(${album.hue === 0 ? '30,30,30' : '0,85,204'}, ${r * 0.6})`;
+        ctx.fillRect(x, 0, 1, h);
+      }
+    }
+  } else if (style === 1) {
+    // Grid with dots
+    for (let x = 10; x < w; x += 15) {
+      for (let y = 10; y < h; y += 15) {
+        const r = rand(seed + x * 31 + y * 17);
+        if (r > 0.5) {
+          ctx.fillStyle = `rgba(30,30,30,${r * 0.4})`;
+          ctx.fillRect(x, y, 2, 2);
+        }
+      }
+    }
+  } else if (style === 2) {
+    // Horizontal lines
+    for (let y = 0; y < h; y += 3) {
+      const r = rand(seed + y);
+      ctx.fillStyle = `rgba(30,30,30,${r * 0.15})`;
+      ctx.fillRect(0, y, w * rand(seed + y + 1), 1);
+    }
+  } else if (style === 3) {
+    // Scattered rectangles
+    for (let i = 0; i < 40; i++) {
+      const r1 = rand(seed + i * 3);
+      const r2 = rand(seed + i * 7);
+      const r3 = rand(seed + i * 11);
+      ctx.fillStyle = `rgba(0,85,204,${r3 * 0.4})`;
+      ctx.fillRect(r1 * w, r2 * h, rand(seed + i * 13) * 60 + 2, 2);
+    }
+  } else if (style === 4) {
+    // Sine wave
+    ctx.strokeStyle = 'rgba(204,34,68,0.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = 0; x < w; x++) {
+      const y = h/2 + Math.sin(x * 0.05 + seed) * 40 + Math.sin(x * 0.13 + seed * 2) * 20;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    // Noise floor
+    for (let i = 0; i < 500; i++) {
+      const px = rand(seed + i * 3) * w;
+      const py = rand(seed + i * 7) * h;
+      ctx.fillStyle = `rgba(30,30,30,${rand(seed + i * 11) * 0.15})`;
+      ctx.fillRect(px, py, 1, 1);
+    }
+  } else {
+    // Data blocks
+    const blockSize = 10;
+    for (let x = 0; x < w; x += blockSize) {
+      for (let y = 0; y < h; y += blockSize) {
+        const r = rand(seed + x * 13 + y * 7);
+        if (r > 0.7) {
+          const brightness = Math.floor(220 - r * 60);
+          ctx.fillStyle = `rgb(${brightness},${brightness},${brightness})`;
+          ctx.fillRect(x, y, blockSize - 1, blockSize - 1);
+        }
+      }
+    }
+  }
+}
+
+// ── Build album grid ──
+const albumGrid = document.getElementById('albumGrid');
+albums.forEach((album, i) => {
+  const div = document.createElement('div');
+  div.className = 'album-item';
+  div.innerHTML = `
+    <div class="album-viz"><canvas></canvas></div>
+    <div class="album-title">${album.title}</div>
+    <div class="album-artist">${album.artist}</div>
+    <div class="album-meta">${album.year} &middot; ${album.label}</div>
+  `;
+  albumGrid.appendChild(div);
+  const canvas = div.querySelector('canvas');
+  drawAlbumArt(canvas, album, i);
+});
+
+// ── Build visual grid ──
+const visualLabels = [
+  'Barcode Scan', 'Data Matrix', 'Waveform', 'Pixel Noise',
+  'Grid System', 'Scan Lines', 'Signal Flow', 'Binary Stream',
+  'Spectral', 'Oscilloscope', 'Frequency', 'Glitch Field',
+  'CRT Artifact', 'Dot Matrix', 'White Noise', 'Phase Space'
+];
+
+const visualGrid = document.getElementById('visualGrid');
+for (let i = 0; i < 16; i++) {
+  const cell = document.createElement('div');
+  cell.className = 'visual-cell';
+  cell.innerHTML = `<canvas></canvas><div class="visual-label">${visualLabels[i]}</div>`;
+  visualGrid.appendChild(cell);
+
+  const canvas = cell.querySelector('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 300;
+  canvas.height = 300;
+  const w = 300, h = 300;
+
+  function rand(s) {
+    let x = Math.sin(s) * 10000;
+    return x - Math.floor(x);
+  }
+
+  ctx.fillStyle = '#eae7e2';
+  ctx.fillRect(0, 0, w, h);
+
+  const seed = i * 3571;
+
+  switch (i % 8) {
+    case 0: // Vertical barcodes
+      for (let x = 0; x < w; x += 2) {
+        const r = rand(seed + x);
+        ctx.fillStyle = `rgba(0,85,204,${r * 0.5})`;
+        if (r > 0.3) ctx.fillRect(x, 0, 1, h);
+      }
+      break;
+    case 1: // Dot field
+      for (let x = 0; x < w; x += 6) {
+        for (let y = 0; y < h; y += 6) {
+          if (rand(seed + x + y * w) > 0.6) {
+            ctx.fillStyle = '#1a1a1a';
+            ctx.globalAlpha = rand(seed + x * 3 + y) * 0.5;
+            ctx.fillRect(x, y, 2, 2);
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+      break;
+    case 2: // Waveform
+      ctx.strokeStyle = 'rgba(0,85,204,0.5)';
+      ctx.lineWidth = 1;
+      for (let ch = 0; ch < 3; ch++) {
+        ctx.beginPath();
+        for (let x = 0; x < w; x++) {
+          const y = h/2 + Math.sin(x * 0.03 * (ch+1) + seed) * (50 - ch*15) + (rand(seed + x + ch*w) - 0.5) * 20;
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+      break;
+    case 3: // Noise
+      for (let j = 0; j < 3000; j++) {
+        const px = rand(seed + j * 3) * w;
+        const py = rand(seed + j * 7) * h;
+        ctx.fillStyle = `rgba(30,30,30,${rand(seed + j * 11) * 0.3})`;
+        ctx.fillRect(px, py, 1, 1);
+      }
+      break;
+    case 4: // Grid
+      ctx.strokeStyle = 'rgba(30,30,30,0.1)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 20) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for (let y = 0; y < h; y += 20) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+      // Random highlights
+      for (let j = 0; j < 15; j++) {
+        const gx = Math.floor(rand(seed + j * 5) * 15) * 20;
+        const gy = Math.floor(rand(seed + j * 9) * 15) * 20;
+        ctx.fillStyle = 'rgba(0,85,204,0.12)';
+        ctx.fillRect(gx, gy, 20, 20);
+      }
+      break;
+    case 5: // Horizontal scanlines
+      for (let y = 0; y < h; y++) {
+        const r = rand(seed + y);
+        ctx.fillStyle = `rgba(204,34,68,${r * 0.15})`;
+        ctx.fillRect(0, y, w * r, 1);
+      }
+      break;
+    case 6: // Blocks
+      for (let j = 0; j < 50; j++) {
+        const bx = rand(seed + j) * w;
+        const by = rand(seed + j * 3) * h;
+        const bw = rand(seed + j * 5) * 40 + 2;
+        const bh = rand(seed + j * 7) * 4 + 1;
+        ctx.fillStyle = `rgba(30,30,30,${rand(seed + j * 9) * 0.2})`;
+        ctx.fillRect(bx, by, bw, bh);
+      }
+      break;
+    case 7: // Concentric
+      for (let r = 10; r < 200; r += 8) {
+        ctx.strokeStyle = `rgba(0,85,204,${(1 - r/200) * 0.35})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(w/2, h/2, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      break;
+  }
+}
+
+// ── Barcode decorations ──
+document.querySelectorAll('.barcode').forEach(el => {
+  for (let i = 0; i < 80; i++) {
+    const span = document.createElement('span');
+    span.style.height = (Math.random() * 30 + 10) + 'px';
+    span.style.width = (Math.random() > 0.5 ? 2 : 1) + 'px';
+    el.appendChild(span);
+  }
+});
+</script>
+
+</body>
+</html>
