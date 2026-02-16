@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#1a1a1a"/>
+  <path d="M0,150 Q30,80 60,150 Q90,220 120,150 Q150,80 180,150 Q210,220 240,150 Q270,80 300,150" fill="none" stroke="#cc2244" stroke-width="2" opacity="0.7"/>
+  <path d="M0,150 Q30,110 60,150 Q90,190 120,150 Q150,110 180,150 Q210,190 240,150 Q270,110 300,150" fill="none" stroke="#cc2244" stroke-width="1" opacity="0.4"/>
+  <path d="M0,150 Q30,60 60,150 Q90,240 120,150 Q150,60 180,150 Q210,240 240,150 Q270,60 300,150" fill="none" stroke="#cc2244" stroke-width="1" opacity="0.2"/>
+  <g fill="#cc2244" opacity="0.3">
+    <rect x="20" y="148" width="2" height="4"/>
+    <rect x="55" y="100" width="2" height="4"/>
+    <rect x="90" y="195" width="2" height="4"/>
+    <rect x="130" y="110" width="2" height="4"/>
+    <rect x="170" y="185" width="2" height="4"/>
+    <rect x="210" y="95" width="2" height="4"/>
+    <rect x="250" y="200" width="2" height="4"/>
+    <rect x="280" y="120" width="2" height="4"/>
+  </g>
+  <text x="15" y="285" font-family="monospace" font-size="10" fill="#555" letter-spacing="1">PAN SONIC — VAKIO</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#f5f3f0"/>
+  <g stroke="#d4d0ca" stroke-width="1" fill="none">
+    <line x1="0" y1="20" x2="300" y2="20"/>
+    <line x1="0" y1="40" x2="300" y2="40"/>
+    <line x1="0" y1="60" x2="300" y2="60"/>
+    <line x1="0" y1="80" x2="300" y2="80"/>
+    <line x1="0" y1="100" x2="300" y2="100"/>
+    <line x1="0" y1="120" x2="300" y2="120"/>
+    <line x1="0" y1="140" x2="300" y2="140"/>
+    <line x1="0" y1="160" x2="300" y2="160"/>
+    <line x1="0" y1="180" x2="300" y2="180"/>
+    <line x1="0" y1="200" x2="300" y2="200"/>
+    <line x1="0" y1="220" x2="300" y2="220"/>
+    <line x1="0" y1="240" x2="300" y2="240"/>
+    <line x1="0" y1="260" x2="300" y2="260"/>
+    <line x1="20" y1="0" x2="20" y2="300"/>
+    <line x1="40" y1="0" x2="40" y2="300"/>
+    <line x1="60" y1="0" x2="60" y2="300"/>
+    <line x1="80" y1="0" x2="80" y2="300"/>
+    <line x1="100" y1="0" x2="100" y2="300"/>
+    <line x1="120" y1="0" x2="120" y2="300"/>
+    <line x1="140" y1="0" x2="140" y2="300"/>
+    <line x1="160" y1="0" x2="160" y2="300"/>
+    <line x1="180" y1="0" x2="180" y2="300"/>
+    <line x1="200" y1="0" x2="200" y2="300"/>
+    <line x1="220" y1="0" x2="220" y2="300"/>
+    <line x1="240" y1="0" x2="240" y2="300"/>
+    <line x1="260" y1="0" x2="260" y2="300"/>
+    <line x1="280" y1="0" x2="280" y2="300"/>
+  </g>
+  <g fill="#0055cc" opacity="0.5">
+    <rect x="41" y="61" width="18" height="18"/>
+    <rect x="101" y="41" width="18" height="18"/>
+    <rect x="181" y="81" width="18" height="18"/>
+    <rect x="61" y="141" width="18" height="18"/>
+    <rect x="141" y="161" width="18" height="18"/>
+    <rect x="221" y="121" width="18" height="18"/>
+    <rect x="81" y="221" width="18" height="18"/>
+    <rect x="201" y="201" width="18" height="18"/>
+    <rect x="261" y="241" width="18" height="18"/>
+  </g>
+  <g fill="#cc2244" opacity="0.4">
+    <rect x="161" y="101" width="18" height="18"/>
+    <rect x="41" y="181" width="18" height="18"/>
+    <rect x="241" y="61" width="18" height="18"/>
+  </g>
+  <text x="15" y="285" font-family="monospace" font-size="10" fill="#888" letter-spacing="1">CLICKS_+_CUTS VOL. 1</text>
+</svg>
