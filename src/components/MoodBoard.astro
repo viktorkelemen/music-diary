@@ -23,7 +23,7 @@ const { items } = Astro.props;
 <div class="moodboard">
   {items.map((item) =>
     item.type === "image" ? (
-      <figure class="moodboard-image">
+      <figure class="moodboard-image" data-src={item.src} data-caption={item.caption || ""}>
         <img src={item.src} alt={item.caption || ""} loading="lazy" />
         {item.caption && <figcaption>{item.caption}</figcaption>}
       </figure>
@@ -34,6 +34,12 @@ const { items } = Astro.props;
       </a>
     )
   )}
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" aria-label="Close">&times;</button>
+  <img class="lightbox-img" />
+  <p class="lightbox-caption"></p>
 </div>
 
 <style>
@@ -49,6 +55,13 @@ const { items } = Astro.props;
     border-radius: 6px;
     overflow: hidden;
     background: #f0f0f0;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .moodboard-image:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   .moodboard-image img {
@@ -93,4 +106,78 @@ const { items } = Astro.props;
   .link-title {
     line-height: 1.3;
   }
+
+  /* Lightbox */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.85);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2rem;
+    cursor: pointer;
+  }
+
+  .lightbox.active {
+    display: flex;
+  }
+
+  .lightbox-img {
+    max-width: min(90vw, 600px);
+    max-height: 75vh;
+    border-radius: 8px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .lightbox-caption {
+    color: #ccc;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+  }
+
+  .lightbox-close:hover {
+    opacity: 1;
+  }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const lightbox = document.getElementById("lightbox");
+    if (!lightbox) return;
+    const lbImg = lightbox.querySelector<HTMLImageElement>(".lightbox-img")!;
+    const lbCaption = lightbox.querySelector<HTMLElement>(".lightbox-caption")!;
+
+    document.querySelectorAll<HTMLElement>(".moodboard-image").forEach((fig) => {
+      fig.addEventListener("click", () => {
+        lbImg.src = fig.dataset.src || "";
+        lbCaption.textContent = fig.dataset.caption || "";
+        lightbox.classList.add("active");
+      });
+    });
+
+    lightbox.addEventListener("click", () => {
+      lightbox.classList.remove("active");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") lightbox.classList.remove("active");
+    });
+  });
+</script>
