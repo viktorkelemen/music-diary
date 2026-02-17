@@ -17,11 +17,12 @@ function isSoundCloud(url: string): boolean {
 }
 
 const youtubeId = getYouTubeId(url);
+const isShort = url.includes("/shorts/");
 const soundcloud = !youtubeId && isSoundCloud(url);
 ---
 
 {youtubeId && (
-  <div class="video-embed">
+  <div class:list={["video-embed", { short: isShort }]}>
     <iframe
       src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
       title="YouTube video"
@@ -54,6 +55,10 @@ const soundcloud = !youtubeId && isSoundCloud(url);
     border-radius: 8px;
     overflow: hidden;
     background: #1a1a1a;
+  }
+
+  .video-embed.short {
+    padding-bottom: 177.78%;
   }
 
   .video-embed iframe {
