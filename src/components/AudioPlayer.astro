@@ -5,10 +5,134 @@ interface Props {
 
 const { url } = Astro.props;
 const filename = decodeURIComponent(url.split("/").pop() || "");
+
+// Extract waveform peaks at build time (avoids CORS issues in the browser)
+function extractPeaksFromWav(buffer: ArrayBuffer, numBars = 200): number[] {
+  const view = new DataView(buffer);
+  if (buffer.byteLength < 44) return [];
+
+  // Walk WAV chunks to find "fmt " and "data"
+  let offset = 12;
+  let channels = 1;
+  let bitsPerSample = 16;
+  let dataOffset = 0;
+  let dataSize = 0;
+
+  while (offset < view.byteLength - 8) {
+    const id = String.fromCharCode(
+      view.getUint8(offset), view.getUint8(offset + 1),
+      view.getUint8(offset + 2), view.getUint8(offset + 3),
+    );
+    const size = view.getUint32(offset + 4, true);
+
+    if (id === "fmt ") {
+      channels = view.getUint16(offset + 10, true);
+      bitsPerSample = view.getUint16(offset + 22, true);
+    } else if (id === "data") {
+      dataOffset = offset + 8;
+      dataSize = size;
+      break;
+    }
+
+    offset += 8 + size;
+    if (size % 2 !== 0) offset++; // WAV chunks are word-aligned
+  }
+
+  if (!dataOffset) return [];
+
+  const bytesPerSample = bitsPerSample / 8;
+  const bytesPerFrame = bytesPerSample * channels;
+  const totalFrames = Math.floor(dataSize / bytesPerFrame);
+  const blockSize = Math.floor(totalFrames / numBars);
+  if (blockSize === 0) return [];
+
+  const peaks: number[] = [];
+  for (let i = 0; i < numBars; i++) {
+    let max = 0;
+    for (let j = 0; j < blockSize; j++) {
+      const bytePos = dataOffset + (i * blockSize + j) * bytesPerFrame;
+      if (bytePos + bytesPerSample > buffer.byteLength) break;
+
+      let value: number;
+      if (bitsPerSample === 16) {
+        value = Math.abs(view.getInt16(bytePos, true)) / 32768;
+      } else if (bitsPerSample === 24) {
+        const b0 = view.getUint8(bytePos);
+        const b1 = view.getUint8(bytePos + 1);
+        const b2 = view.getInt8(bytePos + 2);
+        value = Math.abs((b2 << 16) | (b1 << 8) | b0) / 8388608;
+      } else if (bitsPerSample === 32) {
+        value = Math.abs(view.getFloat32(bytePos, true));
+      } else {
+        value = Math.abs(view.getUint8(bytePos) - 128) / 128;
+      }
+
+      if (value > max) max = value;
+    }
+    peaks.push(max);
+  }
+
+  const peakMax = Math.max(...peaks, 0.01);
+  return peaks.map((p) => Math.round((p / peakMax) * 100) / 100);
+}
+
+let peaks: number[] = [];
+let duration = 0;
+try {
+  const response = await fetch(url);
+  const buffer = await response.arrayBuffer();
+  peaks = extractPeaksFromWav(buffer, 200);
+
+  // Calculate duration from WAV header
+  const view = new DataView(buffer);
+  if (buffer.byteLength >= 32) {
+    let off = 12;
+    while (off < view.byteLength - 8) {
+      const id = String.fromCharCode(
+        view.getUint8(off), view.getUint8(off + 1),
+        view.getUint8(off + 2), view.getUint8(off + 3),
+      );
+      const size = view.getUint32(off + 4, true);
+      if (id === "fmt ") {
+        const byteRate = view.getUint32(off + 16, true);
+        // Find data chunk size for duration calc
+        let dOff = off + 8 + size;
+        if (size % 2 !== 0) dOff++;
+        while (dOff < view.byteLength - 8) {
+          const dId = String.fromCharCode(
+            view.getUint8(dOff), view.getUint8(dOff + 1),
+            view.getUint8(dOff + 2), view.getUint8(dOff + 3),
+          );
+          const dSize = view.getUint32(dOff + 4, true);
+          if (dId === "data") {
+            duration = byteRate > 0 ? dSize / byteRate : 0;
+            break;
+          }
+          dOff += 8 + dSize;
+          if (dSize % 2 !== 0) dOff++;
+        }
+        break;
+      }
+      off += 8 + size;
+      if (size % 2 !== 0) off++;
+    }
+  }
+} catch (err) {
+  console.error(`Failed to extract waveform for ${url}:`, err);
+}
+
+function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+const peaksJson = JSON.stringify(peaks);
+const durationStr = duration > 0 ? formatTime(duration) : "0:00";
 ---
 
-<div class="waveform-player" data-url={url}>
-  <button class="play-btn" aria-label="Play" disabled>
+<div class="waveform-player" data-url={url} data-peaks={peaksJson} data-duration={duration}>
+  <button class="play-btn" aria-label="Play">
     <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
       <path d="M8 5v14l11-7z" />
     </svg>
@@ -20,10 +144,7 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
   <div class="waveform-right">
     <p class="audio-filename">{filename}</p>
     <canvas class="waveform-canvas"></canvas>
-    <span class="time-display">0:00 / 0:00</span>
-    <div class="loading-skeleton" aria-hidden="true">
-      {Array.from({ length: 60 }).map(() => <span class="skel-bar" />)}
-    </div>
+    <span class="time-display">0:00 / {durationStr}</span>
   </div>
 </div>
 
@@ -53,13 +174,8 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
     transition: background 0.15s;
   }
 
-  .play-btn:hover:not(:disabled) {
+  .play-btn:hover {
     background: #444;
-  }
-
-  .play-btn:disabled {
-    background: #aaa;
-    cursor: not-allowed;
   }
 
   .play-btn svg {
@@ -70,7 +186,6 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
   .waveform-right {
     flex: 1;
     min-width: 0;
-    position: relative;
   }
 
   .audio-filename {
@@ -97,41 +212,6 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
     display: block;
     font-variant-numeric: tabular-nums;
   }
-
-  /* Loading skeleton */
-  .loading-skeleton {
-    position: absolute;
-    top: calc(0.75rem + 0.3rem); /* filename height offset */
-    left: 0;
-    right: 0;
-    height: 48px;
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    overflow: hidden;
-  }
-
-  .loading-skeleton.hidden {
-    display: none;
-  }
-
-  .skel-bar {
-    flex: 1;
-    background: #d4d4d4;
-    border-radius: 1px;
-    animation: skel-pulse 1.2s ease-in-out infinite;
-  }
-
-  .skel-bar:nth-child(odd) { height: 60%; }
-  .skel-bar:nth-child(even) { height: 40%; }
-  .skel-bar:nth-child(3n) { height: 80%; }
-  .skel-bar:nth-child(5n) { height: 50%; }
-  .skel-bar:nth-child(7n) { height: 90%; }
-
-  @keyframes skel-pulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }
 </style>
 
 <script>
@@ -144,8 +224,7 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
     private iconPlay: SVGElement;
     private iconPause: SVGElement;
     private timeDisplay: HTMLElement;
-    private skeleton: HTMLElement;
-    private peaks: number[] = [];
+    private peaks: number[];
     private animId: number | null = null;
     private isDragging = false;
 
@@ -161,13 +240,25 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
       this.iconPlay = container.querySelector(".icon-play")!;
       this.iconPause = container.querySelector(".icon-pause")!;
       this.timeDisplay = container.querySelector(".time-display")!;
-      this.skeleton = container.querySelector(".loading-skeleton")!;
+
+      // Read pre-computed peaks from build-time data attribute
+      try {
+        this.peaks = JSON.parse(container.dataset.peaks || "[]");
+      } catch {
+        this.peaks = [];
+      }
 
       this.audio = new Audio();
       this.audio.preload = "metadata";
+      this.audio.src = container.dataset.url!;
+
+      this.audio.addEventListener("loadedmetadata", () => {
+        this.updateTime();
+      });
 
       this.bindEvents();
-      this.loadWaveform();
+      this.sizeCanvas();
+      this.drawWaveform();
     }
 
     private bindEvents() {
@@ -208,67 +299,9 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
       // Responsive resize
       const ro = new ResizeObserver(() => {
         this.sizeCanvas();
-        if (this.peaks.length) this.drawWaveform();
+        this.drawWaveform();
       });
       ro.observe(this.canvas);
-    }
-
-    private async loadWaveform() {
-      const url = this.container.dataset.url!;
-      try {
-        // Fetch once, reuse for both waveform decoding and audio playback
-        const response = await fetch(url);
-        const blob = await response.blob();
-        this.audio.src = URL.createObjectURL(blob);
-
-        const buffer = await blob.arrayBuffer();
-        const audioCtx = new AudioContext();
-        const decoded = await audioCtx.decodeAudioData(buffer);
-        audioCtx.close();
-
-        this.peaks = this.extractPeaks(decoded);
-        this.sizeCanvas();
-        this.skeleton.classList.add("hidden");
-        this.drawWaveform();
-        this.playBtn.disabled = false;
-
-        this.audio.addEventListener("loadedmetadata", () => {
-          this.updateTime();
-        });
-        if (decoded.duration) {
-          this.timeDisplay.textContent = `0:00 / ${this.formatTime(decoded.duration)}`;
-        }
-      } catch (err) {
-        console.error("Failed to load waveform:", err);
-        // Fallback: use original URL for audio, show flat bars
-        this.audio.src = url;
-        this.skeleton.classList.add("hidden");
-        this.peaks = Array(100).fill(0.3);
-        this.sizeCanvas();
-        this.drawWaveform();
-        this.playBtn.disabled = false;
-      }
-    }
-
-    private extractPeaks(audioBuffer: AudioBuffer): number[] {
-      const channel = audioBuffer.getChannelData(0);
-      const numBars = Math.min(300, Math.max(60, Math.floor(this.canvas.clientWidth / 4)));
-      const blockSize = Math.floor(channel.length / numBars);
-      const peaks: number[] = [];
-
-      for (let i = 0; i < numBars; i++) {
-        let max = 0;
-        const start = i * blockSize;
-        for (let j = 0; j < blockSize; j++) {
-          const v = Math.abs(channel[start + j]);
-          if (v > max) max = v;
-        }
-        peaks.push(max);
-      }
-
-      // Normalize
-      const peakMax = Math.max(...peaks, 0.01);
-      return peaks.map((p) => p / peakMax);
     }
 
     private sizeCanvas() {
