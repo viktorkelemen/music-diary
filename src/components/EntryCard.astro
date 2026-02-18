@@ -86,8 +86,17 @@ const videoUrls = data.videoUrl
     margin: 1rem 0;
   }
 
+  .video-grid.single {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
+
   .video-grid :global(.video-embed) {
     margin: 0;
+  }
+
+  .video-grid :global(.video-embed:not(.short)) {
+    grid-column: span 2;
   }
 
   .entry-notes {
