@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#faf6f0"/>
+  <defs>
+    <linearGradient id="kas-g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e87830" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#2da88a" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="kas-g2" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5cb870" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#e8a040" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+  <!-- organic flowing curves suggesting Buchla patches and nature -->
+  <g fill="none" stroke-linecap="round">
+    <!-- large flowing forms -->
+    <path d="M-20,180 Q40,80 100,120 Q160,160 180,100 Q200,40 260,80 Q320,120 320,60" stroke="#e87830" stroke-width="2.5" opacity="0.25"/>
+    <path d="M-20,200 Q50,100 110,140 Q170,180 195,115 Q220,55 275,95 Q330,135 320,75" stroke="#d4682a" stroke-width="1.8" opacity="0.2"/>
+    <path d="M-10,220 Q60,130 120,165 Q175,195 200,135 Q230,70 280,108 Q320,140 330,90" stroke="#e89050" stroke-width="1.5" opacity="0.18"/>
+    <!-- teal/green organic curves -->
+    <path d="M-20,140 Q30,200 90,180 Q150,160 180,210 Q210,260 270,230 Q320,200 330,250" stroke="#2da88a" stroke-width="2.2" opacity="0.3"/>
+    <path d="M-10,155 Q40,215 100,195 Q160,175 188,225 Q218,275 278,245 Q320,218 330,265" stroke="#3db898" stroke-width="1.6" opacity="0.22"/>
+    <path d="M-15,130 Q25,190 85,170 Q148,150 175,200 Q205,250 265,220 Q315,195 325,240" stroke="#4dc8a0" stroke-width="1.2" opacity="0.18"/>
+    <!-- gentle green leaf-like shapes -->
+    <path d="M60,60 Q80,30 100,50 Q110,65 90,75 Q70,80 60,60Z" fill="#5cb870" opacity="0.08"/>
+    <path d="M200,180 Q225,155 245,170 Q255,185 235,195 Q215,200 200,180Z" fill="#2da88a" opacity="0.1"/>
+    <path d="M130,220 Q150,195 168,210 Q175,225 158,232 Q140,238 130,220Z" fill="#5cb870" opacity="0.07"/>
+    <!-- warm circles like seeds or spores -->
+    <circle cx="75" cy="100" r="8" fill="#e87830" opacity="0.1"/>
+    <circle cx="180" cy="70" r="5" fill="#e89050" opacity="0.12"/>
+    <circle cx="240" cy="160" r="10" fill="#e8a040" opacity="0.08"/>
+    <circle cx="120" cy="180" r="6" fill="#e87830" opacity="0.09"/>
+    <circle cx="50" cy="160" r="4" fill="#d4682a" opacity="0.1"/>
+    <circle cx="220" cy="100" r="7" fill="#e8a040" opacity="0.07"/>
+  </g>
+  <text x="15" y="285" font-family="monospace" font-size="10" fill="#c08050" letter-spacing="1">K.A. SMITH — EARS</text>
+</svg>

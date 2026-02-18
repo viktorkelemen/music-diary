@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#1A1520"/>
+  <!-- Overlapping arcs - looped vocals and cathedral reverbs, ethereal layers -->
+  <!-- Deep background arcs -->
+  <path d="M -20,200 Q 150,40 320,200" fill="none" stroke="#5A3860" stroke-width="1.5" opacity="0.2"/>
+  <path d="M -10,210 Q 150,55 310,210" fill="none" stroke="#6A4870" stroke-width="1.2" opacity="0.18"/>
+  <path d="M 0,220 Q 150,70 300,220" fill="none" stroke="#7A5880" stroke-width="1" opacity="0.16"/>
+  <!-- Mid-layer arcs - purple/mauve -->
+  <path d="M 10,180 Q 150,30 290,180" fill="none" stroke="#8A6090" stroke-width="1.8" opacity="0.22"/>
+  <path d="M 20,190 Q 150,50 280,190" fill="none" stroke="#9A70A0" stroke-width="1.5" opacity="0.2"/>
+  <path d="M 30,195 Q 150,65 270,195" fill="none" stroke="#A880A8" stroke-width="1.2" opacity="0.18"/>
+  <!-- Pink-tinted arcs -->
+  <path d="M 40,170 Q 150,20 260,170" fill="none" stroke="#B888A8" stroke-width="1.5" opacity="0.2"/>
+  <path d="M 50,175 Q 150,40 250,175" fill="none" stroke="#C898B0" stroke-width="1.2" opacity="0.18"/>
+  <path d="M 55,180 Q 150,55 245,180" fill="none" stroke="#D0A0B8" stroke-width="1" opacity="0.16"/>
+  <!-- Upper ethereal arcs -->
+  <path d="M 60,155 Q 150,10 240,155" fill="none" stroke="#B890B0" stroke-width="1.2" opacity="0.18"/>
+  <path d="M 70,160 Q 150,30 230,160" fill="none" stroke="#C8A0B8" stroke-width="1" opacity="0.16"/>
+  <path d="M 75,165 Q 150,45 225,165" fill="none" stroke="#D8A8C0" stroke-width="0.8" opacity="0.14"/>
+  <!-- Inverted arcs (reflections/reverb tails) -->
+  <path d="M 30,140 Q 150,250 270,140" fill="none" stroke="#6A4870" stroke-width="1" opacity="0.12"/>
+  <path d="M 50,130 Q 150,230 250,130" fill="none" stroke="#7A5880" stroke-width="0.8" opacity="0.1"/>
+  <path d="M 70,125 Q 150,210 230,125" fill="none" stroke="#8A6890" stroke-width="0.7" opacity="0.09"/>
+  <!-- Soft central glow suggesting voice -->
+  <ellipse cx="150" cy="140" rx="60" ry="40" fill="#9A70A0" opacity="0.06"/>
+  <ellipse cx="150" cy="140" rx="35" ry="22" fill="#B888A8" opacity="0.06"/>
+  <ellipse cx="150" cy="140" rx="15" ry="10" fill="#D0A0B8" opacity="0.08"/>
+  <!-- Tiny shimmer points -->
+  <circle cx="150" cy="100" r="1" fill="#D8B0C8" opacity="0.3"/>
+  <circle cx="120" cy="130" r="0.8" fill="#C8A0B8" opacity="0.25"/>
+  <circle cx="180" cy="125" r="0.8" fill="#C8A0B8" opacity="0.25"/>
+  <circle cx="150" cy="150" r="1" fill="#E0B8D0" opacity="0.2"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#6A5870" letter-spacing="1">JULIANNA BARWICK — NEPENTHE</text>
+</svg>

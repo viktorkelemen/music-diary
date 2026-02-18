@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#0c0c0e"/>
+  <!-- extreme minimalism - just a few small dots scattered in vast dark space -->
+  <!-- like dub echoes disappearing into void -->
+  <circle cx="65" cy="95" r="3" fill="#888" opacity="0.4"/>
+  <circle cx="210" cy="140" r="2" fill="#888" opacity="0.3"/>
+  <circle cx="130" cy="200" r="2.5" fill="#888" opacity="0.35"/>
+  <circle cx="240" cy="70" r="1.5" fill="#888" opacity="0.25"/>
+  <text x="15" y="285" font-family="monospace" font-size="10" fill="#444" letter-spacing="1">RHYTHM &amp; SOUND</text>
+</svg>

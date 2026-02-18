@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#1C1408"/>
+  <!-- Golden/amber radiating lines from center - sun rays, warm healing -->
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFD700" stop-opacity="0.15"/>
+      <stop offset="40%" stop-color="#DAA520" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#1C1408" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Central glow -->
+  <circle cx="150" cy="140" r="140" fill="url(#glow)"/>
+  <!-- Radiating rays -->
+  <line x1="150" y1="140" x2="150" y2="10" stroke="#FFD700" stroke-width="1.2" opacity="0.35"/>
+  <line x1="150" y1="140" x2="220" y2="15" stroke="#DAA520" stroke-width="0.8" opacity="0.28"/>
+  <line x1="150" y1="140" x2="275" y2="45" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+  <line x1="150" y1="140" x2="295" y2="100" stroke="#F0C040" stroke-width="0.8" opacity="0.25"/>
+  <line x1="150" y1="140" x2="295" y2="155" stroke="#DAA520" stroke-width="1.1" opacity="0.3"/>
+  <line x1="150" y1="140" x2="280" y2="210" stroke="#FFD700" stroke-width="0.8" opacity="0.25"/>
+  <line x1="150" y1="140" x2="240" y2="260" stroke="#F0C040" stroke-width="1" opacity="0.28"/>
+  <line x1="150" y1="140" x2="185" y2="268" stroke="#DAA520" stroke-width="0.7" opacity="0.22"/>
+  <line x1="150" y1="140" x2="115" y2="268" stroke="#FFD700" stroke-width="0.9" opacity="0.26"/>
+  <line x1="150" y1="140" x2="60" y2="260" stroke="#F0C040" stroke-width="0.8" opacity="0.24"/>
+  <line x1="150" y1="140" x2="20" y2="210" stroke="#DAA520" stroke-width="1" opacity="0.28"/>
+  <line x1="150" y1="140" x2="5" y2="155" stroke="#FFD700" stroke-width="0.8" opacity="0.25"/>
+  <line x1="150" y1="140" x2="5" y2="100" stroke="#F0C040" stroke-width="1.1" opacity="0.3"/>
+  <line x1="150" y1="140" x2="25" y2="45" stroke="#DAA520" stroke-width="0.8" opacity="0.25"/>
+  <line x1="150" y1="140" x2="80" y2="15" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+  <!-- Secondary finer rays -->
+  <line x1="150" y1="140" x2="170" y2="5" stroke="#E8B830" stroke-width="0.5" opacity="0.18"/>
+  <line x1="150" y1="140" x2="250" y2="28" stroke="#E8B830" stroke-width="0.5" opacity="0.16"/>
+  <line x1="150" y1="140" x2="290" y2="75" stroke="#E8B830" stroke-width="0.5" opacity="0.16"/>
+  <line x1="150" y1="140" x2="298" y2="130" stroke="#E8B830" stroke-width="0.5" opacity="0.15"/>
+  <line x1="150" y1="140" x2="290" y2="185" stroke="#E8B830" stroke-width="0.5" opacity="0.16"/>
+  <line x1="150" y1="140" x2="260" y2="240" stroke="#E8B830" stroke-width="0.5" opacity="0.15"/>
+  <line x1="150" y1="140" x2="210" y2="265" stroke="#E8B830" stroke-width="0.5" opacity="0.14"/>
+  <line x1="150" y1="140" x2="130" y2="5" stroke="#E8B830" stroke-width="0.5" opacity="0.18"/>
+  <line x1="150" y1="140" x2="50" y2="28" stroke="#E8B830" stroke-width="0.5" opacity="0.16"/>
+  <line x1="150" y1="140" x2="10" y2="75" stroke="#E8B830" stroke-width="0.5" opacity="0.16"/>
+  <line x1="150" y1="140" x2="2" y2="130" stroke="#E8B830" stroke-width="0.5" opacity="0.15"/>
+  <line x1="150" y1="140" x2="10" y2="185" stroke="#E8B830" stroke-width="0.5" opacity="0.16"/>
+  <line x1="150" y1="140" x2="40" y2="240" stroke="#E8B830" stroke-width="0.5" opacity="0.15"/>
+  <line x1="150" y1="140" x2="90" y2="265" stroke="#E8B830" stroke-width="0.5" opacity="0.14"/>
+  <!-- Central bright point -->
+  <circle cx="150" cy="140" r="8" fill="#FFD700" opacity="0.2"/>
+  <circle cx="150" cy="140" r="4" fill="#FFF0B0" opacity="0.35"/>
+  <circle cx="150" cy="140" r="1.5" fill="#FFFDE0" opacity="0.6"/>
+  <!-- Concentric rings of radiance -->
+  <circle cx="150" cy="140" r="30" fill="none" stroke="#FFD700" stroke-width="0.5" opacity="0.1"/>
+  <circle cx="150" cy="140" r="60" fill="none" stroke="#DAA520" stroke-width="0.4" opacity="0.08"/>
+  <circle cx="150" cy="140" r="95" fill="none" stroke="#FFD700" stroke-width="0.3" opacity="0.06"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#8B7530" letter-spacing="1">LARAAJI — AMBIENT 3: DAY OF RADIANCE</text>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="cortini-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d4882a"/>
+      <stop offset="40%" stop-color="#c06020"/>
+      <stop offset="100%" stop-color="#6a1a18"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#cortini-bg)"/>
+  <!-- single gentle sine wave - analog warmth -->
+  <g fill="none" stroke-linecap="round">
+    <!-- primary sine wave -->
+    <path d="M0,150 Q37.5,110 75,150 Q112.5,190 150,150 Q187.5,110 225,150 Q262.5,190 300,150"
+          stroke="#f0d0a0" stroke-width="2" opacity="0.5"/>
+    <!-- slightly offset echo waves for warmth -->
+    <path d="M0,150 Q37.5,115 75,150 Q112.5,185 150,150 Q187.5,115 225,150 Q262.5,185 300,150"
+          stroke="#f0c888" stroke-width="1.2" opacity="0.3"/>
+    <path d="M0,150 Q37.5,105 75,150 Q112.5,195 150,150 Q187.5,105 225,150 Q262.5,195 300,150"
+          stroke="#f0c070" stroke-width="0.8" opacity="0.2"/>
+    <!-- subtle harmonic above -->
+    <path d="M0,148 Q18.75,138 37.5,148 Q56.25,158 75,148 Q93.75,138 112.5,148 Q131.25,158 150,148 Q168.75,138 187.5,148 Q206.25,158 225,148 Q243.75,138 262.5,148 Q281.25,158 300,148"
+          stroke="#f0d8b0" stroke-width="0.6" opacity="0.15"/>
+  </g>
+  <!-- warm ambient haze -->
+  <circle cx="150" cy="150" r="100" fill="#f0c888" opacity="0.04"/>
+  <circle cx="150" cy="150" r="60" fill="#f0d0a0" opacity="0.03"/>
+  <text x="15" y="285" font-family="monospace" font-size="10" fill="#f0c888" opacity="0.7" letter-spacing="1">CORTINI — VOLUME MASSIMO</text>
+</svg>

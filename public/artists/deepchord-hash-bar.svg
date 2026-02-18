@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#080e14"/>
+  <!-- concentric ripple circles - aquatic dub techno -->
+  <g fill="none" stroke-linecap="round">
+    <!-- outermost ripples - barely visible -->
+    <circle cx="150" cy="140" r="130" stroke="#1a4868" stroke-width="0.5" opacity="0.15"/>
+    <circle cx="150" cy="140" r="120" stroke="#1a5070" stroke-width="0.6" opacity="0.18"/>
+    <circle cx="150" cy="140" r="110" stroke="#1a5878" stroke-width="0.7" opacity="0.2"/>
+    <!-- mid ripples -->
+    <circle cx="150" cy="140" r="100" stroke="#206080" stroke-width="0.8" opacity="0.25"/>
+    <circle cx="150" cy="140" r="90" stroke="#206888" stroke-width="0.9" opacity="0.28"/>
+    <circle cx="150" cy="140" r="80" stroke="#207090" stroke-width="1" opacity="0.3"/>
+    <circle cx="150" cy="140" r="70" stroke="#207898" stroke-width="1.1" opacity="0.35"/>
+    <!-- inner ripples - more visible -->
+    <circle cx="150" cy="140" r="60" stroke="#2880a0" stroke-width="1.2" opacity="0.4"/>
+    <circle cx="150" cy="140" r="50" stroke="#2888a8" stroke-width="1.3" opacity="0.42"/>
+    <circle cx="150" cy="140" r="40" stroke="#3090b0" stroke-width="1.4" opacity="0.45"/>
+    <circle cx="150" cy="140" r="30" stroke="#3098b8" stroke-width="1.5" opacity="0.5"/>
+    <!-- core -->
+    <circle cx="150" cy="140" r="20" stroke="#38a0c0" stroke-width="1.6" opacity="0.55"/>
+    <circle cx="150" cy="140" r="12" stroke="#40a8c8" stroke-width="1.5" opacity="0.5"/>
+    <circle cx="150" cy="140" r="5" stroke="#48b0d0" stroke-width="1.2" opacity="0.45"/>
+  </g>
+  <!-- subtle center glow -->
+  <circle cx="150" cy="140" r="8" fill="#3098b8" opacity="0.15"/>
+  <circle cx="150" cy="140" r="3" fill="#48b8d8" opacity="0.2"/>
+  <!-- secondary ghost ripple - offset, like an echo -->
+  <g fill="none" opacity="0.08">
+    <circle cx="165" cy="145" r="85" stroke="#40a0c0" stroke-width="0.5"/>
+    <circle cx="165" cy="145" r="65" stroke="#40a0c0" stroke-width="0.5"/>
+    <circle cx="165" cy="145" r="45" stroke="#40a0c0" stroke-width="0.5"/>
+  </g>
+  <text x="15" y="285" font-family="monospace" font-size="10" fill="#2a6880" letter-spacing="1">DEEPCHORD — HASH-BAR LOOPS</text>
+</svg>

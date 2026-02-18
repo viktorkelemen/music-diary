@@ -43,6 +43,12 @@ const videoUrls = data.videoUrl
   <div class="entry-notes">
     <Content />
   </div>
+
+  <div class="artist-lightbox">
+    <button class="artist-lightbox-close" aria-label="Close">&times;</button>
+    <img class="artist-lightbox-img" />
+    <p class="artist-lightbox-caption"></p>
+  </div>
 </article>
 
 <style>
@@ -111,4 +117,146 @@ const videoUrls = data.videoUrl
     border-radius: 3px;
     font-size: 0.9em;
   }
+
+  .entry-notes :global(h2) {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #666;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .entry-notes :global(.artist-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .entry-notes :global(.artist-card) {
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f8f8f8;
+  }
+
+  .entry-notes :global(.artist-card img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  .entry-notes :global(.artist-card .artist-info) {
+    padding: 0.5rem 0.6rem;
+  }
+
+  .entry-notes :global(.artist-card .artist-name) {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #222;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .entry-notes :global(.artist-card .artist-style) {
+    font-size: 0.72rem;
+    color: #888;
+    margin: 0.15rem 0 0;
+    line-height: 1.4;
+  }
+
+  .entry-notes :global(.artist-card) {
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .entry-notes :global(.artist-card:hover) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Artist lightbox */
+  .artist-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.85);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2rem;
+    cursor: pointer;
+  }
+
+  .artist-lightbox.active {
+    display: flex;
+  }
+
+  .artist-lightbox-img {
+    max-width: min(90vw, 500px);
+    max-height: 75vh;
+    border-radius: 8px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .artist-lightbox-caption {
+    color: #ccc;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .artist-lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+  }
+
+  .artist-lightbox-close:hover {
+    opacity: 1;
+  }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll<HTMLElement>(".entry-card").forEach((card) => {
+      const lightbox = card.querySelector<HTMLElement>(".artist-lightbox");
+      if (!lightbox) return;
+      const lbImg = lightbox.querySelector<HTMLImageElement>(".artist-lightbox-img")!;
+      const lbCaption = lightbox.querySelector<HTMLElement>(".artist-lightbox-caption")!;
+
+      card.querySelectorAll<HTMLElement>(".artist-card").forEach((artistCard) => {
+        artistCard.addEventListener("click", () => {
+          const img = artistCard.querySelector("img");
+          const name = artistCard.querySelector(".artist-name");
+          if (img) {
+            lbImg.src = img.src;
+            lbCaption.textContent = name?.textContent || "";
+            lightbox.classList.add("active");
+          }
+        });
+      });
+
+      lightbox.addEventListener("click", () => {
+        lightbox.classList.remove("active");
+      });
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        document.querySelectorAll(".artist-lightbox.active").forEach((lb) => {
+          lb.classList.remove("active");
+        });
+      }
+    });
+  });
+</script>

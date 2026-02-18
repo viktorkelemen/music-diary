@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="ar-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5e6f0"/>
+      <stop offset="50%" stop-color="#e8d5ef"/>
+      <stop offset="100%" stop-color="#f0dde8"/>
+    </linearGradient>
+    <linearGradient id="ar-flow1" x1="0" y1="0" x2="1" y2="0.5">
+      <stop offset="0%" stop-color="#d4a0c0" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#c890b8" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#d4a0c0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ar-flow2" x1="0" y1="0" x2="1" y2="0.3">
+      <stop offset="0%" stop-color="#b890d0" stop-opacity="0"/>
+      <stop offset="40%" stop-color="#a880c0" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#b890d0" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="ar-blur">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <filter id="ar-blur-sm">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+  </defs>
+  <rect width="300" height="300" fill="url(#ar-bg)"/>
+  <!-- Soft flowing ethereal curves -->
+  <path d="M-20,180 Q60,120 150,160 Q240,200 320,140" fill="none" stroke="#c890b8" stroke-width="30" opacity="0.12" filter="url(#ar-blur)"/>
+  <path d="M-20,140 Q80,80 160,130 Q240,180 320,110" fill="none" stroke="#b080c8" stroke-width="20" opacity="0.1" filter="url(#ar-blur)"/>
+  <path d="M-20,200 Q70,160 150,190 Q230,220 320,170" fill="none" stroke="#d0a0c0" stroke-width="25" opacity="0.1" filter="url(#ar-blur)"/>
+  <!-- Delicate flowing lines -->
+  <path d="M0,160 Q50,110 100,140 Q150,170 200,130 Q250,90 300,120" fill="none" stroke="#c080b0" stroke-width="0.8" opacity="0.4"/>
+  <path d="M0,175 Q60,130 120,155 Q180,180 240,140 Q270,120 300,135" fill="none" stroke="#b080c0" stroke-width="0.6" opacity="0.35"/>
+  <path d="M0,145 Q70,100 130,130 Q190,160 250,115 Q280,95 300,108" fill="none" stroke="#d090b8" stroke-width="0.7" opacity="0.3"/>
+  <path d="M0,190 Q55,150 110,170 Q170,195 230,155 Q265,135 300,150" fill="none" stroke="#c0a0d0" stroke-width="0.5" opacity="0.3"/>
+  <path d="M0,130 Q80,90 140,118 Q200,145 260,100 Q285,82 300,95" fill="none" stroke="#d0a0c8" stroke-width="0.5" opacity="0.25"/>
+  <!-- Floating petal-like shapes -->
+  <ellipse cx="90" cy="100" rx="25" ry="8" fill="#c890b8" opacity="0.08" transform="rotate(-15 90 100)" filter="url(#ar-blur-sm)"/>
+  <ellipse cx="200" cy="80" rx="20" ry="6" fill="#b080c8" opacity="0.07" transform="rotate(10 200 80)" filter="url(#ar-blur-sm)"/>
+  <ellipse cx="150" cy="140" rx="30" ry="10" fill="#d0a0c0" opacity="0.06" transform="rotate(-8 150 140)" filter="url(#ar-blur-sm)"/>
+  <ellipse cx="60" cy="200" rx="18" ry="6" fill="#c0a0d0" opacity="0.07" transform="rotate(12 60 200)" filter="url(#ar-blur-sm)"/>
+  <ellipse cx="240" cy="170" rx="22" ry="7" fill="#c890b8" opacity="0.06" transform="rotate(-20 240 170)" filter="url(#ar-blur-sm)"/>
+  <!-- Tiny breath-like dots -->
+  <circle cx="80" cy="130" r="2" fill="#c080b0" opacity="0.15"/>
+  <circle cx="170" cy="105" r="1.5" fill="#b080c8" opacity="0.12"/>
+  <circle cx="220" cy="145" r="1.8" fill="#d090b8" opacity="0.13"/>
+  <circle cx="130" cy="180" r="1.2" fill="#c0a0d0" opacity="0.1"/>
+  <circle cx="55" cy="155" r="1" fill="#c890b8" opacity="0.12"/>
+  <circle cx="260" cy="120" r="1.5" fill="#b080c0" opacity="0.1"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#b090a8" letter-spacing="1">ANA ROXANNE — BECAUSE OF A FLOWER</text>
+</svg>

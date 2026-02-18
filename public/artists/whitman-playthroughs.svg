@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#f2f0ec"/>
+  <!-- tangled generative lines suggesting laptop glitch evolving into modular -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- sparse digital glitch lines on left -->
+    <path d="M20,60 L45,62 L46,90 L80,88 L82,65 L95,67" stroke="#888" stroke-width="0.7" opacity="0.4"/>
+    <path d="M15,80 L30,78 L32,105 L55,103 L58,82 L72,84 L74,110" stroke="#666" stroke-width="0.5" opacity="0.35"/>
+    <path d="M40,45 L42,72 L68,70 L70,50 L90,52 L88,75" stroke="#aaa" stroke-width="0.6" opacity="0.3"/>
+    <path d="M25,100 L50,98 L52,130 L75,128 L78,105" stroke="#777" stroke-width="0.8" opacity="0.3"/>
+    <!-- transition zone - lines becoming more organic -->
+    <path d="M90,55 Q110,45 125,70 Q140,95 130,120 Q120,140 140,145" stroke="#555" stroke-width="0.8" opacity="0.45"/>
+    <path d="M95,90 Q115,80 128,100 Q142,125 135,150 Q128,170 150,168" stroke="#666" stroke-width="0.7" opacity="0.4"/>
+    <path d="M85,120 Q100,110 118,130 Q138,155 130,175 Q125,190 148,185" stroke="#777" stroke-width="0.9" opacity="0.35"/>
+    <path d="M100,60 Q118,55 130,80 Q145,110 138,135 Q132,155 155,150" stroke="#444" stroke-width="0.6" opacity="0.5"/>
+    <!-- dense tangled modular lines on right -->
+    <path d="M140,50 Q165,35 185,65 Q200,90 195,120 Q188,150 210,155 Q235,158 250,140 Q268,118 280,130" stroke="#333" stroke-width="1" opacity="0.5"/>
+    <path d="M145,80 Q170,60 190,90 Q205,115 200,145 Q192,170 215,175 Q240,178 258,158 Q275,140 285,155" stroke="#444" stroke-width="0.9" opacity="0.45"/>
+    <path d="M150,110 Q175,95 192,120 Q210,148 205,175 Q198,200 222,198 Q245,195 262,178 Q278,162 288,175" stroke="#555" stroke-width="1.1" opacity="0.4"/>
+    <path d="M148,140 Q172,125 188,150 Q208,178 202,205 Q196,225 220,222 Q242,218 260,200 Q275,185 282,200" stroke="#666" stroke-width="0.8" opacity="0.38"/>
+    <path d="M155,165 Q178,150 195,175 Q212,200 208,225 Q202,245 225,242 Q248,238 265,220" stroke="#333" stroke-width="1" opacity="0.42"/>
+    <path d="M160,195 Q180,180 198,200 Q215,222 212,245 Q208,260 230,258" stroke="#777" stroke-width="0.7" opacity="0.35"/>
+    <!-- stray crossing threads -->
+    <path d="M30,150 Q80,130 120,160 Q160,190 200,170 Q240,150 270,180" stroke="#999" stroke-width="0.5" opacity="0.25"/>
+    <path d="M50,200 Q100,180 150,210 Q200,240 250,210 Q270,200 280,220" stroke="#aaa" stroke-width="0.4" opacity="0.2"/>
+    <path d="M20,180 Q70,160 110,185 Q160,215 210,195 Q250,178 275,195" stroke="#888" stroke-width="0.6" opacity="0.22"/>
+  </g>
+  <text x="15" y="285" font-family="monospace" font-size="10" fill="#888" letter-spacing="1">KF WHITMAN — PLAYTHROUGHS</text>
+</svg>

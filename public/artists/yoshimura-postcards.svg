@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#FAF5F0"/>
+  <!-- Extremely gentle - soft pastel, thin delicate lines. Japanese environmental music -->
+  <!-- Delicate horizontal lines like distant landscapes -->
+  <line x1="30" y1="80" x2="270" y2="80" stroke="#C8E0D0" stroke-width="0.6" opacity="0.4"/>
+  <line x1="50" y1="85" x2="220" y2="85" stroke="#E8D0D0" stroke-width="0.4" opacity="0.35"/>
+  <line x1="80" y1="120" x2="260" y2="120" stroke="#D0E0D8" stroke-width="0.5" opacity="0.35"/>
+  <line x1="40" y1="125" x2="180" y2="125" stroke="#F0D8D0" stroke-width="0.4" opacity="0.3"/>
+  <line x1="60" y1="160" x2="240" y2="160" stroke="#C8E0D8" stroke-width="0.5" opacity="0.3"/>
+  <line x1="100" y1="165" x2="250" y2="165" stroke="#E0D0C8" stroke-width="0.4" opacity="0.28"/>
+  <line x1="45" y1="200" x2="200" y2="200" stroke="#D8E8E0" stroke-width="0.5" opacity="0.3"/>
+  <line x1="70" y1="205" x2="260" y2="205" stroke="#E8D8D0" stroke-width="0.4" opacity="0.25"/>
+  <!-- Soft floating shapes like postcards -->
+  <rect x="65" y="60" width="45" height="30" rx="1" fill="#D8F0E8" opacity="0.2"/>
+  <rect x="170" y="95" width="50" height="35" rx="1" fill="#F0E0D8" opacity="0.18"/>
+  <rect x="90" y="140" width="40" height="28" rx="1" fill="#E0F0E8" opacity="0.18"/>
+  <rect x="195" y="175" width="45" height="30" rx="1" fill="#F0D8D0" opacity="0.15"/>
+  <rect x="55" y="185" width="38" height="25" rx="1" fill="#D0E8E0" opacity="0.16"/>
+  <!-- Tiny gentle dots - like morning dew -->
+  <circle cx="90" cy="75" r="1.5" fill="#B8D8C8" opacity="0.35"/>
+  <circle cx="200" cy="110" r="1.2" fill="#E0B8B0" opacity="0.3"/>
+  <circle cx="130" cy="150" r="1.5" fill="#B8D8C8" opacity="0.3"/>
+  <circle cx="220" cy="190" r="1.2" fill="#D8B8B0" opacity="0.28"/>
+  <circle cx="75" cy="195" r="1" fill="#B0D0C0" opacity="0.3"/>
+  <circle cx="160" cy="70" r="1" fill="#D8C0B8" opacity="0.25"/>
+  <circle cx="240" cy="155" r="1.3" fill="#B8D8C8" opacity="0.25"/>
+  <circle cx="110" cy="205" r="1" fill="#E0C8C0" opacity="0.22"/>
+  <!-- Very thin vertical accents -->
+  <line x1="90" y1="55" x2="90" y2="95" stroke="#C0D8D0" stroke-width="0.3" opacity="0.25"/>
+  <line x1="195" y1="90" x2="195" y2="135" stroke="#E0C8C0" stroke-width="0.3" opacity="0.22"/>
+  <line x1="115" y1="135" x2="115" y2="175" stroke="#C8E0D8" stroke-width="0.3" opacity="0.22"/>
+  <line x1="220" y1="170" x2="220" y2="210" stroke="#D8C0B8" stroke-width="0.3" opacity="0.2"/>
+  <text x="15" y="285" font-family="monospace" font-size="8" fill="#C0B8B0" letter-spacing="1">HIROSHI YOSHIMURA — MUSIC FOR NINE POST CARDS</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#0d0818"/>
+  <defs>
+    <linearGradient id="bar-g" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#3a0a50"/>
+      <stop offset="50%" stop-color="#8a1a80"/>
+      <stop offset="100%" stop-color="#cc30a0"/>
+    </linearGradient>
+  </defs>
+  <!-- vertical bars like sequencer columns - algorithmic, hypnotic pattern -->
+  <g opacity="0.85">
+    <!-- primary sequencer bars at varying heights -->
+    <rect x="18" y="140" width="5" height="120" fill="#6a1878" opacity="0.7"/>
+    <rect x="28" y="80" width="5" height="180" fill="#8a2090" opacity="0.8"/>
+    <rect x="38" y="160" width="5" height="100" fill="#5a1268" opacity="0.6"/>
+    <rect x="48" y="50" width="5" height="210" fill="#aa28a0" opacity="0.85"/>
+    <rect x="58" y="120" width="5" height="140" fill="#7a1880" opacity="0.65"/>
+    <rect x="68" y="170" width="5" height="90" fill="#4a0e58" opacity="0.55"/>
+    <rect x="78" y="60" width="5" height="200" fill="#9a2498" opacity="0.75"/>
+    <rect x="88" y="100" width="5" height="160" fill="#8a1a88" opacity="0.8"/>
+    <rect x="98" y="150" width="5" height="110" fill="#6a1470" opacity="0.6"/>
+    <rect x="108" y="40" width="5" height="220" fill="#cc30a0" opacity="0.9"/>
+    <rect x="118" y="130" width="5" height="130" fill="#7a1880" opacity="0.7"/>
+    <rect x="128" y="90" width="5" height="170" fill="#9a2090" opacity="0.75"/>
+    <rect x="138" y="180" width="5" height="80" fill="#5a1060" opacity="0.5"/>
+    <rect x="148" y="55" width="5" height="205" fill="#b828a8" opacity="0.85"/>
+    <rect x="158" y="110" width="5" height="150" fill="#8a1c88" opacity="0.7"/>
+    <rect x="168" y="70" width="5" height="190" fill="#a02898" opacity="0.8"/>
+    <rect x="178" y="160" width="5" height="100" fill="#6a1470" opacity="0.55"/>
+    <rect x="188" y="45" width="5" height="215" fill="#cc30a0" opacity="0.9"/>
+    <rect x="198" y="130" width="5" height="130" fill="#7a1878" opacity="0.65"/>
+    <rect x="208" y="85" width="5" height="175" fill="#9a2490" opacity="0.75"/>
+    <rect x="218" y="155" width="5" height="105" fill="#5a1268" opacity="0.55"/>
+    <rect x="228" y="60" width="5" height="200" fill="#aa28a0" opacity="0.85"/>
+    <rect x="238" y="120" width="5" height="140" fill="#8a1c80" opacity="0.7"/>
+    <rect x="248" y="170" width="5" height="90" fill="#4a0e58" opacity="0.5"/>
+    <rect x="258" y="50" width="5" height="210" fill="#b82aa8" opacity="0.85"/>
+    <rect x="268" y="100" width="5" height="160" fill="#8a1888" opacity="0.75"/>
+    <rect x="278" y="145" width="5" height="115" fill="#6a1470" opacity="0.6"/>
+  </g>
+  <!-- subtle glow overlay -->
+  <g opacity="0.15">
+    <rect x="106" y="35" width="9" height="228" fill="#ff50d0" rx="2"/>
+    <rect x="186" y="40" width="9" height="222" fill="#ff50d0" rx="2"/>
+    <rect x="46" y="45" width="9" height="218" fill="#ff40c0" rx="2"/>
+    <rect x="256" y="45" width="9" height="218" fill="#ff40c0" rx="2"/>
+  </g>
+  <text x="15" y="285" font-family="monospace" font-size="10" fill="#8a4090" letter-spacing="1">BARBIERI — ECSTATIC COMPUTATION</text>
+</svg>

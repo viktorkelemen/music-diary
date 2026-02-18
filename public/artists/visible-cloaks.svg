@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#E8ECEA"/>
+  <!-- Digital geometric shapes in muted teal/gray - clean digital naturalism -->
+  <!-- Layered geometric planes -->
+  <polygon points="40,60 160,40 180,120 60,140" fill="#8AABA0" opacity="0.18"/>
+  <polygon points="130,30 260,50 240,130 110,110" fill="#7A9A98" opacity="0.15"/>
+  <polygon points="80,100 200,80 220,180 100,200" fill="#90B0A8" opacity="0.14"/>
+  <!-- Clean rectangles - digital processing blocks -->
+  <rect x="170" y="130" width="80" height="50" fill="#6A8A88" opacity="0.15" transform="rotate(-5 210 155)"/>
+  <rect x="40" y="160" width="70" height="45" fill="#7A9A90" opacity="0.14" transform="rotate(3 75 182)"/>
+  <rect x="130" y="190" width="90" height="40" fill="#8AABA0" opacity="0.12" transform="rotate(-2 175 210)"/>
+  <!-- Thin precise lines - digital grid/processing -->
+  <line x1="30" y1="50" x2="270" y2="45" stroke="#6A8A88" stroke-width="0.6" opacity="0.25"/>
+  <line x1="35" y1="110" x2="265" y2="105" stroke="#7A9A98" stroke-width="0.5" opacity="0.2"/>
+  <line x1="40" y1="170" x2="260" y2="168" stroke="#6A8A88" stroke-width="0.5" opacity="0.2"/>
+  <line x1="35" y1="230" x2="265" y2="228" stroke="#7A9A98" stroke-width="0.4" opacity="0.18"/>
+  <!-- Vertical accents -->
+  <line x1="70" y1="30" x2="68" y2="250" stroke="#8AABA0" stroke-width="0.4" opacity="0.15"/>
+  <line x1="150" y1="25" x2="148" y2="255" stroke="#6A8A88" stroke-width="0.5" opacity="0.18"/>
+  <line x1="230" y1="30" x2="228" y2="250" stroke="#7A9A98" stroke-width="0.4" opacity="0.15"/>
+  <!-- Small geometric accents -->
+  <circle cx="70" cy="50" r="4" fill="none" stroke="#6A8A88" stroke-width="0.8" opacity="0.3"/>
+  <circle cx="150" cy="105" r="3" fill="none" stroke="#7A9A98" stroke-width="0.7" opacity="0.25"/>
+  <circle cx="230" cy="170" r="3.5" fill="none" stroke="#8AABA0" stroke-width="0.7" opacity="0.25"/>
+  <rect x="145" y="162" width="10" height="10" fill="none" stroke="#6A8A88" stroke-width="0.7" opacity="0.25"/>
+  <rect x="65" y="225" width="8" height="8" fill="none" stroke="#7A9A98" stroke-width="0.6" opacity="0.22"/>
+  <!-- Tiny data points -->
+  <circle cx="70" cy="110" r="1.5" fill="#6A8A88" opacity="0.3"/>
+  <circle cx="150" cy="45" r="1.5" fill="#7A9A98" opacity="0.28"/>
+  <circle cx="230" cy="105" r="1.5" fill="#8AABA0" opacity="0.25"/>
+  <circle cx="230" cy="228" r="1.5" fill="#6A8A88" opacity="0.25"/>
+  <circle cx="70" cy="170" r="1.5" fill="#7A9A98" opacity="0.25"/>
+  <circle cx="150" cy="230" r="1.5" fill="#8AABA0" opacity="0.22"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#8A9A98" letter-spacing="1">VISIBLE CLOAKS — REASSEMBLAGE</text>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="ia-bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#1a2850"/>
+      <stop offset="100%" stop-color="#0a0e20"/>
+    </radialGradient>
+    <linearGradient id="ia-gem1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#80d0f0"/>
+      <stop offset="50%" stop-color="#d0a0e0"/>
+      <stop offset="100%" stop-color="#f0d080"/>
+    </linearGradient>
+    <linearGradient id="ia-gem2" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a0e0f0"/>
+      <stop offset="50%" stop-color="#f0b0c0"/>
+      <stop offset="100%" stop-color="#e0d090"/>
+    </linearGradient>
+    <linearGradient id="ia-gem3" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#f0c0d0"/>
+      <stop offset="50%" stop-color="#90c8e8"/>
+      <stop offset="100%" stop-color="#d8c080"/>
+    </linearGradient>
+    <filter id="ia-glow">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+    <filter id="ia-glow-lg">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+  <rect width="300" height="300" fill="url(#ia-bg)"/>
+  <!-- Distant stars -->
+  <circle cx="40" cy="30" r="0.8" fill="#c0d8f0" opacity="0.4"/>
+  <circle cx="260" cy="55" r="0.6" fill="#d0e0f8" opacity="0.35"/>
+  <circle cx="85" cy="60" r="0.5" fill="#b8d0e8" opacity="0.3"/>
+  <circle cx="210" cy="25" r="0.7" fill="#c8d8f0" opacity="0.35"/>
+  <circle cx="170" cy="45" r="0.4" fill="#d8e0f0" opacity="0.25"/>
+  <circle cx="30" cy="190" r="0.6" fill="#c0d0e8" opacity="0.3"/>
+  <circle cx="275" cy="200" r="0.5" fill="#b8d0f0" opacity="0.25"/>
+  <!-- Central glow -->
+  <circle cx="150" cy="130" r="50" fill="#80b8e0" opacity="0.06" filter="url(#ia-glow-lg)"/>
+  <!-- Large crystalline faceted gem shape -->
+  <polygon points="150,55 185,95 195,140 170,175 130,175 105,140 115,95" fill="none" stroke="url(#ia-gem1)" stroke-width="0.8" opacity="0.5"/>
+  <polygon points="150,65 178,100 186,135 165,165 135,165 114,135 122,100" fill="none" stroke="url(#ia-gem2)" stroke-width="0.6" opacity="0.4"/>
+  <!-- Internal facet lines -->
+  <line x1="150" y1="55" x2="150" y2="175" stroke="#a0d0e8" stroke-width="0.3" opacity="0.25"/>
+  <line x1="115" y1="95" x2="195" y2="140" stroke="#d0b0e0" stroke-width="0.3" opacity="0.2"/>
+  <line x1="185" y1="95" x2="105" y2="140" stroke="#f0d090" stroke-width="0.3" opacity="0.2"/>
+  <line x1="130" y1="175" x2="185" y2="95" stroke="#a0c8e0" stroke-width="0.2" opacity="0.18"/>
+  <line x1="170" y1="175" x2="115" y2="95" stroke="#e0c0d0" stroke-width="0.2" opacity="0.18"/>
+  <!-- Smaller floating crystals -->
+  <polygon points="60,85 75,70 90,80 85,100 65,100" fill="none" stroke="url(#ia-gem3)" stroke-width="0.5" opacity="0.3"/>
+  <line x1="75" y1="70" x2="75" y2="100" stroke="#b0d8e8" stroke-width="0.2" opacity="0.15"/>
+  <polygon points="230,100 248,88 260,102 252,118 235,115" fill="none" stroke="url(#ia-gem1)" stroke-width="0.5" opacity="0.28"/>
+  <line x1="248" y1="88" x2="243" y2="118" stroke="#d0a8e0" stroke-width="0.2" opacity="0.15"/>
+  <polygon points="80,190 92,178 105,188 98,205 83,202" fill="none" stroke="url(#ia-gem2)" stroke-width="0.4" opacity="0.25"/>
+  <polygon points="220,175 235,165 245,178 238,192 222,190" fill="none" stroke="url(#ia-gem3)" stroke-width="0.4" opacity="0.25"/>
+  <!-- Iridescent light rays from center -->
+  <line x1="150" y1="115" x2="40" y2="50" stroke="#80c8e8" stroke-width="0.3" opacity="0.12"/>
+  <line x1="150" y1="115" x2="270" y2="40" stroke="#d0a0d8" stroke-width="0.3" opacity="0.1"/>
+  <line x1="150" y1="115" x2="280" y2="180" stroke="#e8d090" stroke-width="0.3" opacity="0.1"/>
+  <line x1="150" y1="115" x2="20" y2="200" stroke="#a0d0e0" stroke-width="0.3" opacity="0.1"/>
+  <!-- Sparkle points -->
+  <circle cx="150" cy="55" r="2" fill="#d0e8f8" opacity="0.35" filter="url(#ia-glow)"/>
+  <circle cx="195" cy="140" r="1.5" fill="#e0c0e8" opacity="0.3" filter="url(#ia-glow)"/>
+  <circle cx="105" cy="140" r="1.5" fill="#f0d8a0" opacity="0.25" filter="url(#ia-glow)"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#506888" letter-spacing="1">IASOS — INTER-DIMENSIONAL MUSIC</text>
+</svg>

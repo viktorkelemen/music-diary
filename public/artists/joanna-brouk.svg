@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="jb-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5f0e4"/>
+      <stop offset="100%" stop-color="#ebe4d0"/>
+    </linearGradient>
+    <filter id="jb-blur">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+  </defs>
+  <rect width="300" height="300" fill="url(#jb-bg)"/>
+  <!-- Subtle paper texture lines -->
+  <line x1="0" y1="60" x2="300" y2="60" stroke="#d8d0bc" stroke-width="0.3" opacity="0.3"/>
+  <line x1="0" y1="120" x2="300" y2="120" stroke="#d8d0bc" stroke-width="0.3" opacity="0.25"/>
+  <line x1="0" y1="180" x2="300" y2="180" stroke="#d8d0bc" stroke-width="0.3" opacity="0.25"/>
+  <line x1="0" y1="240" x2="300" y2="240" stroke="#d8d0bc" stroke-width="0.3" opacity="0.2"/>
+  <!-- Primary sine wave - clean, meditative -->
+  <path d="M0,150 Q37.5,100 75,150 Q112.5,200 150,150 Q187.5,100 225,150 Q262.5,200 300,150" fill="none" stroke="#a09070" stroke-width="1.5" opacity="0.5"/>
+  <!-- Second harmonic - gentler -->
+  <path d="M0,150 Q18.75,125 37.5,150 Q56.25,175 75,150 Q93.75,125 112.5,150 Q131.25,175 150,150 Q168.75,125 187.5,150 Q206.25,175 225,150 Q243.75,125 262.5,150 Q281.25,175 300,150" fill="none" stroke="#b0a080" stroke-width="0.8" opacity="0.3"/>
+  <!-- Soft shadow of the main wave -->
+  <path d="M0,153 Q37.5,103 75,153 Q112.5,203 150,153 Q187.5,103 225,153 Q262.5,203 300,153" fill="none" stroke="#a09070" stroke-width="3" opacity="0.08" filter="url(#jb-blur)"/>
+  <!-- Gentle amplitude envelope shape -->
+  <path d="M20,150 Q60,148 100,145 Q150,140 200,145 Q240,148 280,150" fill="none" stroke="#c0b090" stroke-width="0.4" opacity="0.25"/>
+  <path d="M20,150 Q60,152 100,155 Q150,160 200,155 Q240,152 280,150" fill="none" stroke="#c0b090" stroke-width="0.4" opacity="0.25"/>
+  <!-- Quiet center dot - meditative focal point -->
+  <circle cx="150" cy="150" r="3" fill="#a09070" opacity="0.15"/>
+  <circle cx="150" cy="150" r="1" fill="#908060" opacity="0.25"/>
+  <!-- Small period marks along bottom -->
+  <circle cx="75" cy="230" r="1.5" fill="#b8a888" opacity="0.15"/>
+  <circle cx="150" cy="230" r="1.5" fill="#b8a888" opacity="0.15"/>
+  <circle cx="225" cy="230" r="1.5" fill="#b8a888" opacity="0.15"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#a09878" letter-spacing="1">JOANNA BROUK — HEARING MUSIC</text>
+</svg>

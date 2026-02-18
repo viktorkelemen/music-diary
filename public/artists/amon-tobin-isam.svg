@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#1a1a1a"/>
+  <!-- Shattered glass / angular fragmented shapes -->
+  <!-- Large fragments -->
+  <polygon points="90,20 150,5 170,60 120,80" fill="#2a2a2a" stroke="#444" stroke-width="0.5"/>
+  <polygon points="150,5 230,15 210,70 170,60" fill="#333" stroke="#555" stroke-width="0.5"/>
+  <polygon points="230,15 280,40 260,90 210,70" fill="#252525" stroke="#444" stroke-width="0.5"/>
+  <polygon points="40,50 90,20 120,80 80,110" fill="#303030" stroke="#4a4a4a" stroke-width="0.5"/>
+  <polygon points="120,80 170,60 200,100 160,130" fill="#383838" stroke="#555" stroke-width="0.5"/>
+  <polygon points="170,60 210,70 220,110 200,100" fill="#2e2e2e" stroke="#444" stroke-width="0.5"/>
+  <!-- Central bright shard -->
+  <polygon points="140,110 180,95 200,140 165,160" fill="#e8e8e8" stroke="#fff" stroke-width="0.3" opacity="0.9"/>
+  <polygon points="165,160 200,140 210,175 180,185" fill="#d0d0d0" stroke="#eee" stroke-width="0.3" opacity="0.8"/>
+  <!-- Medium fragments -->
+  <polygon points="20,90 40,50 80,110 50,130" fill="#282828" stroke="#444" stroke-width="0.5"/>
+  <polygon points="210,70 260,90 250,130 220,110" fill="#2c2c2c" stroke="#444" stroke-width="0.5"/>
+  <polygon points="250,130 280,120 290,170 260,180" fill="#222" stroke="#3a3a3a" stroke-width="0.5"/>
+  <polygon points="80,110 160,130 140,170 70,150" fill="#343434" stroke="#4a4a4a" stroke-width="0.5"/>
+  <polygon points="200,100 220,110 210,175 200,140" fill="#3a3a3a" stroke="#505050" stroke-width="0.5"/>
+  <!-- Lower fragments -->
+  <polygon points="20,150 50,130 70,150 60,190" fill="#262626" stroke="#3a3a3a" stroke-width="0.5"/>
+  <polygon points="70,150 140,170 130,210 60,190" fill="#303030" stroke="#444" stroke-width="0.5"/>
+  <polygon points="140,170 165,160 180,185 170,210 130,210" fill="#3c3c3c" stroke="#505050" stroke-width="0.5"/>
+  <polygon points="180,185 210,175 240,200 210,220" fill="#353535" stroke="#4a4a4a" stroke-width="0.5"/>
+  <polygon points="210,175 250,130 260,180 240,200" fill="#282828" stroke="#404040" stroke-width="0.5"/>
+  <polygon points="260,180 290,170 295,230 270,220" fill="#1e1e1e" stroke="#333" stroke-width="0.5"/>
+  <!-- Bottom fragments -->
+  <polygon points="30,200 60,190 80,230 40,240" fill="#222" stroke="#3a3a3a" stroke-width="0.5"/>
+  <polygon points="60,190 130,210 120,250 80,230" fill="#2a2a2a" stroke="#404040" stroke-width="0.5"/>
+  <polygon points="130,210 170,210 160,255 120,250" fill="#323232" stroke="#484848" stroke-width="0.5"/>
+  <polygon points="170,210 210,220 200,260 160,255" fill="#2e2e2e" stroke="#444" stroke-width="0.5"/>
+  <polygon points="210,220 240,200 270,220 250,260 200,260" fill="#262626" stroke="#3c3c3c" stroke-width="0.5"/>
+  <!-- Accent shards - bright edges -->
+  <line x1="140" y1="110" x2="180" y2="95" stroke="#ffffff" stroke-width="0.8" opacity="0.6"/>
+  <line x1="180" y1="95" x2="200" y2="140" stroke="#ffffff" stroke-width="0.6" opacity="0.4"/>
+  <line x1="165" y1="160" x2="200" y2="140" stroke="#e0e0e0" stroke-width="0.5" opacity="0.35"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#666" letter-spacing="1">AMON TOBIN — ISAM</text>
+</svg>

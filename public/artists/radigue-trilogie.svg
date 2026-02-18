@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#e8ddd0"/>
+  <!-- A single very slow curve crossing the canvas - patience, ARP 2500 -->
+  <path d="M0,180
+    Q30,179 60,178
+    Q90,176 120,172
+    Q140,168 150,162
+    Q160,156 170,148
+    Q180,140 190,134
+    Q200,130 210,128
+    Q230,126 250,126
+    Q270,127 290,128
+    L300,128"
+    fill="none" stroke="#4a3828" stroke-width="1.2" opacity="0.7" stroke-linecap="round"/>
+  <!-- Barely visible second trace, like a ghost of the line -->
+  <path d="M0,182
+    Q30,181 60,180
+    Q90,178 120,174
+    Q140,170 150,164
+    Q160,158 170,150
+    Q180,142 190,136
+    Q200,132 210,130
+    Q230,128 250,128
+    Q270,129 290,130
+    L300,130"
+    fill="none" stroke="#5a4838" stroke-width="0.4" opacity="0.25" stroke-linecap="round"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#8a7a68" letter-spacing="1">RADIGUE — TRILOGIE DE LA MORT</text>
+</svg>

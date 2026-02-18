@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="bd-bg" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#d4c8b0"/>
+      <stop offset="100%" stop-color="#b8a888"/>
+    </radialGradient>
+  </defs>
+  <rect width="300" height="300" fill="url(#bd-bg)"/>
+  <!-- Concentric circles progressively fading/decaying - tape loop deterioration -->
+  <!-- Innermost - most solid -->
+  <circle cx="150" cy="140" r="12" fill="none" stroke="#5a4830" stroke-width="2.0" opacity="0.85"/>
+  <circle cx="150" cy="140" r="22" fill="none" stroke="#5a4830" stroke-width="1.9" opacity="0.80"/>
+  <circle cx="150" cy="140" r="32" fill="none" stroke="#5c4a32" stroke-width="1.8" opacity="0.72"/>
+  <circle cx="150" cy="140" r="42" fill="none" stroke="#5e4c34" stroke-width="1.7" opacity="0.64"/>
+  <circle cx="150" cy="140" r="52" fill="none" stroke="#604e36" stroke-width="1.5" opacity="0.55"/>
+  <circle cx="150" cy="140" r="62" fill="none" stroke="#625038" stroke-width="1.3" opacity="0.46"/>
+  <circle cx="150" cy="140" r="72" fill="none" stroke="#64523a" stroke-width="1.1" opacity="0.38"/>
+  <circle cx="150" cy="140" r="82" fill="none" stroke="#66543c" stroke-width="1.0" opacity="0.30"/>
+  <circle cx="150" cy="140" r="92" fill="none" stroke="#68563e" stroke-width="0.8" opacity="0.22"/>
+  <circle cx="150" cy="140" r="102" fill="none" stroke="#6a5840" stroke-width="0.7" opacity="0.16"/>
+  <circle cx="150" cy="140" r="112" fill="none" stroke="#6c5a42" stroke-width="0.5" opacity="0.11"/>
+  <circle cx="150" cy="140" r="122" fill="none" stroke="#6e5c44" stroke-width="0.4" opacity="0.07"/>
+  <!-- Outermost - barely visible, almost gone -->
+  <circle cx="150" cy="140" r="132" fill="none" stroke="#705e46" stroke-width="0.3" opacity="0.04"/>
+  <!-- Degraded / broken circle fragments suggesting tape decay -->
+  <path d="M150,140 m-47,0 a47,47 0 0,1 30,-36" fill="none" stroke="#5a4830" stroke-width="0.6" opacity="0.15" stroke-dasharray="2,4"/>
+  <path d="M150,140 m62,10 a63,63 0 0,1 -20,45" fill="none" stroke="#5a4830" stroke-width="0.5" opacity="0.12" stroke-dasharray="1,6"/>
+  <path d="M150,140 m-85,15 a86,86 0 0,1 10,-50" fill="none" stroke="#604e36" stroke-width="0.4" opacity="0.08" stroke-dasharray="2,8"/>
+  <!-- Faint oxide specks -->
+  <circle cx="130" cy="115" r="0.8" fill="#5a4830" opacity="0.15"/>
+  <circle cx="175" cy="160" r="0.6" fill="#5a4830" opacity="0.12"/>
+  <circle cx="118" cy="150" r="0.7" fill="#604e36" opacity="0.1"/>
+  <circle cx="180" cy="120" r="0.5" fill="#604e36" opacity="0.08"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#6a5840" letter-spacing="0.5">BASINSKI — THE DISINTEGRATION LOOPS</text>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="km-bg" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#1a0a2e"/>
+      <stop offset="50%" stop-color="#16082a"/>
+      <stop offset="100%" stop-color="#0d0418"/>
+    </linearGradient>
+    <linearGradient id="km-key" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9b59d0" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#6b30a0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="km-glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#b060e0" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#1a0a2e" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="km-blur">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+  <rect width="300" height="300" fill="url(#km-bg)"/>
+  <!-- Piano key-like vertical lines - sharp, precise -->
+  <line x1="30" y1="20" x2="30" y2="180" stroke="#8040c0" stroke-width="2" opacity="0.5"/>
+  <line x1="55" y1="30" x2="55" y2="200" stroke="#9050d0" stroke-width="1.5" opacity="0.45"/>
+  <line x1="78" y1="15" x2="78" y2="170" stroke="#7030b0" stroke-width="2.5" opacity="0.4"/>
+  <line x1="105" y1="25" x2="105" y2="210" stroke="#a060d8" stroke-width="1.8" opacity="0.5"/>
+  <line x1="130" y1="10" x2="130" y2="190" stroke="#8848c8" stroke-width="2" opacity="0.55"/>
+  <line x1="155" y1="20" x2="155" y2="220" stroke="#9858d0" stroke-width="2.2" opacity="0.5"/>
+  <line x1="180" y1="35" x2="180" y2="195" stroke="#7838b8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="205" y1="18" x2="205" y2="205" stroke="#a868e0" stroke-width="2" opacity="0.45"/>
+  <line x1="230" y1="28" x2="230" y2="185" stroke="#8040c0" stroke-width="1.8" opacity="0.5"/>
+  <line x1="258" y1="22" x2="258" y2="215" stroke="#9050d0" stroke-width="2.2" opacity="0.4"/>
+  <line x1="280" y1="12" x2="280" y2="175" stroke="#7530b0" stroke-width="1.5" opacity="0.35"/>
+  <!-- Modular wavy lines weaving through -->
+  <path d="M0,90 Q30,70 60,95 Q90,120 120,85 Q150,50 180,80 Q210,110 240,75 Q270,40 300,70" fill="none" stroke="#c080f0" stroke-width="1.2" opacity="0.6"/>
+  <path d="M0,130 Q40,105 80,135 Q120,165 160,125 Q200,85 240,120 Q270,145 300,115" fill="none" stroke="#d090ff" stroke-width="0.8" opacity="0.45"/>
+  <path d="M0,160 Q35,140 70,165 Q110,190 150,150 Q190,110 230,148 Q265,175 300,145" fill="none" stroke="#b070e0" stroke-width="1" opacity="0.4"/>
+  <path d="M0,110 Q45,85 90,115 Q135,145 175,100 Q215,55 255,95 Q280,115 300,95" fill="none" stroke="#e0a0ff" stroke-width="0.6" opacity="0.35"/>
+  <!-- Glow spots where piano meets modular -->
+  <circle cx="78" cy="95" r="8" fill="#b060e0" opacity="0.15" filter="url(#km-blur)"/>
+  <circle cx="155" cy="125" r="10" fill="#c080f0" opacity="0.12" filter="url(#km-blur)"/>
+  <circle cx="230" cy="80" r="7" fill="#a060d8" opacity="0.13" filter="url(#km-blur)"/>
+  <circle cx="105" cy="135" r="6" fill="#d090ff" opacity="0.1" filter="url(#km-blur)"/>
+  <!-- Subtle ultraviolet shimmer -->
+  <rect width="300" height="300" fill="url(#km-glow)"/>
+  <!-- Small bright accents -->
+  <circle cx="130" cy="85" r="1.5" fill="#e0b0ff" opacity="0.5"/>
+  <circle cx="205" cy="115" r="1" fill="#d0a0f0" opacity="0.4"/>
+  <circle cx="55" cy="95" r="1.2" fill="#c090e8" opacity="0.45"/>
+  <circle cx="258" cy="145" r="1" fill="#e0b0ff" opacity="0.35"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#7050a0" letter-spacing="1">KELLY MORAN — ULTRAVIOLET</text>
+</svg>

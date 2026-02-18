@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#F0F5FA"/>
+  <!-- Soft ripple patterns in light blue/white - water-inspired modular sketches -->
+  <defs>
+    <clipPath id="frame">
+      <rect width="300" height="270"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <!-- Concentric ripples - center point slightly off-center -->
+    <circle cx="160" cy="130" r="20" fill="none" stroke="#B0D0E8" stroke-width="0.8" opacity="0.35"/>
+    <circle cx="160" cy="130" r="35" fill="none" stroke="#A8C8E0" stroke-width="0.7" opacity="0.3"/>
+    <circle cx="160" cy="130" r="52" fill="none" stroke="#B0D0E8" stroke-width="0.6" opacity="0.28"/>
+    <circle cx="160" cy="130" r="72" fill="none" stroke="#A0C0D8" stroke-width="0.6" opacity="0.25"/>
+    <circle cx="160" cy="130" r="95" fill="none" stroke="#B0D0E8" stroke-width="0.5" opacity="0.22"/>
+    <circle cx="160" cy="130" r="120" fill="none" stroke="#A8C8E0" stroke-width="0.5" opacity="0.2"/>
+    <circle cx="160" cy="130" r="148" fill="none" stroke="#B0D0E8" stroke-width="0.4" opacity="0.18"/>
+    <circle cx="160" cy="130" r="178" fill="none" stroke="#A0C0D8" stroke-width="0.4" opacity="0.15"/>
+    <!-- Second ripple source -->
+    <circle cx="90" cy="180" r="15" fill="none" stroke="#C0D8E8" stroke-width="0.7" opacity="0.25"/>
+    <circle cx="90" cy="180" r="30" fill="none" stroke="#B8D0E0" stroke-width="0.6" opacity="0.22"/>
+    <circle cx="90" cy="180" r="48" fill="none" stroke="#C0D8E8" stroke-width="0.5" opacity="0.2"/>
+    <circle cx="90" cy="180" r="68" fill="none" stroke="#B8D0E0" stroke-width="0.5" opacity="0.18"/>
+    <circle cx="90" cy="180" r="90" fill="none" stroke="#C0D8E8" stroke-width="0.4" opacity="0.15"/>
+    <circle cx="90" cy="180" r="115" fill="none" stroke="#B8D0E0" stroke-width="0.4" opacity="0.12"/>
+    <!-- Third subtle ripple -->
+    <circle cx="230" cy="90" r="18" fill="none" stroke="#C8E0F0" stroke-width="0.5" opacity="0.2"/>
+    <circle cx="230" cy="90" r="38" fill="none" stroke="#C0D8E8" stroke-width="0.4" opacity="0.18"/>
+    <circle cx="230" cy="90" r="60" fill="none" stroke="#C8E0F0" stroke-width="0.4" opacity="0.15"/>
+    <circle cx="230" cy="90" r="85" fill="none" stroke="#C0D8E8" stroke-width="0.3" opacity="0.12"/>
+    <!-- Tiny drop points -->
+    <circle cx="160" cy="130" r="2.5" fill="#A0C8E0" opacity="0.3"/>
+    <circle cx="90" cy="180" r="2" fill="#B0D0E0" opacity="0.25"/>
+    <circle cx="230" cy="90" r="1.8" fill="#B8D8E8" opacity="0.22"/>
+    <!-- Faint horizontal water surface lines -->
+    <line x1="0" y1="100" x2="300" y2="102" stroke="#C8E0F0" stroke-width="0.3" opacity="0.12"/>
+    <line x1="0" y1="155" x2="300" y2="153" stroke="#B8D0E0" stroke-width="0.3" opacity="0.1"/>
+    <line x1="0" y1="210" x2="300" y2="212" stroke="#C8E0F0" stroke-width="0.3" opacity="0.1"/>
+  </g>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#98B0C0" letter-spacing="1">EMILY SPRAGUE — WATER MEMORY</text>
+</svg>

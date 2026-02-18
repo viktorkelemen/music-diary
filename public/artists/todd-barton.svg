@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#F5F0E6"/>
+  <!-- Buchla patch diagram style - clean educational feel -->
+  <!-- Grid lines (very subtle) -->
+  <line x1="0" y1="75" x2="300" y2="75" stroke="#E0D8C8" stroke-width="0.5"/>
+  <line x1="0" y1="150" x2="300" y2="150" stroke="#E0D8C8" stroke-width="0.5"/>
+  <line x1="0" y1="225" x2="300" y2="225" stroke="#E0D8C8" stroke-width="0.5"/>
+  <line x1="75" y1="0" x2="75" y2="270" stroke="#E0D8C8" stroke-width="0.5"/>
+  <line x1="150" y1="0" x2="150" y2="270" stroke="#E0D8C8" stroke-width="0.5"/>
+  <line x1="225" y1="0" x2="225" y2="270" stroke="#E0D8C8" stroke-width="0.5"/>
+  <!-- Patch cables (curved connections) -->
+  <path d="M 75 75 C 75 112, 150 112, 150 75" fill="none" stroke="#B8A088" stroke-width="1.5" opacity="0.6"/>
+  <path d="M 150 75 C 180 75, 195 120, 225 150" fill="none" stroke="#8FA89A" stroke-width="1.5" opacity="0.6"/>
+  <path d="M 75 150 C 112 150, 112 225, 150 225" fill="none" stroke="#A89080" stroke-width="1.5" opacity="0.6"/>
+  <path d="M 225 150 C 225 187, 150 187, 150 225" fill="none" stroke="#7A9A8A" stroke-width="1.5" opacity="0.6"/>
+  <path d="M 75 75 C 50 120, 50 180, 75 225" fill="none" stroke="#C4A882" stroke-width="1.2" opacity="0.45"/>
+  <path d="M 75 150 C 120 130, 180 130, 225 150" fill="none" stroke="#8FA89A" stroke-width="1.2" opacity="0.45"/>
+  <path d="M 150 75 C 150 130, 75 170, 75 225" fill="none" stroke="#A89080" stroke-width="1.2" opacity="0.4"/>
+  <!-- Module nodes -->
+  <rect x="60" y="60" width="30" height="30" rx="4" fill="#D4C4A8" stroke="#B8A088" stroke-width="1"/>
+  <rect x="135" y="60" width="30" height="30" rx="4" fill="#A8C4B4" stroke="#7A9A8A" stroke-width="1"/>
+  <rect x="210" y="135" width="30" height="30" rx="4" fill="#C4B8A0" stroke="#A89080" stroke-width="1"/>
+  <rect x="60" y="135" width="30" height="30" rx="4" fill="#B4C8BC" stroke="#8FA89A" stroke-width="1"/>
+  <rect x="135" y="210" width="30" height="30" rx="4" fill="#D4C4A8" stroke="#B8A088" stroke-width="1"/>
+  <rect x="60" y="210" width="30" height="30" rx="4" fill="#A8C4B4" stroke="#7A9A8A" stroke-width="1"/>
+  <!-- Node labels -->
+  <text x="75" y="79" font-family="monospace" font-size="7" fill="#8A7A60" text-anchor="middle">OSC</text>
+  <text x="150" y="79" font-family="monospace" font-size="7" fill="#5A7A6A" text-anchor="middle">LPG</text>
+  <text x="225" y="154" font-family="monospace" font-size="7" fill="#7A6A50" text-anchor="middle">ENV</text>
+  <text x="75" y="154" font-family="monospace" font-size="7" fill="#5A7A6A" text-anchor="middle">SRC</text>
+  <text x="150" y="229" font-family="monospace" font-size="7" fill="#8A7A60" text-anchor="middle">OUT</text>
+  <text x="75" y="229" font-family="monospace" font-size="7" fill="#5A7A6A" text-anchor="middle">SEQ</text>
+  <!-- Small connection dots at nodes -->
+  <circle cx="75" cy="90" r="2.5" fill="#B8A088"/>
+  <circle cx="150" cy="90" r="2.5" fill="#7A9A8A"/>
+  <circle cx="225" cy="150" r="2.5" fill="#A89080"/>
+  <circle cx="75" cy="150" r="2.5" fill="#8FA89A"/>
+  <circle cx="150" cy="225" r="2.5" fill="#B8A088"/>
+  <circle cx="90" cy="225" r="2.5" fill="#7A9A8A"/>
+  <circle cx="75" cy="60" r="2.5" fill="#B8A088"/>
+  <circle cx="150" cy="60" r="2.5" fill="#7A9A8A"/>
+  <circle cx="225" cy="165" r="2.5" fill="#A89080"/>
+  <circle cx="60" cy="150" r="2.5" fill="#8FA89A"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#A09480" letter-spacing="1">TODD BARTON — BUCHLA STUDIES</text>
+</svg>

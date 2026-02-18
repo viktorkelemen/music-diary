@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="sl-band1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f0ece4"/>
+      <stop offset="50%" stop-color="#ede8df"/>
+      <stop offset="100%" stop-color="#f0ece4"/>
+    </linearGradient>
+    <linearGradient id="sl-band2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e8e4dc"/>
+      <stop offset="50%" stop-color="#e4e0d8"/>
+      <stop offset="100%" stop-color="#e8e4dc"/>
+    </linearGradient>
+    <linearGradient id="sl-band3" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#dddae8"/>
+      <stop offset="50%" stop-color="#d8d5e4"/>
+      <stop offset="100%" stop-color="#dddae8"/>
+    </linearGradient>
+    <linearGradient id="sl-band4" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d4d8e6"/>
+      <stop offset="50%" stop-color="#d0d4e2"/>
+      <stop offset="100%" stop-color="#d4d8e6"/>
+    </linearGradient>
+    <linearGradient id="sl-band5" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d8dce8"/>
+      <stop offset="50%" stop-color="#d4d8e4"/>
+      <stop offset="100%" stop-color="#d8dce8"/>
+    </linearGradient>
+  </defs>
+  <!-- Cream base -->
+  <rect width="300" height="300" fill="#f2eee6"/>
+  <!-- Very gentle horizontal gradient bands -->
+  <rect y="0" width="300" height="30" fill="url(#sl-band1)" opacity="0.6"/>
+  <rect y="30" width="300" height="25" fill="#eeead2" opacity="0.4"/>
+  <rect y="55" width="300" height="30" fill="url(#sl-band2)" opacity="0.5"/>
+  <rect y="85" width="300" height="25" fill="#e6e2da" opacity="0.5"/>
+  <rect y="110" width="300" height="30" fill="url(#sl-band3)" opacity="0.4"/>
+  <rect y="140" width="300" height="28" fill="#dcd8e4" opacity="0.45"/>
+  <rect y="168" width="300" height="30" fill="url(#sl-band4)" opacity="0.4"/>
+  <rect y="198" width="300" height="28" fill="url(#sl-band5)" opacity="0.45"/>
+  <rect y="226" width="300" height="25" fill="#dddae6" opacity="0.35"/>
+  <rect y="251" width="300" height="49" fill="#e0dce6" opacity="0.3"/>
+  <!-- Softer overlapping transparent bands for depth -->
+  <rect y="20" width="300" height="60" fill="#e8e4d8" opacity="0.15"/>
+  <rect y="100" width="300" height="70" fill="#d8d4e0" opacity="0.15"/>
+  <rect y="180" width="300" height="60" fill="#d4d0dc" opacity="0.12"/>
+  <!-- Barely visible horizontal lines for glacial texture -->
+  <line x1="0" y1="45" x2="300" y2="45" stroke="#d8d4cc" stroke-width="0.3" opacity="0.3"/>
+  <line x1="0" y1="95" x2="300" y2="95" stroke="#d0ccc4" stroke-width="0.3" opacity="0.25"/>
+  <line x1="0" y1="148" x2="300" y2="148" stroke="#ccc8d4" stroke-width="0.3" opacity="0.25"/>
+  <line x1="0" y1="200" x2="300" y2="200" stroke="#c8c4d0" stroke-width="0.3" opacity="0.2"/>
+  <line x1="0" y1="240" x2="300" y2="240" stroke="#ccc8d4" stroke-width="0.3" opacity="0.2"/>
+  <text x="15" y="285" font-family="monospace" font-size="7.5" fill="#a8a4b0" letter-spacing="0.5">STARS OF THE LID — REFINEMENT OF THE DECLINE</text>
+</svg>

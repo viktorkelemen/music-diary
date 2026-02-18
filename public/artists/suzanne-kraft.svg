@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="sk-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5d8b8"/>
+      <stop offset="25%" stop-color="#f0c8a0"/>
+      <stop offset="50%" stop-color="#e8a888"/>
+      <stop offset="75%" stop-color="#e09878"/>
+      <stop offset="100%" stop-color="#d88868"/>
+    </linearGradient>
+    <linearGradient id="sk-haze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8e0c0" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#e09868" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="sk-blur">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="sk-blur-sm">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+  <rect width="300" height="300" fill="url(#sk-bg)"/>
+  <!-- Warm haze layers - sunset atmosphere -->
+  <rect x="0" y="80" width="300" height="60" fill="#f0c098" opacity="0.15" filter="url(#sk-blur)"/>
+  <rect x="0" y="140" width="300" height="50" fill="#e8a880" opacity="0.12" filter="url(#sk-blur)"/>
+  <rect x="0" y="40" width="300" height="40" fill="#f5d0a8" opacity="0.1" filter="url(#sk-blur)"/>
+  <!-- Soft warm orb - like a setting sun -->
+  <circle cx="150" cy="110" r="60" fill="#f8d8b0" opacity="0.15" filter="url(#sk-blur)"/>
+  <circle cx="150" cy="110" r="35" fill="#f5d0a0" opacity="0.12" filter="url(#sk-blur-sm)"/>
+  <circle cx="150" cy="110" r="15" fill="#f8e0c0" opacity="0.15"/>
+  <!-- Minimal horizontal lines - analog warmth -->
+  <line x1="40" y1="90" x2="260" y2="90" stroke="#e8b888" stroke-width="0.5" opacity="0.2"/>
+  <line x1="60" y1="130" x2="240" y2="130" stroke="#e0a878" stroke-width="0.4" opacity="0.18"/>
+  <line x1="50" y1="170" x2="250" y2="170" stroke="#d89868" stroke-width="0.4" opacity="0.15"/>
+  <line x1="70" y1="200" x2="230" y2="200" stroke="#d09060" stroke-width="0.3" opacity="0.12"/>
+  <!-- Very subtle warm overlay -->
+  <rect width="300" height="300" fill="url(#sk-haze)"/>
+  <!-- Tiny warm sparkles -->
+  <circle cx="130" cy="95" r="1.5" fill="#f8e8d0" opacity="0.25"/>
+  <circle cx="170" cy="105" r="1" fill="#f8e0c0" opacity="0.2"/>
+  <circle cx="145" cy="120" r="1.2" fill="#f5d8b0" opacity="0.18"/>
+  <circle cx="160" cy="85" r="0.8" fill="#f8e8d0" opacity="0.2"/>
+  <text x="15" y="285" font-family="monospace" font-size="9" fill="#b87858" letter-spacing="1">SUZANNE KRAFT — TALK FROM HOME</text>
+</svg>
