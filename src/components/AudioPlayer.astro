@@ -169,7 +169,7 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
       this.audio.preload = "metadata";
 
       this.bindEvents();
-      this.loadWaveform();
+      this.loadAudio();
     }
 
     private bindEvents() {
@@ -216,62 +216,19 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
       ro.observe(this.canvas);
     }
 
-    private async loadWaveform() {
+    private loadAudio() {
       const url = this.container.dataset.url!;
-      try {
-        // Fetch once, reuse for both waveform decoding and audio playback
-        const response = await fetch(url);
-        const blob = await response.blob();
-        this.audio.src = URL.createObjectURL(blob);
 
-        const buffer = await blob.arrayBuffer();
-        const audioCtx = new AudioContext();
-        const decoded = await audioCtx.decodeAudioData(buffer);
-        audioCtx.close();
-
-        this.peaks = this.extractPeaks(decoded);
-        this.sizeCanvas();
-        this.skeleton.classList.add("hidden");
-        this.drawWaveform();
+      // Stream audio natively — don't download the whole file
+      this.audio.src = url;
+      this.audio.addEventListener("loadedmetadata", () => {
+        this.updateTime();
         this.playBtn.disabled = false;
-
-        this.audio.addEventListener("loadedmetadata", () => {
-          this.updateTime();
-        });
-        if (decoded.duration) {
-          this.timeDisplay.textContent = `0:00 / ${this.formatTime(decoded.duration)}`;
-        }
-      } catch (err) {
-        console.error("Failed to load waveform:", err);
-        // Fallback: use original URL for audio, show flat bars
-        this.audio.src = url;
         this.skeleton.classList.add("hidden");
         this.peaks = Array(100).fill(0.3);
         this.sizeCanvas();
         this.drawWaveform();
-        this.playBtn.disabled = false;
-      }
-    }
-
-    private extractPeaks(audioBuffer: AudioBuffer): number[] {
-      const channel = audioBuffer.getChannelData(0);
-      const numBars = Math.min(300, Math.max(60, Math.floor(this.canvas.clientWidth / 4)));
-      const blockSize = Math.floor(channel.length / numBars);
-      const peaks: number[] = [];
-
-      for (let i = 0; i < numBars; i++) {
-        let max = 0;
-        const start = i * blockSize;
-        for (let j = 0; j < blockSize; j++) {
-          const v = Math.abs(channel[start + j]);
-          if (v > max) max = v;
-        }
-        peaks.push(max);
-      }
-
-      // Normalize
-      const peakMax = Math.max(...peaks, 0.01);
-      return peaks.map((p) => p / peakMax);
+      });
     }
 
     private sizeCanvas() {
