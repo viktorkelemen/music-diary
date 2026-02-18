@@ -110,6 +110,20 @@ const audioUrls = data.audioUrl
     grid-column: span 2;
   }
 
+  @media (max-width: 600px) {
+    .video-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .video-grid.single {
+      max-width: 100%;
+    }
+
+    .video-grid :global(.video-embed:not(.short)) {
+      grid-column: span 1;
+    }
+  }
+
   .entry-notes {
     margin-top: 1rem;
     line-height: 1.7;
@@ -280,6 +294,46 @@ const audioUrls = data.audioUrl
 
   .artist-lightbox-close:hover {
     opacity: 1;
+  }
+
+  @media (max-width: 600px) {
+    .entry-card {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+    }
+
+    .entry-notes :global(h2) {
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    .entry-notes :global(.svg-cover-grid) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .entry-notes :global(.artist-grid) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+
+    .entry-notes :global(.artist-card .artist-info) {
+      padding: 0.4rem 0.5rem;
+    }
+
+    .entry-notes :global(.artist-card .artist-name) {
+      font-size: 0.72rem;
+    }
+
+    .entry-notes :global(.artist-card .artist-style) {
+      font-size: 0.65rem;
+    }
+
+    .artist-lightbox {
+      padding: 1rem;
+    }
   }
 </style>
 
