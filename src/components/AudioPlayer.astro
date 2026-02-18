@@ -135,6 +135,8 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
 </style>
 
 <script>
+  let activePlayer: WaveformPlayer | null = null;
+
   class WaveformPlayer {
     private container: HTMLElement;
     private canvas: HTMLCanvasElement;
@@ -176,6 +178,7 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
       this.audio.addEventListener("ended", () => {
         this.setPlaying(false);
         this.drawWaveform();
+        if (activePlayer === this) activePlayer = null;
       });
 
       // Canvas seek (mouse)
@@ -344,12 +347,18 @@ const filename = decodeURIComponent(url.split("/").pop() || "");
 
     private togglePlay() {
       if (this.audio.paused) {
+        if (activePlayer && activePlayer !== this) {
+          activePlayer.audio.pause();
+          activePlayer.setPlaying(false);
+        }
+        activePlayer = this;
         this.audio.play();
         this.setPlaying(true);
         this.startAnimation();
       } else {
         this.audio.pause();
         this.setPlaying(false);
+        activePlayer = null;
         this.stopAnimation();
       }
     }
