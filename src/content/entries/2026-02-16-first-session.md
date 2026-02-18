@@ -3,31 +3,31 @@ title: "Clicks & Cuts Research"
 date: 2026-02-16
 moodboard:
   - type: image
-    src: "/moodboards/clicks-cuts-vol1.svg"
+    src: "/artists/covers/clicks-cuts-vol1.jpg"
     caption: "Clicks+Cuts Vol.1 (2000)"
   - type: image
-    src: "/moodboards/oval-systemisch.svg"
+    src: "/artists/covers/oval-systemisch.jpg"
     caption: "Oval — Systemisch"
   - type: image
-    src: "/moodboards/pole-1.svg"
+    src: "/artists/covers/pole-1.jpg"
     caption: "Pole — 1"
   - type: image
-    src: "/moodboards/alva-noto-transform.svg"
+    src: "/artists/covers/alva-noto-transform.jpg"
     caption: "Alva Noto — Transform"
   - type: image
-    src: "/moodboards/ikeda-dataplex.svg"
+    src: "/artists/covers/ikeda-dataplex.jpg"
     caption: "Ryoji Ikeda — Dataplex"
   - type: image
-    src: "/moodboards/fennesz-endless-summer.svg"
+    src: "/artists/covers/fennesz-endless-summer.jpg"
     caption: "Fennesz — Endless Summer"
   - type: image
-    src: "/moodboards/pan-sonic-vakio.svg"
+    src: "/artists/covers/pan-sonic-vakio.jpg"
     caption: "Pan Sonic — Vakio"
   - type: image
-    src: "/moodboards/jelinek-loop-finding.svg"
+    src: "/artists/covers/jelinek-loop-finding.jpg"
     caption: "Jelinek — Loop-Finding-Jazz"
   - type: image
-    src: "/moodboards/devine-creature.svg"
+    src: "/artists/covers/devine-creature.jpg"
     caption: "Richard Devine — Creature"
   - type: link
     url: "/clicks-and-cuts-moodboard.html"
