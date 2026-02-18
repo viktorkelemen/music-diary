@@ -7,29 +7,392 @@ const { url } = Astro.props;
 const filename = decodeURIComponent(url.split("/").pop() || "");
 ---
 
-<div class="audio-player">
-  <p class="audio-filename">{filename}</p>
-  <audio controls preload="metadata">
-    <source src={url} type="audio/wav" />
-  </audio>
+<div class="waveform-player" data-url={url}>
+  <button class="play-btn" aria-label="Play" disabled>
+    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+      <rect x="6" y="5" width="4" height="14" />
+      <rect x="14" y="5" width="4" height="14" />
+    </svg>
+  </button>
+  <div class="waveform-right">
+    <p class="audio-filename">{filename}</p>
+    <canvas class="waveform-canvas"></canvas>
+    <span class="time-display">0:00 / 0:00</span>
+    <div class="loading-skeleton" aria-hidden="true">
+      {Array.from({ length: 60 }).map(() => <span class="skel-bar" />)}
+    </div>
+  </div>
 </div>
 
 <style>
-  .audio-player {
+  .waveform-player {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     background: #f8f8f8;
     border-radius: 8px;
     padding: 0.75rem 1rem;
     margin: 0.5rem 0;
   }
 
+  .play-btn {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+
+  .play-btn:hover:not(:disabled) {
+    background: #444;
+  }
+
+  .play-btn:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+
+  .play-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .waveform-right {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+  }
+
   .audio-filename {
     font-size: 0.75rem;
     color: #888;
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.3rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  audio {
+  .waveform-canvas {
+    display: block;
     width: 100%;
-    height: 36px;
+    height: 48px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .time-display {
+    font-size: 0.7rem;
+    color: #888;
+    margin-top: 0.2rem;
+    display: block;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Loading skeleton */
+  .loading-skeleton {
+    position: absolute;
+    top: calc(0.75rem + 0.3rem); /* filename height offset */
+    left: 0;
+    right: 0;
+    height: 48px;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    overflow: hidden;
+  }
+
+  .loading-skeleton.hidden {
+    display: none;
+  }
+
+  .skel-bar {
+    flex: 1;
+    background: #d4d4d4;
+    border-radius: 1px;
+    animation: skel-pulse 1.2s ease-in-out infinite;
+  }
+
+  .skel-bar:nth-child(odd) { height: 60%; }
+  .skel-bar:nth-child(even) { height: 40%; }
+  .skel-bar:nth-child(3n) { height: 80%; }
+  .skel-bar:nth-child(5n) { height: 50%; }
+  .skel-bar:nth-child(7n) { height: 90%; }
+
+  @keyframes skel-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
   }
 </style>
+
+<script>
+  class WaveformPlayer {
+    private container: HTMLElement;
+    private canvas: HTMLCanvasElement;
+    private ctx: CanvasRenderingContext2D;
+    private audio: HTMLAudioElement;
+    private playBtn: HTMLButtonElement;
+    private iconPlay: SVGElement;
+    private iconPause: SVGElement;
+    private timeDisplay: HTMLElement;
+    private skeleton: HTMLElement;
+    private peaks: number[] = [];
+    private animId: number | null = null;
+    private isDragging = false;
+
+    private readonly ACCENT = "#f97316";
+    private readonly UNPLAYED = "#c4c4c4";
+    private readonly BAR_GAP = 2;
+
+    constructor(container: HTMLElement) {
+      this.container = container;
+      this.canvas = container.querySelector(".waveform-canvas")!;
+      this.ctx = this.canvas.getContext("2d")!;
+      this.playBtn = container.querySelector(".play-btn")!;
+      this.iconPlay = container.querySelector(".icon-play")!;
+      this.iconPause = container.querySelector(".icon-pause")!;
+      this.timeDisplay = container.querySelector(".time-display")!;
+      this.skeleton = container.querySelector(".loading-skeleton")!;
+
+      this.audio = new Audio();
+      this.audio.preload = "metadata";
+
+      this.bindEvents();
+      this.loadWaveform();
+    }
+
+    private bindEvents() {
+      this.playBtn.addEventListener("click", () => this.togglePlay());
+
+      this.audio.addEventListener("ended", () => {
+        this.setPlaying(false);
+        this.drawWaveform();
+      });
+
+      // Canvas seek (mouse)
+      this.canvas.addEventListener("mousedown", (e) => {
+        this.isDragging = true;
+        this.seek(e);
+      });
+      window.addEventListener("mousemove", (e) => {
+        if (this.isDragging) this.seek(e);
+      });
+      window.addEventListener("mouseup", () => {
+        this.isDragging = false;
+      });
+
+      // Canvas seek (touch)
+      this.canvas.addEventListener("touchstart", (e) => {
+        this.isDragging = true;
+        this.seekTouch(e);
+      }, { passive: false });
+      this.canvas.addEventListener("touchmove", (e) => {
+        if (this.isDragging) {
+          e.preventDefault();
+          this.seekTouch(e);
+        }
+      }, { passive: false });
+      this.canvas.addEventListener("touchend", () => {
+        this.isDragging = false;
+      });
+
+      // Responsive resize
+      const ro = new ResizeObserver(() => {
+        this.sizeCanvas();
+        if (this.peaks.length) this.drawWaveform();
+      });
+      ro.observe(this.canvas);
+    }
+
+    private async loadWaveform() {
+      const url = this.container.dataset.url!;
+      try {
+        // Fetch once, reuse for both waveform decoding and audio playback
+        const response = await fetch(url);
+        const blob = await response.blob();
+        this.audio.src = URL.createObjectURL(blob);
+
+        const buffer = await blob.arrayBuffer();
+        const audioCtx = new AudioContext();
+        const decoded = await audioCtx.decodeAudioData(buffer);
+        audioCtx.close();
+
+        this.peaks = this.extractPeaks(decoded);
+        this.sizeCanvas();
+        this.skeleton.classList.add("hidden");
+        this.drawWaveform();
+        this.playBtn.disabled = false;
+
+        this.audio.addEventListener("loadedmetadata", () => {
+          this.updateTime();
+        });
+        if (decoded.duration) {
+          this.timeDisplay.textContent = `0:00 / ${this.formatTime(decoded.duration)}`;
+        }
+      } catch (err) {
+        console.error("Failed to load waveform:", err);
+        // Fallback: use original URL for audio, show flat bars
+        this.audio.src = url;
+        this.skeleton.classList.add("hidden");
+        this.peaks = Array(100).fill(0.3);
+        this.sizeCanvas();
+        this.drawWaveform();
+        this.playBtn.disabled = false;
+      }
+    }
+
+    private extractPeaks(audioBuffer: AudioBuffer): number[] {
+      const channel = audioBuffer.getChannelData(0);
+      const numBars = Math.min(300, Math.max(60, Math.floor(this.canvas.clientWidth / 4)));
+      const blockSize = Math.floor(channel.length / numBars);
+      const peaks: number[] = [];
+
+      for (let i = 0; i < numBars; i++) {
+        let max = 0;
+        const start = i * blockSize;
+        for (let j = 0; j < blockSize; j++) {
+          const v = Math.abs(channel[start + j]);
+          if (v > max) max = v;
+        }
+        peaks.push(max);
+      }
+
+      // Normalize
+      const peakMax = Math.max(...peaks, 0.01);
+      return peaks.map((p) => p / peakMax);
+    }
+
+    private sizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = this.canvas.getBoundingClientRect();
+      this.canvas.width = rect.width * dpr;
+      this.canvas.height = rect.height * dpr;
+      this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    private drawWaveform() {
+      const w = this.canvas.clientWidth;
+      const h = this.canvas.clientHeight;
+      this.ctx.clearRect(0, 0, w, h);
+
+      if (!this.peaks.length) return;
+
+      const numBars = this.peaks.length;
+      const barWidth = (w - (numBars - 1) * this.BAR_GAP) / numBars;
+      const progress = this.audio.duration
+        ? this.audio.currentTime / this.audio.duration
+        : 0;
+      const progressX = progress * w;
+      const minBarH = 2;
+
+      for (let i = 0; i < numBars; i++) {
+        const x = i * (barWidth + this.BAR_GAP);
+        const barH = Math.max(minBarH, this.peaks[i] * h * 0.9);
+        const y = (h - barH) / 2;
+
+        this.ctx.fillStyle = x + barWidth <= progressX ? this.ACCENT : this.UNPLAYED;
+        this.ctx.beginPath();
+        this.roundRect(x, y, barWidth, barH, 1);
+        this.ctx.fill();
+      }
+    }
+
+    private roundRect(x: number, y: number, w: number, h: number, r: number) {
+      r = Math.min(r, w / 2, h / 2);
+      this.ctx.moveTo(x + r, y);
+      this.ctx.lineTo(x + w - r, y);
+      this.ctx.arcTo(x + w, y, x + w, y + r, r);
+      this.ctx.lineTo(x + w, y + h - r);
+      this.ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+      this.ctx.lineTo(x + r, y + h);
+      this.ctx.arcTo(x, y + h, x, y + h - r, r);
+      this.ctx.lineTo(x, y + r);
+      this.ctx.arcTo(x, y, x + r, y, r);
+      this.ctx.closePath();
+    }
+
+    private seek(e: MouseEvent) {
+      const rect = this.canvas.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      if (this.audio.duration) {
+        this.audio.currentTime = ratio * this.audio.duration;
+        this.updateTime();
+        this.drawWaveform();
+      }
+    }
+
+    private seekTouch(e: TouchEvent) {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const rect = this.canvas.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
+      if (this.audio.duration) {
+        this.audio.currentTime = ratio * this.audio.duration;
+        this.updateTime();
+        this.drawWaveform();
+      }
+    }
+
+    private togglePlay() {
+      if (this.audio.paused) {
+        this.audio.play();
+        this.setPlaying(true);
+        this.startAnimation();
+      } else {
+        this.audio.pause();
+        this.setPlaying(false);
+        this.stopAnimation();
+      }
+    }
+
+    private setPlaying(playing: boolean) {
+      this.iconPlay.style.display = playing ? "none" : "";
+      this.iconPause.style.display = playing ? "" : "none";
+      this.playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
+      if (!playing) this.stopAnimation();
+    }
+
+    private startAnimation() {
+      const tick = () => {
+        this.drawWaveform();
+        this.updateTime();
+        this.animId = requestAnimationFrame(tick);
+      };
+      this.animId = requestAnimationFrame(tick);
+    }
+
+    private stopAnimation() {
+      if (this.animId !== null) {
+        cancelAnimationFrame(this.animId);
+        this.animId = null;
+      }
+    }
+
+    private updateTime() {
+      const cur = this.audio.currentTime || 0;
+      const dur = this.audio.duration || 0;
+      this.timeDisplay.textContent = `${this.formatTime(cur)} / ${this.formatTime(dur)}`;
+    }
+
+    private formatTime(seconds: number): string {
+      if (!isFinite(seconds)) return "0:00";
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}:${s.toString().padStart(2, "0")}`;
+    }
+  }
+
+  // Initialize all players on the page
+  document.querySelectorAll<HTMLElement>(".waveform-player").forEach((el) => {
+    new WaveformPlayer(el);
+  });
+</script>
