@@ -16,6 +16,7 @@ const entries = defineCollection({
             type: z.literal("image"),
             src: z.string(),
             caption: z.string().optional(),
+            url: z.string().url().optional(),
           }),
           z.object({
             type: z.literal("link"),

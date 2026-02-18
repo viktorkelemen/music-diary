@@ -3,6 +3,7 @@ interface ImageItem {
   type: "image";
   src: string;
   caption?: string;
+  url?: string;
 }
 
 interface LinkItem {
@@ -25,7 +26,11 @@ const { items } = Astro.props;
     item.type === "image" ? (
       <figure class="moodboard-image" data-src={item.src} data-caption={item.caption || ""}>
         <img src={item.src} alt={item.caption || ""} loading="lazy" />
-        {item.caption && <figcaption>{item.caption}</figcaption>}
+        {item.caption && (
+          item.url
+            ? <figcaption><a href={item.url} target="_blank" rel="noopener noreferrer">{item.caption}</a></figcaption>
+            : <figcaption>{item.caption}</figcaption>
+        )}
       </figure>
     ) : (
       <a class="moodboard-link" href={item.url} target="_blank" rel="noopener noreferrer">
@@ -75,6 +80,11 @@ const { items } = Astro.props;
     padding: 0.35rem 0.5rem;
     font-size: 0.75rem;
     color: #666;
+  }
+
+  .moodboard-image figcaption a {
+    color: inherit;
+    text-decoration: underline;
   }
 
   .moodboard-link {

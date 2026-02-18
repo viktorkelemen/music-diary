@@ -8,24 +8,31 @@ moodboard:
   - type: image
     src: "/artists/covers/oval-systemisch.jpg"
     caption: "Oval — Systemisch"
+    url: "https://open.spotify.com/album/1VjWcD0lLRFpAIK0AFRUBl"
   - type: image
     src: "/artists/covers/pole-1.jpg"
     caption: "Pole — 1"
+    url: "https://open.spotify.com/album/0ybb3fO4tWtCzu4VKieRhL"
   - type: image
     src: "/artists/covers/alva-noto-transform.jpg"
     caption: "Alva Noto — Transform"
+    url: "https://open.spotify.com/album/4SmoOrIB256fLpkQsho9GC"
   - type: image
     src: "/artists/covers/ikeda-dataplex.jpg"
     caption: "Ryoji Ikeda — Dataplex"
+    url: "https://open.spotify.com/album/7rEvZJWAIyqFGy7X62kOq4"
   - type: image
     src: "/artists/covers/fennesz-endless-summer.jpg"
     caption: "Fennesz — Endless Summer"
+    url: "https://open.spotify.com/album/0xnL6goTzcRFKzbrleXfpF"
   - type: image
     src: "/artists/covers/pan-sonic-vakio.jpg"
     caption: "Pan Sonic — Vakio"
+    url: "https://open.spotify.com/album/5vAlc9i4nPlUwSnNqU6mJm"
   - type: image
     src: "/artists/covers/jelinek-loop-finding.jpg"
     caption: "Jelinek — Loop-Finding-Jazz"
+    url: "https://open.spotify.com/album/6UK4EMYa7by9xwU4eeAoE4"
   - type: image
     src: "/artists/covers/devine-creature.jpg"
     caption: "Richard Devine — Creature"
