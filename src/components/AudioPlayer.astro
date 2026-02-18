@@ -1,0 +1,35 @@
+---
+interface Props {
+  url: string;
+}
+
+const { url } = Astro.props;
+const filename = decodeURIComponent(url.split("/").pop() || "");
+---
+
+<div class="audio-player">
+  <p class="audio-filename">{filename}</p>
+  <audio controls preload="metadata">
+    <source src={url} type="audio/wav" />
+  </audio>
+</div>
+
+<style>
+  .audio-player {
+    background: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+  }
+
+  .audio-filename {
+    font-size: 0.75rem;
+    color: #888;
+    margin: 0 0 0.4rem;
+  }
+
+  audio {
+    width: 100%;
+    height: 36px;
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import VideoEmbed from "./VideoEmbed.astro";
+import AudioPlayer from "./AudioPlayer.astro";
 import MoodBoard from "./MoodBoard.astro";
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
@@ -22,6 +23,10 @@ const formattedDate = data.date.toLocaleDateString("en-US", {
 const videoUrls = data.videoUrl
   ? Array.isArray(data.videoUrl) ? data.videoUrl : [data.videoUrl]
   : [];
+
+const audioUrls = data.audioUrl
+  ? Array.isArray(data.audioUrl) ? data.audioUrl : [data.audioUrl]
+  : [];
 ---
 
 <article class="entry-card">
@@ -33,6 +38,12 @@ const videoUrls = data.videoUrl
   {videoUrls.length > 0 && (
     <div class:list={["video-grid", { "single": videoUrls.length === 1 }]}>
       {videoUrls.map((url) => <VideoEmbed url={url} />)}
+    </div>
+  )}
+
+  {audioUrls.length > 0 && (
+    <div class="audio-list">
+      {audioUrls.map((url) => <AudioPlayer url={url} />)}
     </div>
   )}
 
