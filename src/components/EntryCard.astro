@@ -147,6 +147,34 @@ const audioUrls = data.audioUrl
     margin: 2rem 0 0.75rem;
   }
 
+  .entry-notes :global(.svg-cover-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .entry-notes :global(.svg-cover) {
+    text-align: center;
+  }
+
+  .entry-notes :global(.svg-cover img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+    background: #f0f0f0;
+  }
+
+  .entry-notes :global(.svg-cover span) {
+    display: block;
+    font-size: 0.65rem;
+    color: #888;
+    margin-top: 0.25rem;
+    line-height: 1.3;
+  }
+
   .entry-notes :global(.artist-grid) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
