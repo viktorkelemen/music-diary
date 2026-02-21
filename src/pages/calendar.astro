@@ -1,0 +1,332 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const entries = await getCollection("entries");
+
+// Build a map of date string -> entry info
+const entryMap: Record<string, { title: string; anchor: string }[]> = {};
+for (const entry of entries) {
+  const dateStr = entry.data.date.toISOString().split("T")[0];
+  if (!entryMap[dateStr]) {
+    entryMap[dateStr] = [];
+  }
+  entryMap[dateStr].push({
+    title: entry.data.title,
+    anchor: `entry-${dateStr}-${entry.id}`,
+  });
+}
+
+// Find the range of years that have entries
+const years = entries.map((e) => e.data.date.getUTCFullYear());
+const minYear = Math.min(...years);
+const maxYear = Math.max(...years);
+---
+
+<Layout title="Calendar — Viktor's Modular Synth Diary">
+  <div class="calendar-page">
+    <div class="calendar-controls">
+      <button class="nav-btn" id="prev-month" aria-label="Previous month">&larr;</button>
+      <div class="month-year">
+        <select id="month-select" aria-label="Select month">
+          <option value="0">January</option>
+          <option value="1">February</option>
+          <option value="2">March</option>
+          <option value="3">April</option>
+          <option value="4">May</option>
+          <option value="5">June</option>
+          <option value="6">July</option>
+          <option value="7">August</option>
+          <option value="8">September</option>
+          <option value="9">October</option>
+          <option value="10">November</option>
+          <option value="11">December</option>
+        </select>
+        <select id="year-select" aria-label="Select year">
+          {Array.from({ length: maxYear - minYear + 1 }, (_, i) => minYear + i).map((y) => (
+            <option value={y}>{y}</option>
+          ))}
+        </select>
+      </div>
+      <button class="nav-btn" id="next-month" aria-label="Next month">&rarr;</button>
+    </div>
+
+    <div class="calendar-grid">
+      <div class="day-header">Mon</div>
+      <div class="day-header">Tue</div>
+      <div class="day-header">Wed</div>
+      <div class="day-header">Thu</div>
+      <div class="day-header">Fri</div>
+      <div class="day-header">Sat</div>
+      <div class="day-header">Sun</div>
+      <div id="calendar-cells"></div>
+    </div>
+  </div>
+</Layout>
+
+<script is:inline define:vars={{ entryMap, minYear, maxYear }}>
+  const monthSelect = document.getElementById("month-select");
+  const yearSelect = document.getElementById("year-select");
+  const prevBtn = document.getElementById("prev-month");
+  const nextBtn = document.getElementById("next-month");
+  const cellsContainer = document.getElementById("calendar-cells");
+
+  // Start on the current month (use UTC to match entry dates)
+  const now = new Date();
+  let currentMonth = now.getUTCMonth();
+  let currentYear = now.getUTCFullYear();
+
+  // Clamp to available years
+  if (currentYear > maxYear) currentYear = maxYear;
+  if (currentYear < minYear) currentYear = minYear;
+
+  function pad(n) {
+    return n < 10 ? "0" + n : "" + n;
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function renderCalendar() {
+    monthSelect.value = currentMonth;
+    yearSelect.value = currentYear;
+
+    // First day of the month (0=Sun, adjust to Mon=0)
+    const firstDay = new Date(Date.UTC(currentYear, currentMonth, 1));
+    let startDow = firstDay.getUTCDay(); // 0=Sun
+    startDow = startDow === 0 ? 6 : startDow - 1; // Convert to Mon=0
+
+    const daysInMonth = new Date(Date.UTC(currentYear, currentMonth + 1, 0)).getUTCDate();
+
+    let html = "";
+
+    // Empty cells before the 1st
+    for (let i = 0; i < startDow; i++) {
+      html += '<div class="day-cell empty"></div>';
+    }
+
+    const today = new Date();
+    const todayStr = today.getUTCFullYear() + "-" + pad(today.getUTCMonth() + 1) + "-" + pad(today.getUTCDate());
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = currentYear + "-" + pad(currentMonth + 1) + "-" + pad(day);
+      const entriesForDay = entryMap[dateStr];
+      const isToday = dateStr === todayStr;
+
+      let classes = "day-cell";
+      if (isToday) classes += " today";
+      if (entriesForDay) classes += " has-entry";
+
+      html += '<div class="' + classes + '">';
+      html += '<span class="day-number">' + day + "</span>";
+
+      if (entriesForDay) {
+        for (const e of entriesForDay) {
+          html +=
+            '<a class="entry-link" href="/#' +
+            e.anchor +
+            '" title="' +
+            escapeHtml(e.title) +
+            '">' +
+            escapeHtml(e.title) +
+            "</a>";
+        }
+      }
+
+      html += "</div>";
+    }
+
+    cellsContainer.innerHTML = html;
+  }
+
+  prevBtn.addEventListener("click", function () {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+      if (currentYear < minYear) {
+        currentYear = minYear;
+        currentMonth = 0;
+      }
+    }
+    renderCalendar();
+  });
+
+  nextBtn.addEventListener("click", function () {
+    currentMonth++;
+    if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+      if (currentYear > maxYear) {
+        currentYear = maxYear;
+        currentMonth = 11;
+      }
+    }
+    renderCalendar();
+  });
+
+  monthSelect.addEventListener("change", function () {
+    currentMonth = parseInt(monthSelect.value);
+    renderCalendar();
+  });
+
+  yearSelect.addEventListener("change", function () {
+    currentYear = parseInt(yearSelect.value);
+    renderCalendar();
+  });
+
+  renderCalendar();
+</script>
+
+<style>
+  .calendar-page {
+    max-width: 100%;
+  }
+
+  .calendar-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+
+  .nav-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.5rem 0.85rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #333;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .nav-btn:hover {
+    background: #f5f5f5;
+    border-color: #bbb;
+  }
+
+  .month-year {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .month-year select {
+    font-size: 1rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    color: #222;
+    cursor: pointer;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: #e5e5e5;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .day-header {
+    background: #f8f8f8;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  :global(#calendar-cells) {
+    display: contents;
+  }
+
+  :global(.day-cell) {
+    background: #fff;
+    min-height: 90px;
+    padding: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  :global(.day-cell.empty) {
+    background: #fafafa;
+  }
+
+  :global(.day-cell.today .day-number) {
+    background: #111;
+    color: #fff;
+    border-radius: 50%;
+    width: 1.6rem;
+    height: 1.6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :global(.day-number) {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 0.15rem;
+  }
+
+  :global(.day-cell.has-entry) {
+    background: #f0faf0;
+  }
+
+  :global(.entry-link) {
+    font-size: 0.7rem;
+    line-height: 1.3;
+    color: #2a7a2a;
+    text-decoration: none;
+    padding: 0.15rem 0.3rem;
+    border-radius: 3px;
+    background: #e0f2e0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    transition: background 0.15s;
+  }
+
+  :global(.entry-link:hover) {
+    background: #c8e6c8;
+    color: #1a5a1a;
+  }
+
+  @media (max-width: 600px) {
+    .calendar-controls {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .day-header {
+      padding: 0.4rem 0.2rem;
+      font-size: 0.7rem;
+    }
+
+    :global(.day-cell) {
+      min-height: 60px;
+      padding: 0.25rem;
+    }
+
+    :global(.entry-link) {
+      font-size: 0.6rem;
+      padding: 0.1rem 0.2rem;
+    }
+
+    :global(.day-number) {
+      font-size: 0.75rem;
+    }
+  }
+</style>

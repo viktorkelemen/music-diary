@@ -13,6 +13,8 @@ const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
 
+const entryId = `entry-${data.date.toISOString().split('T')[0]}-${entry.id}`;
+
 const formattedDate = data.date.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
@@ -29,7 +31,7 @@ const audioUrls = data.audioUrl
   : [];
 ---
 
-<article class="entry-card">
+<article class="entry-card" id={entryId}>
   <header>
     <time datetime={data.date.toISOString()}>{formattedDate}</time>
     <h2>{data.title}</h2>
