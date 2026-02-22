@@ -34,7 +34,7 @@ const audioUrls = data.audioUrl
 <article class="entry-card" id={entryId}>
   <header>
     <time datetime={data.date.toISOString()}>{formattedDate}</time>
-    <h2>{data.title}</h2>
+    <h2><a href={`/entry/${entry.id}`}>{data.title}</a></h2>
   </header>
 
   {videoUrls.length > 0 && (
@@ -90,6 +90,16 @@ const audioUrls = data.audioUrl
     margin: 0.25rem 0 0;
     font-size: 1.5rem;
     font-weight: 600;
+  }
+
+  h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h2 a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .video-grid {
