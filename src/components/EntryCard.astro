@@ -111,7 +111,6 @@ const audioUrls = data.audioUrl
 
   .video-grid.single {
     grid-template-columns: 1fr;
-    max-width: 480px;
   }
 
   .video-grid :global(.video-embed) {
@@ -119,20 +118,12 @@ const audioUrls = data.audioUrl
   }
 
   .video-grid :global(.video-embed:not(.short)) {
-    grid-column: span 2;
+    grid-column: 1 / -1;
   }
 
   @media (max-width: 600px) {
     .video-grid {
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    }
-
-    .video-grid.single {
-      max-width: 100%;
-    }
-
-    .video-grid :global(.video-embed:not(.short)) {
-      grid-column: span 1;
     }
   }
 
