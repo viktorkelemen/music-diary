@@ -53,9 +53,10 @@ const audioUrls = data.audioUrl
     <MoodBoard items={data.moodboard} />
   )}
 
-  <div class="entry-notes">
+  <div class="entry-notes" data-collapsible>
     <Content />
   </div>
+  <button class="show-more-btn" aria-expanded="false">Show more ↓</button>
 
   <div class="artist-lightbox">
     <button class="artist-lightbox-close" aria-label="Close">&times;</button>
@@ -147,6 +148,45 @@ const audioUrls = data.audioUrl
     color: #2563eb;
     text-decoration-thickness: 1px;
     text-underline-offset: 2px;
+  }
+
+  .entry-notes.is-collapsed {
+    max-height: var(--collapse-height, 600px);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .entry-notes.is-collapsed::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(transparent, white);
+    pointer-events: none;
+  }
+
+  .show-more-btn {
+    display: none;
+    margin: 0.5rem 0 1.5rem;
+    padding: 0.5rem 1.2rem;
+    background: #f3f4f6;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .show-more-btn:hover {
+    background: #e5e7eb;
+    color: #333;
+  }
+
+  .show-more-btn.visible {
+    display: inline-block;
   }
 
   .entry-notes :global(code) {
@@ -343,6 +383,45 @@ const audioUrls = data.audioUrl
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    // Collapsible long entries — collapse if content has more than 3 h2 sections
+    const SECTION_THRESHOLD = 3;
+    const COLLAPSE_HEIGHT = 600; // px
+
+    document.querySelectorAll<HTMLElement>(".entry-notes[data-collapsible]").forEach((notes) => {
+      const headings = notes.querySelectorAll(":scope > h2, :scope > :global(h2)");
+      const h2s = notes.querySelectorAll("h2");
+      const btn = notes.parentElement?.querySelector<HTMLButtonElement>(".show-more-btn");
+      if (!btn) return;
+
+      // Only collapse if entry has many sections or is very tall
+      if (h2s.length <= SECTION_THRESHOLD && notes.scrollHeight <= COLLAPSE_HEIGHT * 1.5) return;
+
+      // Find the position after the Nth h2 section
+      let collapseHeight = COLLAPSE_HEIGHT;
+      if (h2s.length > SECTION_THRESHOLD) {
+        const targetH2 = h2s[SECTION_THRESHOLD];
+        collapseHeight = targetH2.offsetTop - 20;
+      }
+      collapseHeight = Math.max(collapseHeight, 300);
+
+      notes.style.setProperty("--collapse-height", collapseHeight + "px");
+      notes.classList.add("is-collapsed");
+      btn.classList.add("visible");
+
+      btn.addEventListener("click", () => {
+        const isCollapsed = notes.classList.contains("is-collapsed");
+        if (isCollapsed) {
+          notes.classList.remove("is-collapsed");
+          btn.textContent = "Show less ↑";
+          btn.setAttribute("aria-expanded", "true");
+        } else {
+          notes.classList.add("is-collapsed");
+          btn.textContent = "Show more ↓";
+          btn.setAttribute("aria-expanded", "false");
+          notes.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
     document.querySelectorAll<HTMLElement>(".entry-card").forEach((card) => {
       const lightbox = card.querySelector<HTMLElement>(".artist-lightbox");
       if (!lightbox) return;
