@@ -40,27 +40,3 @@ moodboard:
     src: "/moodboards/patch-notes-march/vca-matrix-rotated.jpeg"
     caption: "VCA Matrix"
 ---
-
-## Pachinko + Tempi
-*Clock & Random*
-
-## 0-CTRL
-*Sequencer / Controller*
-
-## XPO
-*Oscillator*
-
-## DPO
-*Oscillator*
-
-## Maths
-*Modulation / Envelopes*
-
-## Mimeophon
-*Delay / Repeater*
-
-## QPAS
-*Filter / Output*
-
-## VCA Matrix
-*Mixing / Routing*
