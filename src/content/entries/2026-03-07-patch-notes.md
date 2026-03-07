@@ -39,4 +39,7 @@ moodboard:
   - type: image
     src: "/moodboards/patch-notes-march/vca-matrix-rotated.jpeg"
     caption: "VCA Matrix"
+  - type: image
+    src: "/moodboards/patch-notes-march/alternate-patching.jpeg"
+    caption: "Alternate patching with similar sound"
 ---
