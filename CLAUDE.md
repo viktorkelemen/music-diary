@@ -2,4 +2,8 @@
 
 ## Deployment
 
-Deployment is done via Railway. Pushing to `master` triggers automatic deployment.
+Deployment is done via Railway. Auto-deploy is NOT enabled — after pushing to `master`, manually deploy with:
+
+```
+railway up
+```
