@@ -53,10 +53,12 @@ const audioUrls = data.audioUrl
     <MoodBoard items={data.moodboard} />
   )}
 
-  <div class="entry-notes" data-collapsible>
-    <Content />
+  <div class="entry-notes collapsible">
+    <div class="entry-notes-inner">
+      <Content />
+    </div>
+    <button class="read-more-btn" aria-expanded="false">Read more</button>
   </div>
-  <button class="show-more-btn" aria-expanded="false">Show more ↓</button>
 
   <div class="artist-lightbox">
     <button class="artist-lightbox-close" aria-label="Close">&times;</button>
@@ -133,6 +135,39 @@ const audioUrls = data.audioUrl
     margin-top: 1rem;
     line-height: 1.7;
     color: #333;
+    position: relative;
+  }
+
+  .entry-notes.collapsible .entry-notes-inner {
+    max-height: 12rem;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+
+  .entry-notes.expanded .entry-notes-inner {
+    max-height: none;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .entry-notes .read-more-btn {
+    display: none;
+  }
+
+  .entry-notes.collapsible .read-more-btn {
+    display: inline-block;
+    background: none;
+    border: none;
+    color: #2563eb;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5rem 0 0;
+  }
+
+  .entry-notes.collapsible .read-more-btn:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   .entry-notes :global(p) {
@@ -150,43 +185,36 @@ const audioUrls = data.audioUrl
     text-underline-offset: 2px;
   }
 
-  .entry-notes.is-collapsed {
-    max-height: var(--collapse-height, 600px);
+  .entry-notes.collapsible .entry-notes-inner {
+    max-height: 12rem;
     overflow: hidden;
-    position: relative;
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   }
 
-  .entry-notes.is-collapsed::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background: linear-gradient(transparent, white);
-    pointer-events: none;
+  .entry-notes.expanded .entry-notes-inner {
+    max-height: none;
+    mask-image: none;
+    -webkit-mask-image: none;
   }
 
-  .show-more-btn {
+  .entry-notes .read-more-btn {
     display: none;
-    margin: 0.5rem 0 1.5rem;
-    padding: 0.5rem 1.2rem;
-    background: #f3f4f6;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    color: #555;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
   }
 
-  .show-more-btn:hover {
-    background: #e5e7eb;
-    color: #333;
-  }
-
-  .show-more-btn.visible {
+  .entry-notes.collapsible .read-more-btn {
     display: inline-block;
+    background: none;
+    border: none;
+    color: #2563eb;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5rem 0 0;
+  }
+
+  .entry-notes.collapsible .read-more-btn:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   .entry-notes :global(code) {
@@ -383,45 +411,25 @@ const audioUrls = data.audioUrl
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    // Collapsible long entries — collapse if content has more than 3 h2 sections
-    const SECTION_THRESHOLD = 3;
-    const COLLAPSE_HEIGHT = 600; // px
+    // Collapsible entry notes
+    document.querySelectorAll<HTMLElement>(".entry-notes.collapsible").forEach((notes) => {
+      const inner = notes.querySelector<HTMLElement>(".entry-notes-inner");
+      const btn = notes.querySelector<HTMLButtonElement>(".read-more-btn");
+      if (!inner || !btn) return;
 
-    document.querySelectorAll<HTMLElement>(".entry-notes[data-collapsible]").forEach((notes) => {
-      const headings = notes.querySelectorAll(":scope > h2, :scope > :global(h2)");
-      const h2s = notes.querySelectorAll("h2");
-      const btn = notes.parentElement?.querySelector<HTMLButtonElement>(".show-more-btn");
-      if (!btn) return;
-
-      // Only collapse if entry has many sections or is very tall
-      if (h2s.length <= SECTION_THRESHOLD && notes.scrollHeight <= COLLAPSE_HEIGHT * 1.5) return;
-
-      // Find the position after the Nth h2 section
-      let collapseHeight = COLLAPSE_HEIGHT;
-      if (h2s.length > SECTION_THRESHOLD) {
-        const targetH2 = h2s[SECTION_THRESHOLD];
-        collapseHeight = targetH2.offsetTop - 20;
+      // If content is short enough, remove collapsible behavior
+      if (inner.scrollHeight <= inner.clientHeight + 8) {
+        notes.classList.remove("collapsible");
+        return;
       }
-      collapseHeight = Math.max(collapseHeight, 300);
-
-      notes.style.setProperty("--collapse-height", collapseHeight + "px");
-      notes.classList.add("is-collapsed");
-      btn.classList.add("visible");
 
       btn.addEventListener("click", () => {
-        const isCollapsed = notes.classList.contains("is-collapsed");
-        if (isCollapsed) {
-          notes.classList.remove("is-collapsed");
-          btn.textContent = "Show less ↑";
-          btn.setAttribute("aria-expanded", "true");
-        } else {
-          notes.classList.add("is-collapsed");
-          btn.textContent = "Show more ↓";
-          btn.setAttribute("aria-expanded", "false");
-          notes.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+        const expanded = notes.classList.toggle("expanded");
+        btn.setAttribute("aria-expanded", String(expanded));
+        btn.textContent = expanded ? "Show less" : "Read more";
       });
     });
+
     document.querySelectorAll<HTMLElement>(".entry-card").forEach((card) => {
       const lightbox = card.querySelector<HTMLElement>(".artist-lightbox");
       if (!lightbox) return;
