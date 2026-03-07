@@ -44,10 +44,6 @@ moodboard:
     caption: "Alternate patching with similar sound"
 ---
 
-## Process
-
-~2:45 performance session. Signal chain: 0-CTRL sequencing the XPO, through QPAS for filtering, DXG as mixer, into Mimeophon for delay/space. Maths handling modulation duties. The alternate patching photo shows a later rearrangement that landed in similar sonic territory.
-
 ## Technique
 
 - Essentia detects BPM at ~135, though this is more of a pulse than a strict tempo — Tempi and Pachinko providing loosely clocked triggers
