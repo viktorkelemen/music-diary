@@ -1,5 +1,5 @@
 ---
-title: "Patch Notes"
+title: "Practice Session"
 date: 2026-03-07T14:00:00
 videoUrl:
   - "https://www.youtube.com/watch?v=kaiu7iWL4aA"
