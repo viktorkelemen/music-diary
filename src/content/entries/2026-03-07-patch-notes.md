@@ -46,7 +46,7 @@ moodboard:
 
 ## Process
 
-~2:45 performance session. The patch runs through the full system — Belgrad, DPO, Wogglebug, Optomix, XPO, QPAS on top; Pachinko, Tempi, VCA Matrix, Precision Adder, Maths, Mimeophon in the middle; 0-CTRL below and ES-8 recording. The alternate patching photo shows a later rearrangement that landed in similar sonic territory.
+~2:45 performance session. Signal chain: 0-CTRL sequencing the XPO, through QPAS for filtering, DXG as mixer, into Mimeophon for delay/space. Maths handling modulation duties. The alternate patching photo shows a later rearrangement that landed in similar sonic territory.
 
 ## Technique
 
