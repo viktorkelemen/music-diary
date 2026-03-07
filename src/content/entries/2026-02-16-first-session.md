@@ -1,6 +1,6 @@
 ---
 title: "Clicks & Cuts Research"
-date: 2026-02-16
+date: 2026-02-16T12:00:00
 moodboard:
   - type: image
     src: "/artists/covers/clicks-cuts-vol1.jpg"

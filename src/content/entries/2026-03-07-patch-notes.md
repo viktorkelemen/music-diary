@@ -1,6 +1,6 @@
 ---
 title: "Patch Notes"
-date: 2026-03-07
+date: 2026-03-07T14:00:00
 videoUrl:
   - "https://www.youtube.com/watch?v=kaiu7iWL4aA"
   - "https://www.youtube.com/watch?v=bk1YRoSuAvM"

@@ -1,6 +1,6 @@
 ---
 title: "Making Drums from Gate Signals via the QPAS"
-date: 2026-02-16
+date: 2026-02-16T14:00:00
 ---
 
 The core concept is elegant: a gate signal has a sharp transient attack followed by a sustain and release. By driving the QPAS's radiate/resonance into self-oscillation, you can treat the filter itself as a pitched sound source, and then use the gate (often via an envelope) to excite it — like physically striking a tuned resonator.

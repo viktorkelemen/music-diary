@@ -1,6 +1,6 @@
 ---
 title: "Documenting Modular Synth Patches"
-date: 2026-03-02
+date: 2026-03-02T10:00:00
 moodboard:
   - type: image
     src: "/moodboards/patch-documentation/block-schematic.png"

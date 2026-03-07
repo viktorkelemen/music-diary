@@ -1,6 +1,6 @@
 ---
 title: "Session Notes with Matthew — From Patching to Practice"
-date: 2026-03-02
+date: 2026-03-02T14:00:00
 ---
 
 This session shifted something fundamental in my practice. We talked less about modules and more about structure — how I document, analyze, and prepare.

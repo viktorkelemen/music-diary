@@ -33,7 +33,7 @@ const audioUrls = data.audioUrl
 
 <article class="entry-card" id={entryId}>
   <header>
-    <time datetime={data.date.toISOString()}>{formattedDate}</time>
+    <a href={`/entry/${entry.id}`} class="date-link"><time datetime={data.date.toISOString()}>{formattedDate}</time></a>
     <h2><a href={`/entry/${entry.id}`}>{data.title}</a></h2>
   </header>
 
@@ -80,6 +80,16 @@ const audioUrls = data.audioUrl
 
   header {
     margin-bottom: 1rem;
+  }
+
+  .date-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .date-link:hover time {
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   time {
