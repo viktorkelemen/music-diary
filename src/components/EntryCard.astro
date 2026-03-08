@@ -22,6 +22,12 @@ const formattedDate = data.date.toLocaleDateString("en-US", {
   timeZone: "UTC",
 });
 
+const formattedTime = data.date.toLocaleTimeString("en-US", {
+  hour: "numeric",
+  minute: "2-digit",
+  timeZone: "UTC",
+});
+
 const videoUrls = data.videoUrl
   ? Array.isArray(data.videoUrl) ? data.videoUrl : [data.videoUrl]
   : [];
@@ -33,7 +39,7 @@ const audioUrls = data.audioUrl
 
 <article class="entry-card" id={entryId}>
   <header>
-    <a href={`/entry/${entry.id}`} class="date-link"><time datetime={data.date.toISOString()}>{formattedDate}</time></a>
+    <a href={`/entry/${entry.id}`} class="date-link"><time datetime={data.date.toISOString()}>{formattedDate} · {formattedTime}</time></a>
     <h2><a href={`/entry/${entry.id}`}>{data.title}</a></h2>
   </header>
 

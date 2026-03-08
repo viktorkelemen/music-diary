@@ -24,6 +24,12 @@ const formattedDate = data.date.toLocaleDateString("en-US", {
   timeZone: "UTC",
 });
 
+const formattedTime = data.date.toLocaleTimeString("en-US", {
+  hour: "numeric",
+  minute: "2-digit",
+  timeZone: "UTC",
+});
+
 const videoUrls = data.videoUrl
   ? Array.isArray(data.videoUrl) ? data.videoUrl : [data.videoUrl]
   : [];
@@ -36,7 +42,7 @@ const audioUrls = data.audioUrl
 <Layout title={`${data.title} — Viktor's Modular Synth Diary`}>
   <article class="entry-page">
     <header>
-      <time datetime={data.date.toISOString()}>{formattedDate}</time>
+      <time datetime={data.date.toISOString()}>{formattedDate} · {formattedTime}</time>
       <h2>{data.title}</h2>
     </header>
 
