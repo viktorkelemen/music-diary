@@ -46,17 +46,17 @@ moodboard:
 
 ## Technique
 
-- Essentia detects BPM at ~135, though this is more of a pulse than a strict tempo — Tempi and Pachinko providing loosely clocked triggers
-- Key detection lands on F minor but with low confidence (0.42) — the strongest pitch classes are A, G#, D#, F#, suggesting chromatic/atonal movement rather than a tonal center
-- Dissonance increases steadily through the middle section (0.34 → 0.47), then drops back at the end — deliberate harmonic tension and release
-- Spectral flatness stays low throughout (~0.035) — the sound is fundamentally tonal even at its most dissonant, not noise-based
+- BPM ~135, more of a pulse than a strict tempo — 0-CTRL driving the rhythm
+- Key: F minor (low confidence 0.42) — strongest pitch classes A, G#, D#, F# suggest chromatic movement rather than a tonal center
+- Dissonance builds through the middle (0.34 → 0.47) then drops back — tension and release arc
+- Spectral flatness stays low (~0.035) — tonal throughout, not noise-based
 
 ## Sound & Characteristics
 
-Clear three-part arc in the dynamics and timbre:
+Three-part arc:
 
-**Opening (0-30s):** Loud and warm. Centroid around 1500-2400 Hz, low dissonance. The sound is grounded and present.
+**Opening (0-30s):** Loud and warm. Centroid around 1500-2400 Hz, low dissonance.
 
-**Middle (60-120s):** Volume drops by ~40%, brightness peaks at 3170 Hz around 1:30, dissonance climbs to 0.47, spectral flatness nearly doubles. This is the exploratory section — thinner, more exposed, harmonically tense.
+**Middle (60-120s):** Volume drops ~40%, brightness peaks at 3170 Hz around 1:30, dissonance climbs to 0.47, flatness nearly doubles. Thinner, more exposed, harmonically tense.
 
-**Return (130-160s):** Volume comes back to opening levels, centroid settles around 2050 Hz, dissonance and flatness drop back down. Warmer and more resolved than the opening.
+**Return (130-160s):** Volume returns, centroid settles around 2050 Hz, dissonance and flatness drop back. Warmer and more resolved than the opening.
