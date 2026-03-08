@@ -19,17 +19,21 @@ moodboard:
 
 ## Technique
 
-- BPM ~135, more of a pulse than a strict tempo — 0-CTRL driving the rhythm
-- Key: F minor (low confidence 0.42) — strongest pitch classes A, G#, D#, F# suggest chromatic movement rather than a tonal center
-- Dissonance builds through the middle (0.34 → 0.47) then drops back — tension and release arc
-- Spectral flatness stays low (~0.035) — tonal throughout, not noise-based
+- BPM ~140, 0-CTRL driving the rhythm
+- Key: C minor (strength 0.75) — strongest pitch classes F#, C, E, G#, F, D# — tonal center more defined than other sessions
+- Dynamic complexity: 2.11 — moderate, with clear loud/quiet sections
+- Spectral flatness low (~0.03) — tonal throughout
 
 ## Sound & Characteristics
 
-Three-part arc:
+~6:30 session with a wide dynamic arc:
 
-**Opening (0-30s):** Loud and warm. Centroid around 1500-2400 Hz, low dissonance.
+**Opening (0-60s):** Loud and steady (loudness ~57-61), warm centroid around 1800-2000 Hz. Confident, grounded sound.
 
-**Middle (60-120s):** Volume drops ~40%, brightness peaks at 3170 Hz around 1:30, dissonance climbs to 0.47, flatness nearly doubles. Thinner, more exposed, harmonically tense.
+**Descent (70-130s):** Volume drops sharply by ~50%. A dip to 800 Hz centroid at 1:20 — a moment of near-silence or very low register. Dissonance eases slightly.
 
-**Return (130-160s):** Volume returns, centroid settles around 2050 Hz, dissonance and flatness drop back. Warmer and more resolved than the opening.
+**Exploration (130-270s):** Quieter, more varied. Brightness fluctuates widely — centroid spikes to 3750 Hz at 3:20 and 4190 Hz at 4:00. Flatness increases, the sound becomes more textural and less pitched.
+
+**Return (280-330s):** Volume surges back to opening levels (~57). Centroid drops back to 1200-1900 Hz — the warmest passage in the piece.
+
+**Fade (340-390s):** Brightness climbs sharply to 4000-4400 Hz while volume drops to the lowest point. The piece dissolves into high, thin, noisy texture — flatness peaks at 0.064.
