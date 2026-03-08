@@ -20,7 +20,6 @@ moodboard:
 ## Technique
 
 - BPM ~140, 0-CTRL driving the rhythm
-- Key: C minor (strength 0.75) — strongest pitch classes F#, C, E, G#, F, D# — tonal center more defined than other sessions
 - Dynamic complexity: 2.11 — moderate, with clear loud/quiet sections
 - Spectral flatness low (~0.03) — tonal throughout
 
