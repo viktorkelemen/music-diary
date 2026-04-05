@@ -1,0 +1,28 @@
+---
+interface Props {
+  url: string;
+}
+
+const { url } = Astro.props;
+const encodedUrl = encodeURIComponent(url);
+const iframeSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23f97316&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`;
+---
+
+<div class="soundcloud-embed">
+  <iframe
+    width="100%"
+    height="166"
+    scrolling="no"
+    frameborder="no"
+    allow="autoplay"
+    src={iframeSrc}
+  ></iframe>
+</div>
+
+<style>
+  .soundcloud-embed {
+    margin: 0.5rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+</style>

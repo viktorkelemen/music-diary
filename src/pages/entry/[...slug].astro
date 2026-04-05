@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import VideoEmbed from "../../components/VideoEmbed.astro";
 import AudioPlayer from "../../components/AudioPlayer.astro";
+import SoundCloudEmbed from "../../components/SoundCloudEmbed.astro";
 import MoodBoard from "../../components/MoodBoard.astro";
 import { getCollection, render } from "astro:content";
 
@@ -54,7 +55,11 @@ const audioUrls = data.audioUrl
 
     {audioUrls.length > 0 && (
       <div class="audio-list">
-        {audioUrls.map((url) => <AudioPlayer url={url} />)}
+        {audioUrls.map((url) =>
+          url.includes("soundcloud.com")
+            ? <SoundCloudEmbed url={url} />
+            : <AudioPlayer url={url} />
+        )}
       </div>
     )}
 
