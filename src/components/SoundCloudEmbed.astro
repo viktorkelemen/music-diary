@@ -4,20 +4,30 @@ interface Props {
 }
 
 const { url } = Astro.props;
-const encodedUrl = encodeURIComponent(url);
-const iframeSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23f97316&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`;
+
+// Strip query params (si, utm_*) — the widget only needs the base URL + secret token path
+const cleanUrl = url.split("?")[0];
+
+// Use SoundCloud oEmbed to get the proper embed HTML
+const oembedUrl = `https://soundcloud.com/oembed?format=json&url=${encodeURIComponent(cleanUrl)}`;
+let embedHtml = "";
+try {
+  const res = await fetch(oembedUrl);
+  if (res.ok) {
+    const data = await res.json();
+    embedHtml = data.html;
+  }
+} catch (_) {}
+
+// Fallback to widget player if oEmbed fails
+if (!embedHtml) {
+  const encodedUrl = encodeURIComponent(cleanUrl);
+  const iframeSrc = `https://w.soundcloud.com/player/?url=${encodedUrl}&color=%23f97316&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`;
+  embedHtml = `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="${iframeSrc}"></iframe>`;
+}
 ---
 
-<div class="soundcloud-embed">
-  <iframe
-    width="100%"
-    height="166"
-    scrolling="no"
-    frameborder="no"
-    allow="autoplay"
-    src={iframeSrc}
-  ></iframe>
-</div>
+<div class="soundcloud-embed" set:html={embedHtml} />
 
 <style>
   .soundcloud-embed {
