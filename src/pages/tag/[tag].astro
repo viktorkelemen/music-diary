@@ -1,0 +1,54 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import EntryCard from "../../components/EntryCard.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("entries");
+  const tags = new Set(entries.flatMap((e) => e.data.tags ?? []));
+  return [...tags].map((tag) => ({
+    params: { tag },
+    props: { tag, entries: entries.filter((e) => e.data.tags?.includes(tag)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime()) },
+  }));
+}
+
+const { tag, entries } = Astro.props;
+---
+
+<Layout title={`#${tag} — Viktor's Modular Synth Diary`}>
+  <div class="tag-header">
+    <a href="/" class="back">&larr; All entries</a>
+    <h2>#{tag}</h2>
+    <p class="count">{entries.length} {entries.length === 1 ? "entry" : "entries"}</p>
+  </div>
+
+  {entries.map((entry) => <EntryCard entry={entry} />)}
+</Layout>
+
+<style>
+  .tag-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .back {
+    font-size: 0.85rem;
+    color: #888;
+    text-decoration: none;
+  }
+
+  .back:hover {
+    color: #333;
+  }
+
+  h2 {
+    margin: 0.5rem 0 0.25rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .count {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #888;
+  }
+</style>

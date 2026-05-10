@@ -41,6 +41,11 @@ const audioUrls = data.audioUrl
   <header>
     <a href={`/entry/${entry.id}`} class="date-link"><time datetime={data.date.toISOString()}>{formattedDate} · {formattedTime}</time></a>
     <h2><a href={`/entry/${entry.id}`}>{data.title}</a></h2>
+    {data.tags && data.tags.length > 0 && (
+      <div class="tags">
+        {data.tags.map((tag) => <a href={`/tag/${tag}`} class="tag">#{tag}</a>)}
+      </div>
+    )}
   </header>
 
   {videoUrls.length > 0 && (
@@ -119,6 +124,24 @@ const audioUrls = data.audioUrl
   h2 a:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.78rem;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .tag:hover {
+    color: #333;
   }
 
   .video-grid {

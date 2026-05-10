@@ -7,6 +7,7 @@ const entries = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
+    tags: z.array(z.string()).optional(),
     videoUrl: z.union([z.string().url(), z.array(z.string().url())]).optional(),
     audioUrl: z.union([z.string().url(), z.array(z.string().url())]).optional(),
     moodboard: z
