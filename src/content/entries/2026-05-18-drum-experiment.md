@@ -1,0 +1,46 @@
+---
+title: "Drum Experiment"
+date: 2026-05-18T18:18:00
+tags:
+  - modular
+  - eurorack
+  - drums
+  - patch-log
+audioUrl: "https://soundcloud.com/viktor-kelemen/05_18_2026_master"
+moodboard:
+  - type: image
+    src: "/moodboards/2026-05-18-drum-experiment/01.jpg"
+    caption: "Drum experiment, image 1"
+  - type: image
+    src: "/moodboards/2026-05-18-drum-experiment/02.jpg"
+    caption: "Drum experiment, image 2"
+  - type: image
+    src: "/moodboards/2026-05-18-drum-experiment/03.jpg"
+    caption: "Drum experiment, image 3"
+  - type: image
+    src: "/moodboards/2026-05-18-drum-experiment/04.jpg"
+    caption: "Drum experiment, image 4"
+---
+
+Source: Telegram images from 2026-05-18.
+
+## What I can see
+
+- SSF Ultra-Kick is visible in the patch.
+- Entity Ultra-Perc is visible in the patch.
+- Pachinko is visible in one of the wider shots.
+- The patch uses several colored patch cables, with the percussion voices wired into a broader control/modulation setup.
+
+## Analysis
+
+- This reads as a layered percussion experiment rather than a single drum voice.
+- Ultra-Kick suggests a dedicated kick path with envelope, pitch, and decay shaping.
+- Ultra-Perc suggests a second percussion voice for accents, toms, or metallic/transient percussion.
+- Pachinko likely adds probabilistic or generative triggering/modulation, which fits the overall rhythmic feel.
+- The setup looks like it is trying to balance a stable kick backbone with a more variable percussive texture.
+
+## What to try next
+
+- Split the patch into a clear kick lane and a separate accent lane.
+- Use one clocked source for the kick and a more probabilistic source for the percussive layer.
+- Record short A/B takes: straight pattern, then randomized variation, to hear where the patch is strongest.
