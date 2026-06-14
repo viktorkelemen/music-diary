@@ -12,7 +12,14 @@ function getYouTubeId(url: string): string | null {
   return match ? match[1] : null;
 }
 
+function getYouTubeStart(url: string): number | null {
+  // Supports ?t=898s, &t=898, &start=898
+  const match = url.match(/[?&](?:t|start)=(\d+)/);
+  return match ? Number(match[1]) : null;
+}
+
 const youtubeId = getYouTubeId(url);
+const youtubeStart = getYouTubeStart(url);
 const isShort = url.includes("/shorts/");
 const isSCWidget = url.includes("w.soundcloud.com/player");
 const isSCPage = !isSCWidget && url.includes("soundcloud.com");
@@ -37,7 +44,7 @@ if (isSCPage) {
 {youtubeId && (
   <div class:list={["video-embed", { short: isShort }]}>
     <iframe
-      src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+      src={`https://www.youtube-nocookie.com/embed/${youtubeId}${youtubeStart ? `?start=${youtubeStart}` : ""}`}
       title="YouTube video"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
