@@ -167,6 +167,25 @@ const audioUrls = data.audioUrl
     text-underline-offset: 2px;
   }
 
+  .entry-content :global(pre) {
+    background: #1a1a1a;
+    color: #e8e8e8;
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin: 1rem 0;
+  }
+
+  .entry-content :global(pre code) {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    border-radius: 0;
+  }
+
   .entry-content :global(code) {
     background: #f3f4f6;
     padding: 0.15em 0.35em;
