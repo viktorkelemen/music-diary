@@ -8,7 +8,7 @@ Deployed on Railway. Auto-deploy is NOT enabled — after pushing to `master`, m
 railway up
 ```
 
-The app builds with `astro build` and is served by `server.cjs` (plain Node HTTP server on `PORT` env var, defaults to 8080). The `.railwayignore` excludes `node_modules/` and `.wrangler/`.
+The app builds with `astro build` and is served by the Astro Node adapter (`node dist/server/entry.mjs`). Railway runs `npm start` which executes that command. The `.railwayignore` excludes `node_modules/` and `.wrangler/`.
 
 ## Audio files
 
