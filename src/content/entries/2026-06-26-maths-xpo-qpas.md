@@ -13,6 +13,7 @@ tags:
 audioUrl:
   - "https://pub-d1e4591f14c94d2f84a21fed1d9f0d79.r2.dev/untitled-44-0m00s-3m10s-SC.mp3"
   - "https://pub-d1e4591f14c94d2f84a21fed1d9f0d79.r2.dev/untitled-43-0m00s-2m40s-SC.mp3"
+  - "https://pub-d1e4591f14c94d2f84a21fed1d9f0d79.r2.dev/untitled-45-0m00s-3m30s-SC.mp3"
 moodboard:
   - type: "image"
     src: "/moodboards/2026-06-26-maths-xpo-qpas/01.jpeg"
@@ -23,12 +24,12 @@ moodboard:
   - type: "image"
     src: "/moodboards/2026-06-26-maths-xpo-qpas/03.jpeg"
     caption: "QPAS connections"
-  - type: "link"
+  - type: "youtube"
     url: "https://www.youtube.com/watch?v=BE8coULg9vQ&t=1487s"
     title: "Inspiration"
 ---
 
-Practice session. Maths bouncing ball driving XPO's modulate inputs, XPO variable sine modulating QPAS radiate, saw wave into QPAS, then into Morphagene for live recording, into Erbe-Verb for reverb. Ultra-Kick as kick drum underneath.
+Three takes from a practice session. Maths in bouncing ball mode driving XPO, filtered through QPAS, recorded live into Morphagene, Erbe-Verb for reverb. Ultra-Kick as kick. Untitled 44, 0:00–3:10. Untitled 43, 0:00–2:40. Untitled 45, 0:00–3:30.
 
 ---
 

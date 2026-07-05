@@ -24,6 +24,11 @@ const entries = defineCollection({
             url: z.string(),
             title: z.string(),
           }),
+          z.object({
+            type: z.literal("youtube"),
+            url: z.string(),
+            title: z.string(),
+          }),
         ])
       )
       .optional(),

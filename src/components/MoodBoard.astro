@@ -12,7 +12,21 @@ interface LinkItem {
   title: string;
 }
 
-type MoodBoardItem = ImageItem | LinkItem;
+interface YoutubeItem {
+  type: "youtube";
+  url: string;
+  title: string;
+}
+
+type MoodBoardItem = ImageItem | LinkItem | YoutubeItem;
+
+function youtubeEmbedUrl(url: string): string {
+  const match = url.match(/[?&]v=([^&]+)/);
+  const id = match ? match[1] : "";
+  const tMatch = url.match(/[?&]t=(\d+)/);
+  const start = tMatch ? `?start=${tMatch[1]}` : "";
+  return `https://www.youtube.com/embed/${id}${start}`;
+}
 
 interface Props {
   items: MoodBoardItem[];
@@ -32,6 +46,15 @@ const { items } = Astro.props;
             : <figcaption>{item.caption}</figcaption>
         )}
       </figure>
+    ) : item.type === "youtube" ? (
+      <div class="moodboard-youtube">
+        <iframe
+          src={youtubeEmbedUrl(item.url)}
+          title={item.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
     ) : (
       <a class="moodboard-link" href={item.url} target="_blank" rel="noopener noreferrer">
         <span class="link-icon">&#x1F517;</span>
@@ -92,6 +115,20 @@ const { items } = Astro.props;
   .moodboard-image figcaption a {
     color: inherit;
     text-decoration: underline;
+  }
+
+  .moodboard-youtube {
+    grid-column: 1 / -1;
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .moodboard-youtube iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
   }
 
   .moodboard-link {
