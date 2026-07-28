@@ -5,13 +5,24 @@ import { getCollection } from "astro:content";
 
 const entries = await getCollection("entries");
 entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const pageSize = 10;
+const totalPages = Math.ceil(entries.length / pageSize);
+const pageEntries = entries.slice(0, pageSize);
 ---
 
 <Layout>
   {entries.length === 0 ? (
     <p class="empty">No entries yet. Add a markdown file to <code>src/content/entries/</code> to get started.</p>
   ) : (
-    entries.map((entry) => <EntryCard entry={entry} />)
+    pageEntries.map((entry) => <EntryCard entry={entry} />)
+  )}
+
+  {totalPages > 1 && (
+    <nav class="pagination" aria-label="Journal pages">
+      <span></span>
+      <a href="/page/2" rel="next">Older entries &rarr;</a>
+    </nav>
   )}
 </Layout>
 
@@ -26,5 +37,26 @@ entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
     padding: 0.15em 0.35em;
     border-radius: 3px;
     font-style: normal;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .pagination a {
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .pagination a:hover {
+    color: #111;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 </style>

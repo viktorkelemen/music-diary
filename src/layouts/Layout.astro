@@ -20,7 +20,7 @@ const currentPath = Astro.url.pathname;
       <header class="site-header">
         <h1><a href="/">Viktor's Modular Synth Diary</a></h1>
         <nav class="site-nav">
-          <a href="/" class:list={[{ active: currentPath === "/" }]}>Journal</a>
+          <a href="/" class:list={[{ active: currentPath === "/" || currentPath.startsWith("/page/") }]}>Journal</a>
           <a href="/calendar" class:list={[{ active: currentPath.startsWith("/calendar") }]}>Calendar</a>
         </nav>
       </header>
