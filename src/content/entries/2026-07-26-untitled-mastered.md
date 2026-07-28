@@ -1,5 +1,5 @@
 ---
-title: "Untitled (8:00–11:30, mastered)"
+title: "Ambient Works #1"
 date: 2026-07-26T00:00:00
 tags:
   - modular
