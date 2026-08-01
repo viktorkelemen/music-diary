@@ -4,6 +4,7 @@ import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://viktorpatchlog.com',
   output: 'static',
   adapter: node({ mode: 'standalone' }),
   server: { host: '0.0.0.0' },
