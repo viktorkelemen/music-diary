@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://viktorpatchlog.com/sitemap-index.xml
