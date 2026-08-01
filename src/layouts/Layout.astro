@@ -6,6 +6,7 @@ interface Props {
   description?: string;
   image?: string;
   type?: "website" | "article";
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -13,6 +14,7 @@ const {
   description = SITE_DESCRIPTION,
   image = "/og-default.png",
   type = "website",
+  jsonLd,
 } = Astro.props;
 const currentPath = Astro.url.pathname;
 const canonicalURL = new URL(currentPath, Astro.site);
@@ -41,6 +43,10 @@ const ogImage = new URL(image, Astro.site);
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
   </head>
   <body>
     <div class="container">

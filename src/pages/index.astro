@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import EntryCard from "../components/EntryCard.astro";
 import { getCollection } from "astro:content";
-import { SITE_TITLE, SITE_TAGLINE } from "../consts";
+import { SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION, SITE_URL, AUTHOR } from "../consts";
 
 const entries = await getCollection("entries");
 entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -10,9 +10,27 @@ entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 const pageSize = 10;
 const totalPages = Math.ceil(entries.length / pageSize);
 const pageEntries = entries.slice(0, pageSize);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_TITLE,
+    url: SITE_URL,
+    description: SITE_DESCRIPTION,
+    author: { "@type": "Person", name: AUTHOR },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: AUTHOR,
+    url: SITE_URL,
+    sameAs: ["https://www.instagram.com/viktor.patchlog"],
+  },
+];
 ---
 
-<Layout title={`${SITE_TITLE} — ${SITE_TAGLINE}`}>
+<Layout title={`${SITE_TITLE} — ${SITE_TAGLINE}`} jsonLd={jsonLd}>
   {entries.length === 0 ? (
     <p class="empty">No entries yet. Add a markdown file to <code>src/content/entries/</code> to get started.</p>
   ) : (

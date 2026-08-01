@@ -5,6 +5,7 @@ import AudioPlayer from "../../components/AudioPlayer.astro";
 import SoundCloudEmbed from "../../components/SoundCloudEmbed.astro";
 import MoodBoard from "../../components/MoodBoard.astro";
 import { getCollection, render } from "astro:content";
+import { SITE_TITLE, SITE_URL, AUTHOR } from "../../consts";
 
 export async function getStaticPaths() {
   const entries = await getCollection("entries");
@@ -34,6 +35,25 @@ const description = toExcerpt(entry.body ?? "");
 
 const firstImage = data.moodboard?.find((m) => m.type === "image")?.src;
 
+const canonicalURL = new URL(`/entry/${entry.id}`, Astro.site).href;
+const ogImageURL = new URL(firstImage ?? "/og-default.png", Astro.site).href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: data.title,
+  description,
+  datePublished: data.date.toISOString(),
+  dateModified: data.date.toISOString(),
+  url: canonicalURL,
+  mainEntityOfPage: canonicalURL,
+  image: ogImageURL,
+  author: { "@type": "Person", name: AUTHOR, url: SITE_URL },
+  publisher: { "@type": "Person", name: AUTHOR, url: SITE_URL },
+  isPartOf: { "@type": "Blog", name: SITE_TITLE, url: SITE_URL },
+  ...(data.tags && data.tags.length > 0 ? { keywords: data.tags.join(", ") } : {}),
+};
+
 const formattedDate = data.date.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
@@ -61,6 +81,7 @@ const audioUrls = data.audioUrl
   description={description}
   image={firstImage}
   type="article"
+  jsonLd={jsonLd}
 >
   <article class="entry-page">
     <header>
