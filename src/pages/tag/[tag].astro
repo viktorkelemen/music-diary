@@ -15,7 +15,10 @@ export async function getStaticPaths() {
 const { tag, entries } = Astro.props;
 ---
 
-<Layout title={`#${tag} — Viktor's Modular Synth Diary`}>
+<Layout
+  title={`#${tag} — Viktor's Modular Synth Diary`}
+  description={`Diary entries tagged #${tag} — modular synth patches, recordings, and notes by Viktor Kelemen.`}
+>
   <div class="tag-header">
     <a href="/" class="back">&larr; All entries</a>
     <h2>#{tag}</h2>

@@ -1,9 +1,12 @@
 ---
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
 interface Props {
   title?: string;
+  description?: string;
 }
 
-const { title = "Viktor's Modular Synth Diary" } = Astro.props;
+const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 const currentPath = Astro.url.pathname;
 ---
 
@@ -15,6 +18,7 @@ const currentPath = Astro.url.pathname;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <title>{title}</title>
+    <meta name="description" content={description} />
   </head>
   <body>
     <div class="container">

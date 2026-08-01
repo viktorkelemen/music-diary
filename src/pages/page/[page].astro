@@ -35,7 +35,10 @@ const { entries, currentPage, totalPages } = Astro.props;
 const newerHref = currentPage === 2 ? "/" : `/page/${currentPage - 1}`;
 ---
 
-<Layout title={`Page ${currentPage} — Viktor's Modular Synth Diary`}>
+<Layout
+  title={`Page ${currentPage} — Viktor's Modular Synth Diary`}
+  description={`More entries from Viktor's modular synth diary — page ${currentPage} of ${totalPages}.`}
+>
   <p class="page-number">Page {currentPage} of {totalPages}</p>
 
   {entries.map((entry) => <EntryCard entry={entry} />)}
