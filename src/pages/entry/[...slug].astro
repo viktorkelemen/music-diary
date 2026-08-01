@@ -106,12 +106,15 @@ const useGallery = fileItems.length > 4;
       </div>
     )}
 
-    {audioItems.length > 0 && (
+    {scItems.length > 0 && (
       <div class="audio-list">
         {scItems.map((a) => <SoundCloudEmbed url={a.url} />)}
-        {useGallery
-          ? <AudioGallery items={fileItems} />
-          : fileItems.map((a) => <AudioPlayer url={a.url} />)}
+      </div>
+    )}
+
+    {!useGallery && fileItems.length > 0 && (
+      <div class="audio-list">
+        {fileItems.map((a) => <AudioPlayer url={a.url} />)}
       </div>
     )}
 
@@ -122,6 +125,12 @@ const useGallery = fileItems.length > 4;
     <div class="entry-content">
       <Content />
     </div>
+
+    {useGallery && fileItems.length > 0 && (
+      <div class="audio-list entry-samples">
+        <AudioGallery items={fileItems} />
+      </div>
+    )}
   </article>
 
   <a class="back-link" href="/">&larr; All entries</a>
@@ -395,6 +404,12 @@ const useGallery = fileItems.length > 4;
     .entry-content :global(.artist-card .artist-style) {
       font-size: 0.65rem;
     }
+  }
+
+  .entry-samples {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
   }
 
   .back-link {
