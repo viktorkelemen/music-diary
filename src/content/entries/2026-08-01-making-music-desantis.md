@@ -7,9 +7,10 @@ tags:
   - workflow
   - modular
 moodboard:
-  - type: link
+  - type: image
+    src: "/moodboards/2026-08-01-making-music-desantis/cover.jpg"
+    caption: "Making Music — Dennis DeSantis (free PDF)"
     url: "https://cdn-resources.ableton.com/resources/uploads/makingmusic/MakingMusic_DennisDeSantis.pdf"
-    title: "Making Music — Dennis DeSantis (free PDF)"
 ---
 
 Dennis DeSantis's *Making Music: 74 Creative Strategies for Electronic Music Producers* isn't about modular synths, but several chapters fit the way I patch.
