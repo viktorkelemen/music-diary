@@ -6,13 +6,6 @@ tags:
   - performance
   - clowning
   - improv
-videoUrl:
-  - "https://youtube.com/shorts/B82F_qjANsA"
-moodboard:
-  - type: image
-    src: "/moodboards/2026-08-01-what-is-music-for/clowning.jpeg"
-    caption: "Clowning at The Idiot's Hour, NYC — photo by @aw.sing.er"
-    url: "https://www.instagram.com/aw.sing.er"
 ---
 
 I've been thinking about how much space I want work to take up in my life. If work isn't at the center, what is?
@@ -29,6 +22,17 @@ A few things:
 ## Performance
 
 I recently played a 20-minute live set at Wonderville in Brooklyn. I've also spent the last few weeks performing as a clown and doing improv.
+
+<div style="max-width:320px;margin:1.5rem auto;aspect-ratio:9/16;border-radius:8px;overflow:hidden;background:#1a1a1a;">
+  <iframe src="https://www.youtube-nocookie.com/embed/B82F_qjANsA" title="Live set — YouTube short" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" style="width:100%;height:100%;border:0;display:block;"></iframe>
+</div>
+
+<figure style="margin:1.5rem 0;">
+  <a href="https://www.instagram.com/aw.sing.er" target="_blank" rel="noopener noreferrer">
+    <img src="/moodboards/2026-08-01-what-is-music-for/clowning.jpeg" alt="Clowning at The Idiot's Hour, NYC" loading="lazy" style="width:100%;max-width:560px;border-radius:8px;display:block;" />
+  </a>
+  <figcaption style="font-size:0.8rem;color:#888;margin-top:0.4rem;">Clowning at The Idiot's Hour, NYC — photo by <a href="https://www.instagram.com/aw.sing.er" target="_blank" rel="noopener noreferrer">@aw.sing.er</a></figcaption>
+</figure>
 
 These things feel related.
 
