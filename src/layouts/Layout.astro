@@ -23,6 +23,12 @@ const currentPath = Astro.url.pathname;
         <nav class="site-nav">
           <a href="/" class:list={[{ active: currentPath === "/" || currentPath.startsWith("/page/") }]}>Journal</a>
           <a href="/calendar" class:list={[{ active: currentPath.startsWith("/calendar") }]}>Calendar</a>
+          <a
+            class="social"
+            href="https://www.instagram.com/viktor.patchlog"
+            target="_blank"
+            rel="me noopener noreferrer"
+          >Instagram ↗</a>
         </nav>
       </header>
       <main>
@@ -102,6 +108,10 @@ const currentPath = Astro.url.pathname;
   .site-nav a.active {
     color: #111;
     border-bottom-color: #111;
+  }
+
+  .site-nav a.social {
+    margin-left: auto;
   }
 
   footer {
