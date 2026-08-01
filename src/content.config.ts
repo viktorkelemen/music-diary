@@ -9,7 +9,21 @@ const entries = defineCollection({
     date: z.coerce.date(),
     tags: z.array(z.string()).optional(),
     videoUrl: z.union([z.string().url(), z.array(z.string().url())]).optional(),
-    audioUrl: z.union([z.string().url(), z.array(z.string().url())]).optional(),
+    audioUrl: z
+      .union([
+        z.string().url(),
+        z.array(
+          z.union([
+            z.string().url(),
+            z.object({
+              url: z.string().url(),
+              label: z.string().optional(),
+              group: z.string().optional(),
+            }),
+          ])
+        ),
+      ])
+      .optional(),
     moodboard: z
       .array(
         z.discriminatedUnion("type", [

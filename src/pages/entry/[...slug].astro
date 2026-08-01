@@ -4,6 +4,7 @@ import VideoEmbed from "../../components/VideoEmbed.astro";
 import AudioPlayer from "../../components/AudioPlayer.astro";
 import SoundCloudEmbed from "../../components/SoundCloudEmbed.astro";
 import MoodBoard from "../../components/MoodBoard.astro";
+import AudioGallery from "../../components/AudioGallery.astro";
 import { getCollection, render } from "astro:content";
 import { SITE_TITLE, SITE_URL, AUTHOR } from "../../consts";
 
@@ -71,9 +72,14 @@ const videoUrls = data.videoUrl
   ? Array.isArray(data.videoUrl) ? data.videoUrl : [data.videoUrl]
   : [];
 
-const audioUrls = data.audioUrl
+const rawAudio = data.audioUrl
   ? Array.isArray(data.audioUrl) ? data.audioUrl : [data.audioUrl]
   : [];
+const audioItems = rawAudio.map((a) => (typeof a === "string" ? { url: a } : a));
+const scItems = audioItems.filter((a) => a.url.includes("soundcloud.com"));
+const fileItems = audioItems.filter((a) => !a.url.includes("soundcloud.com"));
+// Many clips → compact, lazy-loading gallery. A few takes → full waveform players.
+const useGallery = fileItems.length > 4;
 ---
 
 <Layout
@@ -100,13 +106,12 @@ const audioUrls = data.audioUrl
       </div>
     )}
 
-    {audioUrls.length > 0 && (
+    {audioItems.length > 0 && (
       <div class="audio-list">
-        {audioUrls.map((url) =>
-          url.includes("soundcloud.com")
-            ? <SoundCloudEmbed url={url} />
-            : <AudioPlayer url={url} />
-        )}
+        {scItems.map((a) => <SoundCloudEmbed url={a.url} />)}
+        {useGallery
+          ? <AudioGallery items={fileItems} />
+          : fileItems.map((a) => <AudioPlayer url={a.url} />)}
       </div>
     )}
 

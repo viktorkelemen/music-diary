@@ -1,0 +1,302 @@
+---
+interface AudioItem {
+  url: string;
+  label?: string;
+  group?: string;
+}
+
+interface Props {
+  items: AudioItem[];
+}
+
+const { items } = Astro.props;
+
+function prettify(url: string): string {
+  const name = decodeURIComponent(url.split("/").pop() || "");
+  return name.replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ").trim();
+}
+
+// Preserve order; bucket items into groups by their `group` field.
+const groups: { name: string; items: AudioItem[] }[] = [];
+for (const item of items) {
+  const name = item.group ?? "";
+  let g = groups.find((x) => x.name === name);
+  if (!g) {
+    g = { name, items: [] };
+    groups.push(g);
+  }
+  g.items.push(item);
+}
+---
+
+<div class="audio-gallery">
+  {groups.map((group) => (
+    <section class="ag-group">
+      {group.name && <h3 class="ag-group-title">{group.name}</h3>}
+      <ul class="ag-list">
+        {group.items.map((item) => (
+          <li class="ag-row" data-url={item.url}>
+            <button class="ag-play" aria-label="Play" type="button">
+              <svg class="ag-icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <svg class="ag-icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none">
+                <rect x="6" y="5" width="4" height="14" />
+                <rect x="14" y="5" width="4" height="14" />
+              </svg>
+              <span class="ag-spinner" aria-hidden="true" style="display:none"></span>
+            </button>
+            <div class="ag-main">
+              <span class="ag-label">{item.label ?? prettify(item.url)}</span>
+              <div class="ag-bar" role="progressbar">
+                <div class="ag-bar-fill"></div>
+              </div>
+            </div>
+            <span class="ag-time">0:00</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</div>
+
+<style>
+  .audio-gallery {
+    margin: 0.5rem 0;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .ag-group + .ag-group {
+    border-top: 1px solid #eee;
+  }
+
+  .ag-group-title {
+    margin: 0;
+    padding: 0.6rem 0.9rem 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #888;
+    background: #fafafa;
+  }
+
+  .ag-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ag-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.4rem 0.9rem;
+  }
+
+  .ag-row + .ag-row {
+    border-top: 1px solid #f2f2f2;
+  }
+
+  .ag-row.playing {
+    background: #fff7ed;
+  }
+
+  .ag-play {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+
+  .ag-play:hover {
+    background: #444;
+  }
+
+  .ag-play svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .ag-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: ag-spin 0.7s linear infinite;
+  }
+
+  @keyframes ag-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .ag-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .ag-label {
+    font-size: 0.85rem;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ag-bar {
+    height: 4px;
+    border-radius: 2px;
+    background: #e6e6e6;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .ag-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #f97316;
+    border-radius: 2px;
+  }
+
+  .ag-time {
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    color: #999;
+    font-variant-numeric: tabular-nums;
+    min-width: 2.4rem;
+    text-align: right;
+  }
+
+  @media (max-width: 600px) {
+    .ag-label {
+      font-size: 0.8rem;
+    }
+  }
+</style>
+
+<script>
+  let activeTrack: GalleryTrack | null = null;
+
+  class GalleryTrack {
+    private row: HTMLElement;
+    private url: string;
+    private playBtn: HTMLButtonElement;
+    private iconPlay: SVGElement;
+    private iconPause: SVGElement;
+    private spinner: HTMLElement;
+    private barFill: HTMLElement;
+    private bar: HTMLElement;
+    private timeEl: HTMLElement;
+    private audio: HTMLAudioElement | null = null;
+
+    constructor(row: HTMLElement) {
+      this.row = row;
+      this.url = row.dataset.url!;
+      this.playBtn = row.querySelector(".ag-play")!;
+      this.iconPlay = row.querySelector(".ag-icon-play")!;
+      this.iconPause = row.querySelector(".ag-icon-pause")!;
+      this.spinner = row.querySelector(".ag-spinner")!;
+      this.barFill = row.querySelector(".ag-bar-fill")!;
+      this.bar = row.querySelector(".ag-bar")!;
+      this.timeEl = row.querySelector(".ag-time")!;
+
+      this.playBtn.addEventListener("click", () => this.toggle());
+      this.bar.addEventListener("click", (e) => this.seek(e as MouseEvent));
+    }
+
+    private ensureAudio() {
+      if (this.audio) return;
+      // Lazy: the file is only requested here, on first play.
+      const audio = new Audio();
+      audio.preload = "none";
+      audio.src = this.url;
+      audio.addEventListener("timeupdate", () => this.render());
+      audio.addEventListener("durationchange", () => this.render());
+      audio.addEventListener("ended", () => {
+        this.setPlaying(false);
+        if (this.audio) this.audio.currentTime = 0;
+        this.render();
+        if (activeTrack === this) activeTrack = null;
+      });
+      audio.addEventListener("playing", () => this.setLoading(false));
+      audio.addEventListener("waiting", () => this.setLoading(true));
+      this.audio = audio;
+    }
+
+    private toggle() {
+      this.ensureAudio();
+      const audio = this.audio!;
+      if (audio.paused) {
+        if (activeTrack && activeTrack !== this) activeTrack.pause();
+        activeTrack = this;
+        this.setLoading(true);
+        audio.play().then(() => this.setPlaying(true)).catch(() => this.setLoading(false));
+      } else {
+        this.pause();
+      }
+    }
+
+    pause() {
+      if (this.audio) this.audio.pause();
+      this.setPlaying(false);
+      if (activeTrack === this) activeTrack = null;
+    }
+
+    private seek(e: MouseEvent) {
+      if (!this.audio || !isFinite(this.audio.duration)) return;
+      const rect = this.bar.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      this.audio.currentTime = ratio * this.audio.duration;
+      this.render();
+    }
+
+    private setPlaying(playing: boolean) {
+      if (!playing) this.setLoading(false);
+      this.iconPlay.style.display = playing ? "none" : "";
+      this.iconPause.style.display = playing ? "" : "none";
+      this.playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
+      this.row.classList.toggle("playing", playing);
+    }
+
+    private setLoading(loading: boolean) {
+      this.spinner.style.display = loading ? "" : "none";
+      if (loading) {
+        this.iconPlay.style.display = "none";
+        this.iconPause.style.display = "none";
+      }
+    }
+
+    private render() {
+      const audio = this.audio;
+      if (!audio) return;
+      const dur = audio.duration;
+      const cur = audio.currentTime || 0;
+      const ratio = isFinite(dur) && dur > 0 ? cur / dur : 0;
+      this.barFill.style.width = `${ratio * 100}%`;
+      this.timeEl.textContent = this.fmt(isFinite(dur) && dur > 0 ? (audio.paused && cur === 0 ? dur : cur) : cur);
+    }
+
+    private fmt(seconds: number): string {
+      if (!isFinite(seconds)) return "0:00";
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}:${s.toString().padStart(2, "0")}`;
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>(".ag-row").forEach((row) => new GalleryTrack(row));
+</script>
