@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import EntryCard from "../components/EntryCard.astro";
 import { getCollection } from "astro:content";
+import { SITE_TITLE, SITE_TAGLINE } from "../consts";
 
 const entries = await getCollection("entries");
 entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
@@ -11,7 +12,7 @@ const totalPages = Math.ceil(entries.length / pageSize);
 const pageEntries = entries.slice(0, pageSize);
 ---
 
-<Layout>
+<Layout title={`${SITE_TITLE} — ${SITE_TAGLINE}`}>
   {entries.length === 0 ? (
     <p class="empty">No entries yet. Add a markdown file to <code>src/content/entries/</code> to get started.</p>
   ) : (
