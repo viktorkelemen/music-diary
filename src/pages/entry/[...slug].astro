@@ -32,6 +32,8 @@ function toExcerpt(markdown: string, max = 155): string {
 
 const description = toExcerpt(entry.body ?? "");
 
+const firstImage = data.moodboard?.find((m) => m.type === "image")?.src;
+
 const formattedDate = data.date.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
@@ -54,7 +56,12 @@ const audioUrls = data.audioUrl
   : [];
 ---
 
-<Layout title={`${data.title} — Viktor's Modular Synth Diary`} description={description}>
+<Layout
+  title={`${data.title} — Viktor's Modular Synth Diary`}
+  description={description}
+  image={firstImage}
+  type="article"
+>
   <article class="entry-page">
     <header>
       <time datetime={data.date.toISOString()}>{formattedDate} · {formattedTime}</time>
