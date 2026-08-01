@@ -27,11 +27,11 @@ I recently played a 20-minute live set at Wonderville in Brooklyn. I've also spe
   <iframe src="https://www.youtube-nocookie.com/embed/B82F_qjANsA" title="Live set — YouTube short" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" style="width:100%;height:100%;border:0;display:block;"></iframe>
 </div>
 
-<figure style="margin:1.5rem 0;">
+<figure style="max-width:560px;margin:1.5rem auto;">
   <a href="https://www.instagram.com/aw.sing.er" target="_blank" rel="noopener noreferrer">
-    <img src="/moodboards/2026-08-01-what-is-music-for/clowning.jpeg" alt="Clowning at The Idiot's Hour, NYC" loading="lazy" style="width:100%;max-width:560px;border-radius:8px;display:block;" />
+    <img src="/moodboards/2026-08-01-what-is-music-for/clowning.jpeg" alt="Clowning at The Idiot's Hour, NYC" loading="lazy" style="width:100%;border-radius:8px;display:block;" />
   </a>
-  <figcaption style="font-size:0.8rem;color:#888;margin-top:0.4rem;">Clowning at The Idiot's Hour, NYC — photo by <a href="https://www.instagram.com/aw.sing.er" target="_blank" rel="noopener noreferrer">@aw.sing.er</a></figcaption>
+  <figcaption style="font-size:0.8rem;color:#888;margin-top:0.4rem;text-align:center;">Clowning at The Idiot's Hour, NYC — photo by <a href="https://www.instagram.com/aw.sing.er" target="_blank" rel="noopener noreferrer">@aw.sing.er</a></figcaption>
 </figure>
 
 These things feel related.
