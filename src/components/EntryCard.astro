@@ -1,6 +1,8 @@
 ---
 import VideoEmbed from "./VideoEmbed.astro";
 import AudioPlayer from "./AudioPlayer.astro";
+import AudioGallery from "./AudioGallery.astro";
+import SoundCloudEmbed from "./SoundCloudEmbed.astro";
 import MoodBoard from "./MoodBoard.astro";
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
@@ -32,9 +34,13 @@ const videoUrls = data.videoUrl
   ? Array.isArray(data.videoUrl) ? data.videoUrl : [data.videoUrl]
   : [];
 
-const audioUrls = data.audioUrl
+const rawAudio = data.audioUrl
   ? Array.isArray(data.audioUrl) ? data.audioUrl : [data.audioUrl]
   : [];
+const audioItems = rawAudio.map((a) => (typeof a === "string" ? { url: a } : a));
+const scItems = audioItems.filter((a) => a.url.includes("soundcloud.com"));
+const fileItems = audioItems.filter((a) => !a.url.includes("soundcloud.com"));
+const useGallery = fileItems.length > 4;
 ---
 
 <article class="entry-card" id={entryId}>
@@ -54,9 +60,17 @@ const audioUrls = data.audioUrl
     </div>
   )}
 
-  {audioUrls.length > 0 && (
+  {scItems.length > 0 && (
     <div class="audio-list">
-      {audioUrls.map((url) => <AudioPlayer url={url} />)}
+      {scItems.map((a) => <SoundCloudEmbed url={a.url} />)}
+    </div>
+  )}
+
+  {fileItems.length > 0 && (
+    <div class="audio-list">
+      {useGallery
+        ? <AudioGallery items={fileItems} />
+        : fileItems.map((a) => <AudioPlayer url={a.url} />)}
     </div>
   )}
 
