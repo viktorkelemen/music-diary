@@ -1,5 +1,5 @@
 ---
-title: "What is music for?"
+title: "What do I want from music?"
 date: 2026-08-01T10:00:00
 tags:
   - reflection
@@ -8,20 +8,22 @@ tags:
   - improv
 ---
 
-I've been thinking about how much space I want work to take up in my life. If work isn't at the center, what is?
-
-Music is part of the answer. But "spend more time on music" is vague. What am I actually trying to do?
+I only started taking music-making seriously about a year ago, when I got into modular synths. Before that, I had played around with Fruity Loops and Ableton Live, but never consistently. Now I practice, make things, and sometimes perform. I'm trying to understand what I want from all of it.
 
 A few things:
 
-- **Craft.** I want to get better at harmony, rhythm, composition, and especially improvisation. Some fundamentals are missing.
-- **Exploration.** Making music is one way I figure out what I like.
-- **Presence.** Performance is partly a practice of attention.
-- **Play.** Some of it should just be fun.
+- **Craft.** I want to get better at harmony, rhythm, composition, and especially improvisation.
+- **Exploration.** Making music helps me figure out what I like.
+- **Presence.** I have to listen and respond to what is happening.
+- **Play.** I want to leave room for accidents, surprise, and fun.
 
-## Performance
+Improvisation is where these things overlap. It requires some fluency, but I also have to notice what is happening and be willing to follow it somewhere unexpected.
 
-I recently played a 20-minute live set at Wonderville in Brooklyn. I've also spent the last few weeks performing as a clown and doing improv.
+Of these, presence is where I feel the biggest gap, especially when I perform.
+
+## Attention under pressure
+
+I recently played a 20-minute live set at Wonderville in Brooklyn.
 
 <div style="max-width:320px;margin:1.5rem auto;aspect-ratio:9/16;border-radius:8px;overflow:hidden;background:#1a1a1a;">
   <iframe src="https://www.youtube-nocookie.com/embed/B82F_qjANsA" title="Live set — YouTube short" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" style="width:100%;height:100%;border:0;display:block;"></iframe>
@@ -34,52 +36,31 @@ I recently played a 20-minute live set at Wonderville in Brooklyn. I've also spe
   <figcaption style="font-size:0.8rem;color:#888;margin-top:0.4rem;text-align:center;">Clowning at The Idiot's Hour, NYC — photo by <a href="https://www.instagram.com/aw.sing.er" target="_blank" rel="noopener noreferrer">@aw.sing.er</a></figcaption>
 </figure>
 
-These things feel related.
+I've been doing theater improv for years, and over the last few weeks I've performed as a clown several times. In music, clowning, and improv, I'm dealing with the same problem: what happens to my attention under pressure?
 
-Performance changes my attention, although not always for the better. Under stress, my attention narrows. I listen less, judge myself more, and lose track of what is happening around me.
+Right now, it often gets worse. Under stress, my attention narrows. I listen less, judge myself more, and lose track of what is happening around me.
 
-I've been working on this, and I can feel some improvement, but it's still difficult. I'm trying to notice when my attention collapses and learn how to come back.
+I've been working on this, and I can feel some improvement, but it's still difficult. I'm trying to notice when it happens and find my way back.
 
-## Becoming less one-dimensional
+In clowning and theater improv, I need to notice the other people, the room, and what just happened. If I get too far inside my own head, I stop responding.
 
-I've spent a long time getting good at software engineering. It's a useful way of looking at the world, but I don't want it to be the only one.
+## Different ways of improvising
 
-Music, clowning, improv, and dance ask different things from me:
+Music isn't the only place where I'm working on this. Clowning, theater improv, contact improv, and dance all involve listening and responding in different ways.
 
-- Contact improv brings in the body and another person.
-- Clowning asks me to keep going after failure.
-- Music asks me to listen.
-- Performance asks me to do something while being observed.
-
-In all of them, I have to spend some time not knowing what I'm doing.
+I've spent a long time as a software engineer, where I can usually stop, think, and revise. Improvisation doesn't give me that distance. I have to work with what is happening now.
 
 As I get older, I sometimes imagine the grumpy old man I could become: certain about everything, less curious, mostly living inside his own habits. I would like to avoid that.
 
-I'm not sure that collecting hobbies is the answer. But moving with other people, improvising, performing, being a beginner, and getting surprised seem like a decent start.
-
-## Connecting the pieces
-
-These interests don't fit neatly inside music. My background in software means I can also build:
-
-- Visuals and animations
-- Software and hardware
-- Controllers and instruments
-- Systems connecting sound, movement, light, and interaction
-
-I don't know if these things need to come together. Maybe "music" is already enough. Or maybe what I'm interested in is some combination of sound, visuals, technology, movement, and performance, with improvisation somewhere in the middle.
+These practices put me in situations where I don't know what will happen next. Maybe continuing to spend time there is one way of not becoming too fixed.
 
 ## Questions
 
-I don't need an action plan yet. I have questions:
+I still have questions:
 
-- What kinds of practice make me want to come back?
-- When am I present, rather than trying to be productive?
-- What do I want to learn, and what do I only think I should learn?
-- Do I like performing, preparing to perform, or both?
-- What does an audience add?
-- When does technology open something up?
-- Do these interests need to become one thing?
-- What would it mean to take this seriously without making it a career?
-- What kind of person do I become by continuing?
+- What do I need to learn to improvise more freely?
+- How do I keep listening when I'm anxious?
+- What does performing in front of other people add to the practice?
+- Which parts of this do I actually want to keep doing?
 
-I can't answer these in advance. I'll have to notice what happens as I practice, make things, and perform.
+I don't have answers yet. These are the questions I want to keep around.
