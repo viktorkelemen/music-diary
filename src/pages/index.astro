@@ -47,12 +47,12 @@ const jsonLd = [
 
 <style>
   .empty {
-    color: #888;
+    color: var(--muted);
     font-style: italic;
   }
 
   .empty code {
-    background: #f3f4f6;
+    background: var(--surface);
     padding: 0.15em 0.35em;
     border-radius: 3px;
     font-style: normal;
@@ -63,18 +63,21 @@ const jsonLd = [
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--fg);
   }
 
   .pagination a {
-    color: #555;
+    color: var(--accent);
+    font-family: var(--mono);
     font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
   }
 
   .pagination a:hover {
-    color: #111;
+    color: var(--accent-2);
     text-decoration: underline;
     text-underline-offset: 3px;
   }

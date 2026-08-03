@@ -48,7 +48,7 @@ for (const item of items) {
             </button>
             <div class="ag-main">
               <span class="ag-label">{item.label ?? prettify(item.url)}</span>
-              <div class="ag-bar" role="progressbar">
+              <div class="ag-bar" role="slider" tabindex="0" aria-label={`Seek ${item.label ?? prettify(item.url)}`} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                 <div class="ag-bar-fill"></div>
               </div>
             </div>
@@ -62,14 +62,13 @@ for (const item of items) {
 
 <style>
   .audio-gallery {
-    margin: 0.5rem 0;
-    border: 1px solid #eee;
-    border-radius: 10px;
+    margin: 0.75rem 0;
+    border: 1px solid var(--border);
     overflow: hidden;
   }
 
   .ag-group + .ag-group {
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--border);
   }
 
   .ag-group-title {
@@ -79,8 +78,9 @@ for (const item of items) {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: #888;
-    background: #fafafa;
+    color: var(--muted);
+    background: var(--surface);
+    font-family: var(--mono);
   }
 
   .ag-list {
@@ -97,21 +97,21 @@ for (const item of items) {
   }
 
   .ag-row + .ag-row {
-    border-top: 1px solid #f2f2f2;
+    border-top: 1px solid var(--border);
   }
 
   .ag-row.playing {
-    background: #fff7ed;
+    background: var(--surface);
   }
 
   .ag-play {
     flex-shrink: 0;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: none;
-    background: #222;
-    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 0;
+    border: 1px solid var(--fg);
+    background: var(--fg);
+    color: var(--bg);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -120,7 +120,8 @@ for (const item of items) {
   }
 
   .ag-play:hover {
-    background: #444;
+    background: var(--bg);
+    color: var(--fg);
   }
 
   .ag-play svg {
@@ -141,6 +142,10 @@ for (const item of items) {
     to { transform: rotate(360deg); }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .ag-spinner { animation: none; }
+  }
+
   .ag-main {
     flex: 1;
     min-width: 0;
@@ -150,17 +155,18 @@ for (const item of items) {
   }
 
   .ag-label {
-    font-size: 0.85rem;
-    color: #333;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--fg);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .ag-bar {
-    height: 4px;
-    border-radius: 2px;
-    background: #e6e6e6;
+    height: 3px;
+    border-radius: 0;
+    background: var(--border);
     cursor: pointer;
     overflow: hidden;
   }
@@ -168,14 +174,14 @@ for (const item of items) {
   .ag-bar-fill {
     height: 100%;
     width: 0%;
-    background: #f97316;
-    border-radius: 2px;
+    background: var(--accent);
   }
 
   .ag-time {
     flex-shrink: 0;
-    font-size: 0.72rem;
-    color: #999;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--muted);
     font-variant-numeric: tabular-nums;
     min-width: 2.4rem;
     text-align: right;
@@ -216,6 +222,7 @@ for (const item of items) {
 
       this.playBtn.addEventListener("click", () => this.toggle());
       this.bar.addEventListener("click", (e) => this.seek(e as MouseEvent));
+      this.bar.addEventListener("keydown", (e) => this.seekWithKeyboard(e as KeyboardEvent));
     }
 
     private ensureAudio() {
@@ -234,6 +241,13 @@ for (const item of items) {
       });
       audio.addEventListener("playing", () => this.setLoading(false));
       audio.addEventListener("waiting", () => this.setLoading(true));
+      audio.addEventListener("error", () => {
+        this.setLoading(false);
+        this.audio = null;
+        this.playBtn.disabled = false;
+        this.playBtn.setAttribute("aria-label", "Retry audio");
+        this.timeEl.textContent = "RETRY";
+      });
       this.audio = audio;
     }
 
@@ -264,6 +278,15 @@ for (const item of items) {
       this.render();
     }
 
+    private seekWithKeyboard(e: KeyboardEvent) {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      this.ensureAudio();
+      if (!this.audio || !isFinite(this.audio.duration)) return;
+      this.audio.currentTime = Math.max(0, Math.min(this.audio.duration, this.audio.currentTime + (e.key === "ArrowRight" ? 5 : -5)));
+      this.render();
+    }
+
     private setPlaying(playing: boolean) {
       if (!playing) this.setLoading(false);
       this.iconPlay.style.display = playing ? "none" : "";
@@ -287,6 +310,7 @@ for (const item of items) {
       const cur = audio.currentTime || 0;
       const ratio = isFinite(dur) && dur > 0 ? cur / dur : 0;
       this.barFill.style.width = `${ratio * 100}%`;
+      this.bar.setAttribute("aria-valuenow", String(Math.round(ratio * 100)));
       this.timeEl.textContent = this.fmt(isFinite(dur) && dur > 0 ? (audio.paused && cur === 0 ? dur : cur) : cur);
     }
 

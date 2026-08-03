@@ -28,6 +28,9 @@ const ogImage = new URL(image, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -49,9 +52,19 @@ const ogImage = new URL(image, Astro.site);
     )}
   </head>
   <body>
+    <!--
+      THESIS: A living patch log rendered as a clicks-and-cuts research terminal, refusing the generic clean personal-blog template.
+      OWN-WORLD: Warm off-white stock, charcoal mono type, hairline rules, scanlines, signal blue, and sparse red status marks.
+      STORY: Scan the chronology, open an experiment, and move between its notes, sound, images, and references without losing context.
+      FIRST VIEWPORT: A large stacked wordmark, compact route rail, session metadata, then the newest dated entry within one ruled column.
+      FORM: User-pinned full moodboard translation; direction seed 434e4559.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
     <div class="container">
       <header class="site-header">
-        <h1><a href="/">Viktor's Modular Synth Diary</a></h1>
+        <div class="site-id">
+          <h1><a href="/"><span>VIKTOR'S</span><span>MODULAR_SYNTH</span><span>DIARY</span></a></h1>
+        </div>
         <nav class="site-nav">
           <a href="/" class:list={[{ active: currentPath === "/" || currentPath.startsWith("/page/") }]}>Journal</a>
           <a href="/calendar" class:list={[{ active: currentPath.startsWith("/calendar") }]}>Calendar</a>
@@ -74,6 +87,21 @@ const ogImage = new URL(image, Astro.site);
 </html>
 
 <style is:global>
+  :root {
+    --bg: #f5f3f0;
+    --surface: #ebe8e3;
+    --fg: #1a1a1a;
+    --muted: #68645f;
+    --dim: #68645f;
+    --border: #d4d0ca;
+    --accent: #0055cc;
+    --accent-dark: #003f99;
+    --accent-2: #cc2244;
+    --inverse: #f8f6f2;
+    --mono: "Space Mono", "IBM Plex Mono", "Courier New", monospace;
+    --plex: "IBM Plex Mono", "Courier New", monospace;
+  }
+
   *,
   *::before,
   *::after {
@@ -82,12 +110,32 @@ const ogImage = new URL(image, Astro.site);
 
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      "Helvetica Neue", Arial, sans-serif;
-    color: #222;
-    background: #fff;
+    font-family: var(--plex);
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--fg);
+    background: var(--bg);
     -webkit-font-smoothing: antialiased;
     overflow-wrap: break-word;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.025) 2px, rgba(0, 0, 0, 0.025) 4px);
+  }
+
+  ::selection {
+    color: #fff;
+    background: var(--accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
 
   img {
@@ -98,22 +146,36 @@ const ogImage = new URL(image, Astro.site);
 
 <style>
   .container {
-    max-width: 960px;
+    max-width: 1040px;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 2rem;
   }
 
   .site-header {
-    margin-bottom: 3rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 2px solid #111;
+    position: relative;
+    margin-bottom: 4rem;
+    padding: 1.25rem 0 0.9rem;
+    border-top: 6px solid var(--fg);
+    border-bottom: 1px solid var(--fg);
   }
 
   .site-header h1 {
     margin: 0;
-    font-size: 1.75rem;
+    max-width: 13ch;
+    font-family: var(--mono);
+    font-size: clamp(2.1rem, 6.4vw, 4.75rem);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.035em;
+    line-height: 0.92;
+    text-transform: uppercase;
+  }
+
+  .site-header h1 span {
+    display: block;
+  }
+
+  .site-header h1 span:nth-child(2) {
+    color: var(--accent);
   }
 
   .site-header a {
@@ -122,50 +184,61 @@ const ogImage = new URL(image, Astro.site);
   }
 
   .site-nav {
-    margin-top: 0.75rem;
+    margin-top: 1.5rem;
     display: flex;
-    gap: 1.25rem;
+    gap: 0;
+    border-top: 1px solid var(--border);
   }
 
   .site-nav a {
-    font-size: 0.9rem;
-    color: #666;
+    padding: 0.55rem 1rem 0.5rem 0;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--muted);
     text-decoration: none;
-    padding-bottom: 2px;
-    border-bottom: 1px solid transparent;
-    transition: color 0.15s, border-color 0.15s;
+    text-transform: uppercase;
+    transition: color 0.15s, background 0.15s;
   }
 
   .site-nav a:hover,
   .site-nav a.active {
-    color: #111;
-    border-bottom-color: #111;
+    color: var(--accent);
   }
 
   .site-nav a.social {
     margin-left: auto;
+    padding-right: 0;
   }
 
   footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #eee;
-    font-size: 0.85rem;
-    color: #999;
+    margin-top: 4rem;
+    padding: 1rem 0;
+    border-top: 6px solid var(--fg);
+    border-bottom: 1px solid var(--fg);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
   }
 
   @media (max-width: 600px) {
     .container {
-      padding: 1.25rem 1rem;
+      padding: 1rem;
     }
 
     .site-header {
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
+      margin-bottom: 2.5rem;
+      padding-top: 0.9rem;
     }
 
     .site-header h1 {
-      font-size: 1.35rem;
+      font-size: clamp(1.9rem, 10vw, 3rem);
+    }
+
+    .site-nav a {
+      padding-right: 0.75rem;
+      font-size: 0.67rem;
     }
 
     footer {

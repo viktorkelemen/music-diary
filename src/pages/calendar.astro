@@ -185,30 +185,32 @@ const maxYear = Math.max(...years);
 <style>
   .calendar-page {
     max-width: 100%;
+    padding-top: 0.5rem;
   }
 
   .calendar-controls {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     gap: 1rem;
   }
 
   .nav-btn {
-    background: none;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    font-family: var(--mono);
+    background: var(--fg);
+    border: 1px solid var(--fg);
+    border-radius: 0;
     padding: 0.5rem 0.85rem;
     font-size: 1.1rem;
     cursor: pointer;
-    color: #333;
+    color: var(--bg);
     transition: background 0.15s, border-color 0.15s;
   }
 
   .nav-btn:hover {
-    background: #f5f5f5;
-    border-color: #bbb;
+    background: var(--accent);
+    border-color: var(--accent);
   }
 
   .month-year {
@@ -218,12 +220,13 @@ const maxYear = Math.max(...years);
   }
 
   .month-year select {
+    font-family: var(--plex);
     font-size: 1rem;
     padding: 0.4rem 0.6rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background: #fff;
-    color: #222;
+    border: 1px solid var(--fg);
+    border-radius: 0;
+    background: var(--bg);
+    color: var(--fg);
     cursor: pointer;
   }
 
@@ -231,19 +234,19 @@ const maxYear = Math.max(...years);
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
-    background: #e5e5e5;
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
+    background: var(--border);
+    border: 1px solid var(--fg);
+    border-radius: 0;
     overflow: hidden;
   }
 
   .day-header {
-    background: #f8f8f8;
+    background: var(--fg);
     padding: 0.6rem 0.4rem;
     text-align: center;
     font-size: 0.8rem;
     font-weight: 600;
-    color: #666;
+    color: var(--bg);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
@@ -253,7 +256,7 @@ const maxYear = Math.max(...years);
   }
 
   :global(.day-cell) {
-    background: #fff;
+    background: var(--bg);
     min-height: 90px;
     padding: 0.4rem;
     display: flex;
@@ -262,13 +265,13 @@ const maxYear = Math.max(...years);
   }
 
   :global(.day-cell.empty) {
-    background: #fafafa;
+    background: var(--surface);
   }
 
   :global(.day-cell.today .day-number) {
-    background: #111;
+    background: var(--accent-2);
     color: #fff;
-    border-radius: 50%;
+    border-radius: 0;
     width: 1.6rem;
     height: 1.6rem;
     display: inline-flex;
@@ -279,22 +282,22 @@ const maxYear = Math.max(...years);
   :global(.day-number) {
     font-size: 0.85rem;
     font-weight: 500;
-    color: #444;
+    color: var(--fg);
     margin-bottom: 0.15rem;
   }
 
   :global(.day-cell.has-entry) {
-    background: #f0faf0;
+    background: color-mix(in srgb, var(--accent) 6%, var(--bg));
   }
 
   :global(.entry-link) {
     font-size: 0.7rem;
     line-height: 1.3;
-    color: #2a7a2a;
+    color: var(--accent-dark);
     text-decoration: none;
     padding: 0.15rem 0.3rem;
-    border-radius: 3px;
-    background: #e0f2e0;
+    border-radius: 0;
+    background: color-mix(in srgb, var(--accent) 12%, var(--bg));
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -303,14 +306,13 @@ const maxYear = Math.max(...years);
   }
 
   :global(.entry-link:hover) {
-    background: #c8e6c8;
-    color: #1a5a1a;
+    background: var(--accent);
+    color: #fff;
   }
 
   @media (max-width: 600px) {
     .calendar-controls {
-      flex-wrap: wrap;
-      justify-content: center;
+      gap: 0.4rem;
     }
 
     .day-header {
@@ -326,10 +328,20 @@ const maxYear = Math.max(...years);
     :global(.entry-link) {
       font-size: 0.6rem;
       padding: 0.1rem 0.2rem;
+      max-width: 5ch;
     }
 
     :global(.day-number) {
       font-size: 0.75rem;
+    }
+
+    .month-year {
+      gap: 0.25rem;
+    }
+
+    .month-year select {
+      max-width: 8.5rem;
+      font-size: 0.78rem;
     }
   }
 </style>

@@ -38,7 +38,7 @@ const { items } = Astro.props;
 <div class="moodboard">
   {items.map((item) =>
     item.type === "image" ? (
-      <figure class="moodboard-image" data-src={item.src} data-caption={item.caption || ""}>
+      <figure class="moodboard-image" data-src={item.src} data-caption={item.caption || ""} tabindex="0" role="button" aria-label={`Open image${item.caption ? `: ${item.caption}` : ""}`}>
         <img src={item.src} alt={item.caption || ""} loading="lazy" />
         {item.caption && (
           item.url
@@ -57,16 +57,16 @@ const { items } = Astro.props;
       </div>
     ) : (
       <a class="moodboard-link" href={item.url} target="_blank" rel="noopener noreferrer">
-        <span class="link-icon">&#x1F517;</span>
+        <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 13.5l3-3M8 16l-1 1a4.24 4.24 0 0 1-6-6l3-3a4.24 4.24 0 0 1 6 0M16 8l1-1a4.24 4.24 0 0 1 6 6l-3 3a4.24 4.24 0 0 1-6 0" /></svg>
         <span class="link-title">{item.title}</span>
       </a>
     )
   )}
 </div>
 
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" aria-label="Close">&times;</button>
-  <img class="lightbox-img" />
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+  <button class="lightbox-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg></button>
+  <img class="lightbox-img" src="/og-default.png" alt="" />
   <p class="lightbox-caption"></p>
 </div>
 
@@ -87,9 +87,10 @@ const { items } = Astro.props;
 
   .moodboard-image {
     margin: 0;
-    border-radius: 6px;
+    border: 1px solid var(--border);
+    border-radius: 0;
     overflow: hidden;
-    background: #f0f0f0;
+    background: var(--surface);
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.15s;
   }
@@ -109,7 +110,7 @@ const { items } = Astro.props;
   .moodboard-image figcaption {
     padding: 0.35rem 0.5rem;
     font-size: 0.75rem;
-    color: #666;
+    color: var(--muted);
   }
 
   .moodboard-image figcaption a {
@@ -119,7 +120,8 @@ const { items } = Astro.props;
 
   .moodboard-youtube {
     grid-column: 1 / -1;
-    border-radius: 6px;
+    border: 1px solid var(--border);
+    border-radius: 0;
     overflow: hidden;
     aspect-ratio: 16 / 9;
   }
@@ -137,10 +139,10 @@ const { items } = Astro.props;
     align-items: center;
     justify-content: center;
     padding: 1rem 0.75rem;
-    border: 1px dashed #ccc;
-    border-radius: 6px;
+    border: 1px dashed var(--muted);
+    border-radius: 0;
     text-decoration: none;
-    color: #333;
+    color: var(--fg);
     font-size: 0.8rem;
     text-align: center;
     min-height: 120px;
@@ -148,13 +150,18 @@ const { items } = Astro.props;
   }
 
   .moodboard-link:hover {
-    border-color: #888;
-    background: #fafafa;
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--surface);
   }
 
   .link-icon {
-    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
     margin-bottom: 0.4rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
   }
 
   .link-title {
@@ -200,10 +207,17 @@ const { items } = Astro.props;
     background: none;
     border: none;
     color: #fff;
-    font-size: 2rem;
     cursor: pointer;
     opacity: 0.7;
     transition: opacity 0.15s;
+  }
+
+  .lightbox-close svg {
+    width: 2rem;
+    height: 2rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
   }
 
   .lightbox-close:hover {
@@ -218,20 +232,40 @@ const { items } = Astro.props;
     const lbImg = lightbox.querySelector<HTMLImageElement>(".lightbox-img")!;
     const lbCaption = lightbox.querySelector<HTMLElement>(".lightbox-caption")!;
 
+    let returnFocus: HTMLElement | null = null;
+    const closeLightbox = () => {
+      lightbox.classList.remove("active");
+      returnFocus?.focus();
+    };
+
     document.querySelectorAll<HTMLElement>(".moodboard-image").forEach((fig) => {
-      fig.addEventListener("click", () => {
+      const openLightbox = () => {
+        returnFocus = fig;
         lbImg.src = fig.dataset.src || "";
         lbCaption.textContent = fig.dataset.caption || "";
         lightbox.classList.add("active");
+        lightbox.querySelector<HTMLButtonElement>(".lightbox-close")?.focus();
+      };
+      fig.addEventListener("click", openLightbox);
+      fig.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openLightbox();
+        }
       });
     });
 
-    lightbox.addEventListener("click", () => {
-      lightbox.classList.remove("active");
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox || (e.target as HTMLElement).closest(".lightbox-close")) closeLightbox();
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") lightbox.classList.remove("active");
+      if (!lightbox.classList.contains("active")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "Tab") {
+        e.preventDefault();
+        lightbox.querySelector<HTMLButtonElement>(".lightbox-close")?.focus();
+      }
     });
   });
 </script>

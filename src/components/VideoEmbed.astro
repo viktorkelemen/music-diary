@@ -32,11 +32,11 @@ if (isSCPage) {
     const res = await fetch(`https://soundcloud.com/oembed?format=json&url=${encodeURIComponent(cleanUrl)}`);
     if (res.ok) {
       const data = await res.json();
-      scEmbedHtml = data.html;
+      scEmbedHtml = data.html.replace(/color=%23[a-fA-F0-9]{6}/g, "color=%23222222");
     }
   } catch (_) {}
   if (!scEmbedHtml) {
-    scEmbedHtml = `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(cleanUrl)}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>`;
+    scEmbedHtml = `<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(cleanUrl)}&color=%23222222&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>`;
   }
 }
 ---
@@ -75,8 +75,8 @@ if (isSCPage) {
     position: relative;
     width: 100%;
     padding-bottom: 56.25%;
-    margin: 1rem 0;
-    border-radius: 8px;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
     overflow: hidden;
     background: #1a1a1a;
   }
@@ -97,12 +97,14 @@ if (isSCPage) {
   }
 
   .sc-embed {
-    margin: 1rem 0;
-    border-radius: 8px;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
     overflow: hidden;
+    background: var(--surface);
   }
 
   .sc-embed iframe {
+    width: 100%;
     display: block;
     border: 0;
   }

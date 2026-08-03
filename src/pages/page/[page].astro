@@ -56,8 +56,10 @@ const newerHref = currentPage === 2 ? "/" : `/page/${currentPage - 1}`;
 <style>
   .page-number {
     margin: 0 0 2rem;
-    color: #888;
+    color: var(--muted);
     font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .pagination {
@@ -65,18 +67,21 @@ const newerHref = currentPage === 2 ? "/" : `/page/${currentPage - 1}`;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--fg);
   }
 
   .pagination a {
-    color: #555;
+    color: var(--accent);
+    font-family: var(--mono);
     font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
   }
 
   .pagination a:hover {
-    color: #111;
+    color: var(--accent-2);
     text-decoration: underline;
     text-underline-offset: 3px;
   }

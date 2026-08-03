@@ -68,7 +68,8 @@ const useGallery = fileItems.length > 4;
   {fileItems.length > 0 && (
     useGallery ? (
       <a class="audio-teaser" href={`/entry/${entry.id}`}>
-        &#9658; {fileItems.length} audio samples
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+        {fileItems.length} audio samples
       </a>
     ) : (
       <div class="audio-list">
@@ -88,18 +89,40 @@ const useGallery = fileItems.length > 4;
     <button class="read-more-btn" aria-expanded="false">Read more</button>
   </div>
 
-  <div class="artist-lightbox">
-    <button class="artist-lightbox-close" aria-label="Close">&times;</button>
-    <img class="artist-lightbox-img" />
+  <div class="artist-lightbox" role="dialog" aria-modal="true" aria-label="Artist image preview">
+    <button class="artist-lightbox-close" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg></button>
+    <img class="artist-lightbox-img" src="/og-default.png" alt="" />
     <p class="artist-lightbox-caption"></p>
   </div>
 </article>
 
 <style>
   .entry-card {
-    margin-bottom: 3rem;
-    padding-bottom: 3rem;
-    border-bottom: 1px solid #eee;
+    position: relative;
+    margin-bottom: 4rem;
+    padding: 0 0 3.5rem 2.25rem;
+    border-bottom: 1px solid var(--fg);
+  }
+
+  .entry-card::before {
+    content: "";
+    position: absolute;
+    top: 0.35rem;
+    bottom: 3.5rem;
+    left: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .entry-card::after {
+    content: "●";
+    position: absolute;
+    top: -0.2rem;
+    left: -0.28rem;
+    padding: 0 0.1rem;
+    color: var(--accent-2);
+    background: var(--bg);
+    font-size: 0.65rem;
   }
 
   .entry-card:last-child {
@@ -121,16 +144,20 @@ const useGallery = fileItems.length > 4;
   }
 
   time {
-    font-size: 0.85rem;
-    color: #888;
+    font-size: 0.72rem;
+    color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.08em;
   }
 
   h2 {
-    margin: 0.25rem 0 0;
-    font-size: 1.5rem;
-    font-weight: 600;
+    max-width: 24ch;
+    margin: 0.45rem 0 0;
+    font-family: var(--mono);
+    font-size: clamp(1.45rem, 4vw, 2.35rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
   }
 
   h2 a {
@@ -139,8 +166,7 @@ const useGallery = fileItems.length > 4;
   }
 
   h2 a:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    color: var(--accent);
   }
 
   .tags {
@@ -151,14 +177,14 @@ const useGallery = fileItems.length > 4;
   }
 
   .tag {
-    font-size: 0.78rem;
-    color: #888;
+    font-size: 0.68rem;
+    color: var(--muted);
     text-decoration: none;
     transition: color 0.15s;
   }
 
   .tag:hover {
-    color: #333;
+    color: var(--accent-2);
   }
 
   .audio-teaser {
@@ -167,17 +193,26 @@ const useGallery = fileItems.length > 4;
     gap: 0.4rem;
     margin: 1rem 0 0;
     padding: 0.5rem 0.9rem;
-    border: 1px solid #eee;
-    border-radius: 999px;
-    font-size: 0.82rem;
-    color: #555;
+    border: 1px solid var(--fg);
+    border-radius: 0;
+    font-size: 0.72rem;
+    color: var(--fg);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     text-decoration: none;
     transition: border-color 0.15s, color 0.15s;
   }
 
   .audio-teaser:hover {
-    border-color: #999;
-    color: #222;
+    border-color: var(--accent);
+    color: #fff;
+    background: var(--accent);
+  }
+
+  .audio-teaser svg {
+    width: 0.8rem;
+    height: 0.8rem;
+    fill: currentColor;
   }
 
   .video-grid {
@@ -209,7 +244,8 @@ const useGallery = fileItems.length > 4;
   .entry-notes {
     margin-top: 1rem;
     line-height: 1.7;
-    color: #333;
+    max-width: 72ch;
+    color: var(--fg);
     position: relative;
   }
 
@@ -234,7 +270,8 @@ const useGallery = fileItems.length > 4;
     display: inline-block;
     background: none;
     border: none;
-    color: #2563eb;
+    color: var(--accent);
+    font-family: var(--plex);
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0.5rem 0 0;
@@ -255,7 +292,7 @@ const useGallery = fileItems.length > 4;
   }
 
   .entry-notes :global(a) {
-    color: #2563eb;
+    color: var(--accent);
     text-decoration-thickness: 1px;
     text-underline-offset: 2px;
   }
@@ -281,7 +318,7 @@ const useGallery = fileItems.length > 4;
     display: inline-block;
     background: none;
     border: none;
-    color: #2563eb;
+    color: var(--accent);
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0.5rem 0 0;
@@ -293,10 +330,10 @@ const useGallery = fileItems.length > 4;
   }
 
   .entry-notes :global(pre) {
-    background: #1a1a1a;
-    color: #e8e8e8;
+    background: var(--fg);
+    color: var(--inverse);
     padding: 1rem 1.25rem;
-    border-radius: 6px;
+    border-radius: 0;
     overflow-x: auto;
     font-size: 0.88rem;
     line-height: 1.6;
@@ -312,7 +349,7 @@ const useGallery = fileItems.length > 4;
   }
 
   .entry-notes :global(code) {
-    background: #f3f4f6;
+    background: var(--surface);
     padding: 0.15em 0.35em;
     border-radius: 3px;
     font-size: 0.9em;
@@ -323,7 +360,7 @@ const useGallery = fileItems.length > 4;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #666;
+    color: var(--muted);
     margin: 2rem 0 0.75rem;
   }
 
@@ -343,14 +380,14 @@ const useGallery = fileItems.length > 4;
     aspect-ratio: 1;
     object-fit: cover;
     display: block;
-    border-radius: 4px;
-    background: #f0f0f0;
+    border-radius: 0;
+    background: var(--surface);
   }
 
   .entry-notes :global(.svg-cover span) {
     display: block;
     font-size: 0.65rem;
-    color: #888;
+    color: var(--dim);
     margin-top: 0.25rem;
     line-height: 1.3;
   }
@@ -363,9 +400,10 @@ const useGallery = fileItems.length > 4;
   }
 
   .entry-notes :global(.artist-card) {
-    border-radius: 6px;
+    border: 1px solid var(--border);
+    border-radius: 0;
     overflow: hidden;
-    background: #f8f8f8;
+    background: transparent;
   }
 
   .entry-notes :global(.artist-card img) {
@@ -382,7 +420,7 @@ const useGallery = fileItems.length > 4;
   .entry-notes :global(.artist-card .artist-name) {
     font-weight: 600;
     font-size: 0.8rem;
-    color: #222;
+    color: var(--fg);
     margin: 0;
     line-height: 1.3;
   }
@@ -398,7 +436,7 @@ const useGallery = fileItems.length > 4;
 
   .entry-notes :global(.artist-card .artist-style) {
     font-size: 0.72rem;
-    color: #888;
+    color: var(--dim);
     margin: 0.15rem 0 0;
     line-height: 1.4;
   }
@@ -452,10 +490,17 @@ const useGallery = fileItems.length > 4;
     background: none;
     border: none;
     color: #fff;
-    font-size: 2rem;
     cursor: pointer;
     opacity: 0.7;
     transition: opacity 0.15s;
+  }
+
+  .artist-lightbox-close svg {
+    width: 2rem;
+    height: 2rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
   }
 
   .artist-lightbox-close:hover {
@@ -465,11 +510,11 @@ const useGallery = fileItems.length > 4;
   @media (max-width: 600px) {
     .entry-card {
       margin-bottom: 2rem;
-      padding-bottom: 2rem;
+      padding: 0 0 2rem 1.1rem;
     }
 
     h2 {
-      font-size: 1.2rem;
+      font-size: 1.35rem;
     }
 
     .entry-notes :global(h2) {
@@ -529,31 +574,50 @@ const useGallery = fileItems.length > 4;
       if (!lightbox) return;
       const lbImg = lightbox.querySelector<HTMLImageElement>(".artist-lightbox-img")!;
       const lbCaption = lightbox.querySelector<HTMLElement>(".artist-lightbox-caption")!;
+      let returnFocus: HTMLElement | null = null;
+
+      const closeLightbox = () => {
+        lightbox.classList.remove("active");
+        returnFocus?.focus();
+      };
 
       card.querySelectorAll<HTMLElement>(".artist-card").forEach((artistCard) => {
-        artistCard.addEventListener("click", (e) => {
+        artistCard.tabIndex = 0;
+        artistCard.setAttribute("role", "button");
+        artistCard.setAttribute("aria-label", `Open artist image: ${artistCard.querySelector(".artist-name")?.textContent || "artist"}`);
+        const openLightbox = (e?: Event) => {
           if ((e.target as HTMLElement).closest("a")) return;
           const img = artistCard.querySelector("img");
           const name = artistCard.querySelector(".artist-name");
           if (img) {
+            returnFocus = artistCard;
             lbImg.src = img.src;
             lbCaption.textContent = name?.textContent || "";
             lightbox.classList.add("active");
+            lightbox.querySelector<HTMLButtonElement>(".artist-lightbox-close")?.focus();
+          }
+        };
+        artistCard.addEventListener("click", openLightbox);
+        artistCard.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            openLightbox(e);
           }
         });
       });
 
-      lightbox.addEventListener("click", () => {
-        lightbox.classList.remove("active");
+      lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox || (e.target as HTMLElement).closest(".artist-lightbox-close")) closeLightbox();
       });
-    });
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        document.querySelectorAll(".artist-lightbox.active").forEach((lb) => {
-          lb.classList.remove("active");
-        });
-      }
+      document.addEventListener("keydown", (e) => {
+        if (!lightbox.classList.contains("active")) return;
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "Tab") {
+          e.preventDefault();
+          lightbox.querySelector<HTMLButtonElement>(".artist-lightbox-close")?.focus();
+        }
+      });
     });
   });
 </script>
