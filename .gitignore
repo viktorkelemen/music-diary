@@ -1,5 +1,6 @@
 # build output
 dist/
+instagram-output/
 # generated types
 .astro/
 
