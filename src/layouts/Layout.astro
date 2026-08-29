@@ -28,6 +28,7 @@ const ogImage = new URL(image, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -68,6 +69,7 @@ const ogImage = new URL(image, Astro.site);
         <nav class="site-nav">
           <a href="/" class:list={[{ active: currentPath === "/" || currentPath.startsWith("/page/") }]}>Journal</a>
           <a href="/calendar" class:list={[{ active: currentPath.startsWith("/calendar") }]}>Calendar</a>
+          <a href="/rss.xml" class="rss">RSS</a>
           <a
             class="social"
             href="https://www.instagram.com/viktor.patchlog"
