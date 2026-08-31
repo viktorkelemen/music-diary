@@ -46,7 +46,7 @@ Pick a transformation and move the drive. The left chart is the rule; the right 
 </div>
 <div class="sig-charts">
 <figure>
-<figcaption><span class="sig-label">Transfer curve</span><span class="sig-formula" id="sig-formula">y = x²</span></figcaption>
+<figcaption><span class="sig-label">Transfer curve</span><span class="sig-formula" id="sig-formula">y = (gx)²</span></figcaption>
 <svg id="sig-transferChart" class="sig-chart" viewBox="0 0 600 300" role="img" aria-label="Input to output transfer curve"></svg>
 </figure>
 <figure>
@@ -228,8 +228,8 @@ Rössler and Chua after that.
 <script>
 (() => {
   const transforms = {
-    square: { name: 'Square', formula: 'y = x²', cv: 'Folds both polarities upward. Bipolar motion becomes unipolar; a sine LFO runs at twice the rate.', audio: 'Creates DC and even harmonics. A centered sine becomes mostly an octave plus positive offset.', fn: (x) => x*x },
-    cube: { name: 'Signed cube', formula: 'y = x³', cv: 'Keeps polarity while reducing small movements. Useful when feedback must remain bipolar.', audio: 'Adds odd harmonics with a smooth symmetric curve and no DC for centered input.', fn: (x) => x*x*x },
+    square: { name: 'Square', formula: 'y = (gx)²', cv: 'Folds both polarities upward. Bipolar motion becomes unipolar; a sine LFO runs at twice the rate.', audio: 'Creates DC and even harmonics. A centered sine becomes mostly an octave plus positive offset.', fn: (x,g) => (g*x)*(g*x) },
+    cube: { name: 'Signed cube', formula: 'y = (gx)³', cv: 'Keeps polarity while reducing small movements. Useful when feedback must remain bipolar.', audio: 'Adds odd harmonics with a smooth symmetric curve and no DC for centered input.', fn: (x,g) => (g*x)*(g*x)*(g*x) },
     doubleWell: { name: 'Double well', formula: 'y = gx − x³', cv: 'An S-shaped restoring force. With state and feedback, it can support two competing regions.', audio: 'Non-monotonic shaping: louder input can turn back toward zero, producing complex overtones.', fn: (x,g) => g*x-x*x*x },
     tanh: { name: 'Soft saturation', formula: 'y = tanh(gx)', cv: 'Limits runaway feedback smoothly while preserving sign and gentle motion near zero.', audio: 'Rounds peaks progressively. More drive approaches hard limiting without an abrupt corner.', fn: (x,g) => Math.tanh(g*x) },
     sine: { name: 'Sine fold', formula: 'y = sin(gx)', cv: 'Creates repeated rising and falling control regions as drive increases.', audio: 'Wavefolding produces a bright metallic spectrum and increasingly dense harmonics.', fn: (x,g) => Math.sin(g*x) }
