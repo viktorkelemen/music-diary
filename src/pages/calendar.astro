@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const entries = await getCollection("entries");
+const entries = (await getCollection("entries")).filter((e) => !e.data.unlisted);
 
 // Build a map of date string -> entry info
 const entryMap: Record<string, { title: string; href: string }[]> = {};

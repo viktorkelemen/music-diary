@@ -10,7 +10,7 @@ interface Props {
 }
 
 export async function getStaticPaths() {
-  const entries = await getCollection("entries");
+  const entries = (await getCollection("entries")).filter((e) => !e.data.unlisted);
   entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
   const pageSize = 10;

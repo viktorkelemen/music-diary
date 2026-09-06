@@ -8,6 +8,9 @@ const entries = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     tags: z.array(z.string()).optional(),
+    // Page still builds at /entry/<slug>, but is kept off the home page,
+    // pagination, tags, calendar, RSS and sitemap, and is marked noindex.
+    unlisted: z.boolean().optional(),
     videoUrl: z.union([z.string().url(), z.array(z.string().url())]).optional(),
     audioUrl: z
       .union([

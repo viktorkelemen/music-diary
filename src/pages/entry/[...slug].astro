@@ -77,6 +77,7 @@ const useGallery = fileItems.length > 4;
   image={firstImage}
   type="article"
   jsonLd={jsonLd}
+  noindex={data.unlisted}
 >
   <article class="entry-page">
     <header>
@@ -84,7 +85,11 @@ const useGallery = fileItems.length > 4;
       <h2>{data.title}</h2>
       {data.tags && data.tags.length > 0 && (
         <div class="tags">
-          {data.tags.map((tag) => <a href={`/tag/${tag}`} class="tag">#{tag}</a>)}
+          {data.tags.map((tag) => (
+            data.unlisted
+              ? <span class="tag">#{tag}</span>
+              : <a href={`/tag/${tag}`} class="tag">#{tag}</a>
+          ))}
         </div>
       )}
     </header>

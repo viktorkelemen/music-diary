@@ -4,7 +4,7 @@ import EntryCard from "../components/EntryCard.astro";
 import { getCollection } from "astro:content";
 import { SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION, SITE_URL, AUTHOR } from "../consts";
 
-const entries = await getCollection("entries");
+const entries = (await getCollection("entries")).filter((e) => !e.data.unlisted);
 entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const pageSize = 10;

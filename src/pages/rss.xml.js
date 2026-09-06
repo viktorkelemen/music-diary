@@ -4,7 +4,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { toExcerpt } from "../lib/excerpt";
 
 export async function GET(context) {
-  const entries = await getCollection("entries");
+  const entries = (await getCollection("entries")).filter((e) => !e.data.unlisted);
   entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
   return rss({
