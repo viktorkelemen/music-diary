@@ -77,18 +77,14 @@ An unofficial modification of centrevillage's LilaC Repeater v2.0 firmware, made
       </section>
     </div>
   </div>
-  <div class="range-illustration" id="lc-range" role="img" aria-label="Full sample playback: start at beginning, end at sample end">
-    <div class="viz-row"><span>Full-sample playback</span><span class="text-small text-muted">FDBK ↓ · SPEED ↑ · no button held</span></div>
-    <svg class="range-svg" width="100%" height="48" aria-hidden="true"><rect x="0" y="10" width="100%" height="18" class="range-fill"/><path d="M1 4v31" class="range-edge"/><path id="lc-range-end" class="range-edge"/><text x="0" y="47" class="text-small">Beginning</text><text x="100%" y="47" text-anchor="end" class="text-small">Sample end</text></svg>
-  </div>
   <details><summary>Targeting, limits, and original behavior</summary>
     <ul>
       <li>Trims use the edit track, otherwise the recording target. They snap to musical steps, cannot cross, and retain at least one step.</li>
       <li>FUNC + SPEED controls global tempo and affects all tracks. The original external-sync restrictions still apply. FUNC takes precedence over a held track button.</li>
-      <li>Continuous track speed is an absolute per-track multiplier relative to global / recorded tempo. It changes pitch and speed in VARI; it does not add STRETCH pitch control. Playback changes take effect at the next playback clock boundary.</li>
-      <li>Native speed menu / MIDI edits, track reset / clear, and sample reload clear the temporary speed override. Empty, recording, and overdubbing tracks do not accept the new track-speed control.</li>
-      <li>In playback detail, track-button menu taps act on release; standalone menu hold-repeat is disabled. Showing another edit track does not redirect REC.</li>
-      <li>Modifier-transition filtering prevents residual slider movement from leaking into the next function. Startup / load notifications preserve existing settings.</li>
+      <li>Continuous track speed is an absolute per-track multiplier relative to global / recorded tempo. It changes pitch and speed in VARI; it does not add STRETCH pitch control. While playing, continuous speed changes become audible at the next playback clock boundary. While stopped, they apply immediately for subsequent playback.</li>
+      <li>Native speed menu / MIDI edits, clearing a track, and loading / restoring a sample clear the temporary override. Empty, recording, and overdubbing tracks do not accept the new track-speed control.</li>
+      <li>In playback detail, track-button menu taps act on release; standalone menu hold-repeat is disabled. Changing the displayed edit track does not itself redirect REC; pressing a track button in the main view still selects the recording target.</li>
+      <li>Modifier-transition filtering prevents residual slider movement from leaking into the next function, as far as emulator tests establish — not a guarantee against every hardware glitch. Startup and load-generated slider notifications do not overwrite settings with the physical fader positions.</li>
       <li>Track level faders, audio jacks, and transport retain their original roles. DRY down plus all track faders down allows silent input recording. Recording sources that mix tracks still follow their existing mix rules.</li>
       <li>Unity recording gain means no digital attenuation from DRY, not automatic normalization. Set input recording level upstream.</li>
     </ul>
@@ -99,7 +95,7 @@ An unofficial modification of centrevillage's LilaC Repeater v2.0 firmware, made
   #lilac-ex6-controls .layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:28px;align-items:start;margin:20px 0}
   #lilac-ex6-controls .panel-wrap{width:280px;max-width:100%;justify-self:center}
   #lilac-ex6-controls .module{display:block;width:100%;height:auto}
-  #lilac-ex6-controls .module text,#lilac-ex6-controls .range-svg text{fill:var(--foreground)}
+  #lilac-ex6-controls .module text{fill:var(--foreground)}
   #lilac-ex6-controls .face{fill:var(--secondary);stroke:var(--border)}
   #lilac-ex6-controls .hardware{fill:var(--muted);stroke:var(--muted-foreground)}
   #lilac-ex6-controls .socket{fill:var(--background);stroke:var(--muted-foreground);stroke-width:2}
@@ -114,9 +110,6 @@ An unofficial modification of centrevillage's LilaC Repeater v2.0 firmware, made
   #lilac-ex6-controls h3{margin:0 0 5px}
   #lilac-ex6-controls .annotations .text-small{margin-top:5px}
   #lilac-ex6-controls .index{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;margin-right:6px;border-radius:50%;background:var(--primary);color:var(--primary-foreground)}
-  #lilac-ex6-controls .range-illustration{margin:22px 0}
-  #lilac-ex6-controls .range-fill{fill:var(--viz-series-1);opacity:.2}
-  #lilac-ex6-controls .range-edge{stroke:var(--viz-series-1);stroke-width:2}
   #lilac-ex6-controls details{margin:18px 0}
   #lilac-ex6-controls summary{cursor:pointer}
   #lilac-ex6-controls li{margin:8px 0}
@@ -152,7 +145,6 @@ An unofficial modification of centrevillage's LilaC Repeater v2.0 firmware, made
     get('lc-speed-cap').setAttribute('y',mode==='normal'?'159':mode==='track'?'208.5':'192');
     get('lc-fdbk-cap').setAttribute('y',mode==='func'?'192':'258');
   }));
-  const range=root.querySelector('.range-svg');new ResizeObserver(()=>{const w=range.getBoundingClientRect().width;get('lc-range-end').setAttribute('d',`M${Math.max(1,w-1)} 4v31`);}).observe(range);
 })();
 </script>
 
@@ -178,7 +170,9 @@ Most of the work went into the modifier transitions. An earlier build, EX2, had 
 
 Hold a single track button and move SPEED for that track's continuous VARI multiplier, 0.5× to 2×, with 1× around the center. The gesture opens the track's detail view and the multiplier updates live.
 
-The setting is session-only. Saved sample metadata is untouched, and a native menu or MIDI edit, or any reset or load, clears the override. I'd rather not write an undocumented value into the on-disk format of a module I'm patching without source.
+While playing, a speed change becomes audible at the next playback clock boundary. While stopped, it applies immediately for subsequent playback.
+
+The setting is session-only. Saved sample metadata is untouched, and a native speed menu or MIDI edit, clearing a track, or loading/restoring a sample clears the temporary override. I'd rather not write an undocumented value into the on-disk format of a module I'm patching without source.
 
 Menu taps inside the detail view act on release rather than press, so a tap can be told apart from the start of a speed gesture. Standalone menu hold-repeat is disabled for the same reason.
 
