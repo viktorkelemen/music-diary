@@ -185,12 +185,6 @@ R2 is a cosmetic revision. The startup screen replaces the original 123×56 logo
 <figcaption>The 123×56 splash, decoded straight out of the binary at <code>0x3e028</code>. 1,011 lit pixels.</figcaption>
 </figure>
 
-The bitmap sits at `0x3e028`, SSD1306 page-major, one bit per pixel. Immediately after the seven pages of logo data the original linker placed a hardware table, referenced by a pointer at `0x2a16c`, so the builder writes the new artwork and leaves that table and its three bytes of padding where they were. 665 bytes change, all inside the bitmap range. No code differences between this and the plain EX6 build.
-
-## Status
-
-Trimming, playback, recording, effects, sync and the audio paths are stock EX6 behavior.
-
 <style>
 /* Bridge: the controls widget expects a host design system, so map its
    variables onto this site's palette and supply the few utility classes
