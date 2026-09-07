@@ -14,29 +14,31 @@ Custom firmware for my Acid Rain Technology HEX, running Ripsaw, turning it into
 
 <div class="fw-note">
 
-An unofficial modification, made for my own module. Not an Acid Rain Technology release, not endorsed by or affiliated with them, and nothing to do with the official Ripsaw firmware beyond being patched on top of it. Acid Rain Technology, HEX, and Ripsaw are their names, used here to say which module this is.
+An unofficial modification of the firmware on my own module. Not an Acid Rain Technology release, and not endorsed by or affiliated with them. Acid Rain Technology, HEX and Ripsaw are their names, used here to say which module this is.
 
-Flashing modified firmware can render a module unusable and may void a warranty. These are notes on what I did to mine, not instructions for doing it to yours.
+Flashing modified firmware can make a module unusable and may void a warranty. This is a record of what I did to my own module.
 
 </div>
 
 ## Background
 
-My live set leans on one specific chord combination, and I needed a simple way to generate those chords with variations. First attempt was Morphagene, recording the chords in by hand. Then I tried writing firmware for a Noise Engineering Librae Legio — the Legio platform is open for custom development through libDaisy — but what I got out of it wasn't usable enough.
+My live set leans on one specific chord combination, and I needed a simple way to generate those chords with variations. First attempt was Morphagene, recording the chords in by hand. Then I tried writing firmware for a Noise Engineering Librae Legio, whose Legio platform is open for custom development through libDaisy. What I got out of it was not usable enough.
 
-The Ripsaw had been out of my rack for a while. It's already a four-voice oscillator, so the question was whether changing a few things would be enough. It was.
+The Ripsaw had been out of my rack for a while. It is already a four-voice oscillator, so it needed less changing than anything else I had.
 
-This modification is very specific to that chord combination. Rewriting it for a different set is easy, but for my upcoming live sets this is sufficient.
+The modification is specific to that chord combination. Rewriting it for a different set would be easy, but this covers my upcoming live sets.
 
 ## Patches
 
-There is no binary to download here. The patch list is my own work; the firmware it applies to is Acid Rain's, so you supply that yourself from your own module.
+Acid Rain publishes firmware for HEX but not source or an SDK, so there is nothing to build against and everything here is patched into the compiled application. The module is an RP2040 with 2 MB of flash.
+
+The patch list below is mine. The firmware it applies to is Acid Rain's, so you supply that from a dump of your own module.
 
 <div class="fw-download">
 
 **[hex_chord_drone_patches.json](/firmware/hex_chord_drone_patches.json)**
 
-13 patches, 330 replaced instruction bytes, applied to the 96 KB application region at `0x10000000`. Each entry carries a flash offset, the original bytes, and the replacement bytes, so a patcher can refuse to touch anything that doesn't already match.
+13 patches, 330 replaced instruction bytes, applied to the 96 KB application region at `0x10000000`. Each entry carries a flash offset, the original bytes and the replacement bytes, so a patcher can refuse to write anywhere the original does not already match.
 
 Built against one specific `chainsaw2 1.0.0` image, SHA-256 `99ef27b4…36600`, and not compatible with arbitrary Ripsaw releases. Non-commercial use only.
 
@@ -59,7 +61,7 @@ for p in man["patches"]:
 open("hex-chord-drone.bin", "wb").write(img[:0x18000])
 ```
 
-The result should hash to the `expected_result` value in the manifest. That's the image that was flashed and read back on my module, with calibration and settings untouched.
+The result should hash to the `expected_result` value in the manifest. That is the image flashed and read back on my module, with calibration and settings unchanged.
 
 ## Controls
 
@@ -92,12 +94,6 @@ With the default chord and voicing, 0 V produces C2–D2–F2–G2, and +1 V rai
 Each input keeps its own original calibration.
 
 
-
-## Working from the flash
-
-HEX is Acid Rain's swappable-firmware platform — Ripsaw is the first firmware on it, and further firmwares are advertised as free downloads. What they haven't published is source or an SDK, so there is nothing to build against. Everything here is patched into the compiled application.
-
-First step was the hardware and the USB connection: an RP2040, a full 2 MB flash backup, then everything done against the saved image. Rather than rewrite the instrument from scratch I patched specific parts of the existing application, so its synthesis engine, calibration, and settings storage all survived intact.
 
 <style>
 .fw-note { border: 1px solid var(--border); border-left: 3px solid var(--accent); background: #fff; padding: 16px 18px; margin: 1.5rem 0; color: var(--muted); font-size: 13px; }
