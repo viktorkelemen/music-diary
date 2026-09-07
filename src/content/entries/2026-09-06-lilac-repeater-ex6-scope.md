@@ -73,8 +73,6 @@ The bitmap sits at `0x3e028`, SSD1306 page-major, one bit per pixel. Immediately
 
 Trimming, playback, recording, effects, sync and the audio paths are stock EX6 behavior.
 
-It passes emulator checks and has not been run on hardware. Bootloader acceptance is unverified, and the binary is 2,520 bytes larger than the previous build, which is a plausible reason for a bootloader to reject it. Full recording workflows, SD storage and recovery are all untested on a real module. Not affiliated with centrevillage.
-
 <style>
 .fw-download { border: 1px solid var(--border); border-left: 3px solid var(--accent); background: #fff; padding: 16px 18px; margin: 1.5rem 0; }
 .fw-download > :first-child { margin-top: 0; }
