@@ -32,7 +32,7 @@ An unofficial modification of centrevillage's LilaC Repeater v2.0 firmware, made
 
 </div>
 
-<div id="lilac-ex6-controls">
+<div id="lilac-ex6-controls" class="wide">
   <div class="viz-row"><h2>LilaC Repeater · EX6 Scope R2</h2><span class="text-small text-muted">Changes from supplied official v2.0 firmware</span></div>
   <div class="viz-controls" role="group" aria-label="Button held while moving a fader">
     <button class="btn" type="button" data-mode="normal" aria-pressed="true">No button held</button>

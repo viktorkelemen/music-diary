@@ -200,6 +200,12 @@ const useGallery = fileItems.length > 4;
     h2 {
       font-size: 1.35rem;
     }
+
+    /* Container padding drops to 1rem here and the prose column already
+       fills the viewport, so wide content just matches it. */
+    .entry-content :global(.wide) {
+      width: 100%;
+    }
   }
 
   .entry-content {
@@ -207,6 +213,16 @@ const useGallery = fileItems.length > 4;
     max-width: 72ch;
     line-height: 1.7;
     color: var(--fg);
+  }
+
+  /* Prose keeps its ~72-character measure; wide content (widgets, charts,
+     tables, image grids) opts out and spans the container instead. The
+     content column is flush with the container's left edge, so matching the
+     container's inner width lines both edges up. */
+  .entry-content :global(.wide) {
+    width: min(1040px - 4rem, 100vw - 4rem);
+    max-width: none;
+    overflow-x: auto;
   }
 
   .entry-content :global(p) {
