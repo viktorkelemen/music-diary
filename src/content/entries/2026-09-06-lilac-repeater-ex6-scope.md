@@ -1,7 +1,6 @@
 ---
 title: "Custom Firmware for Centrevillage's LilaC Repeater"
 date: 2026-09-06T00:00:00
-unlisted: true
 tags:
   - eurorack
   - firmware
