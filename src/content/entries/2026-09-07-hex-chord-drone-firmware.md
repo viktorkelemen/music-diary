@@ -20,6 +20,18 @@ Flashing modified firmware can make a module unusable and may void a warranty. T
 
 </div>
 
+## Sound
+
+<figure class="vid">
+<div class="vid-frame"><iframe src="https://www.youtube-nocookie.com/embed/qLoAbgE3j_c" title="Ripsaw chord drone firmware, module on its own" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+<figcaption>The module on its own.</figcaption>
+</figure>
+
+<figure class="vid">
+<div class="vid-frame"><iframe src="https://www.youtube-nocookie.com/embed/YNKVeHVl5Vk" title="Ripsaw chord drone firmware in a patch with other sounds" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+<figcaption>In a patch, with other sounds around it.</figcaption>
+</figure>
+
 ## Background
 
 My live set leans on one specific chord combination, and I needed a simple way to generate those chords with variations. First attempt was Morphagene, recording the chords in by hand. Then I tried writing firmware for a Noise Engineering Librae Legio, whose Legio platform is open for custom development through libDaisy. What I got out of it was not usable enough.
@@ -96,6 +108,10 @@ Each input keeps its own original calibration.
 
 
 <style>
+.vid { margin: 1.5rem 0; }
+.vid-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--border); }
+.vid-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.vid figcaption { margin-top: 8px; color: var(--muted); font: 11px var(--mono); }
 .fw-note { border: 1px solid var(--border); border-left: 3px solid var(--accent); background: #fff; padding: 16px 18px; margin: 1.5rem 0; color: var(--muted); font-size: 13px; }
 .fw-note > :first-child { margin-top: 0; }
 .fw-note > :last-child { margin-bottom: 0; }
