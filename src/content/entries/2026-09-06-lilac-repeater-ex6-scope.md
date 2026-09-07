@@ -9,7 +9,7 @@ tags:
   - code
 ---
 
-Custom firmware for the centrevillage LilaC Repeater, built on the official 2.0 binary, `lr_v2_0.bin`. There is no source, so every change is a patch to the binary itself: locate the instruction or the bitmap, write new bytes, check the diff against the original. Byte-level differences against that file are verifiable. Its provenance beyond the file itself is not.
+Custom firmware for the centrevillage LilaC Repeater, built on the official 2.0 binary, `lr_v2_0.bin`. There is no source, so every change is a patch to the binary itself.
 
 The current build is `2.0-EX6 Scope R2`.
 
