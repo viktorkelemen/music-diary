@@ -1,0 +1,139 @@
+{
+  "description": "Binary patches turning one Acid Rain chainsaw2 1.0.0 image into a four-voice chord drone. Apply to your own dump; no original firmware is redistributed here.",
+  "status": "flashed_and_readback_verified_2026-09-06",
+  "target": "chainsaw2 1.0.0, saved 2026-09-05, RP2040, 2 MiB flash",
+  "application_range": "0x10000000..0x10018000 (exclusive end)",
+  "original_full_flash_sha256": "99ef27b480dcd7279289897ed0881225820ba4e05bf9456cd340de9727736600",
+  "pitch_range": "MIDI 12..96 (documented C0..C7)",
+  "modified_byte_count": 301,
+  "replaced_instruction_bytes": 330,
+  "filesystem_included_in_candidate": false,
+  "expected_result": {
+    "hex-voicing-candidate.bin": {
+      "size": 98304,
+      "sha256": "4a240665fe86979e8e7f7a95b5f705977ed4a6254743f8004962cfd05609bee8"
+    },
+    "hex-voicing-candidate.uf2": {
+      "size": 196608,
+      "sha256": "690535424a02c0f0d2cc1a7bd1dd205660acfdb48e8989ff9569be993d39462d"
+    }
+  },
+  "readback": {
+    "application_sha256": "4a240665fe86979e8e7f7a95b5f705977ed4a6254743f8004962cfd05609bee8",
+    "outside_application_unchanged": true,
+    "calibration_and_settings_unchanged": true,
+    "normal_usb_returned": true
+  },
+  "tools": {
+    "as": "GNU assembler (GNU Binutils) 2.47.20260726",
+    "ld": "GNU ld (GNU Binutils) 2.47.20260726",
+    "objcopy": "GNU objcopy (GNU Binutils) 2.47.20260726",
+    "objdump": "GNU objdump (GNU Binutils) 2.47.20260726"
+  },
+  "patches": [
+    {
+      "name": "button_entry",
+      "ram_address": "0x20000276",
+      "flash_offset": "0x46a",
+      "length": 2,
+      "original_hex": "cde0",
+      "candidate_hex": "c6e0"
+    },
+    {
+      "name": "button_press",
+      "ram_address": "0x20000406",
+      "flash_offset": "0x5fa",
+      "length": 30,
+      "original_hex": "002301220b6033785340337044e7002301223a4e32490b60337853403370",
+      "candidate_hex": "38490b68002b09d101230b603c4e3378012253403370002331490b603ce7"
+    },
+    {
+      "name": "routing_pointer",
+      "ram_address": "0x200004d4",
+      "flash_offset": "0x6c8",
+      "length": 4,
+      "original_hex": "00f8ffff",
+      "candidate_hex": "640a0020"
+    },
+    {
+      "name": "panel_cv_order",
+      "ram_address": "0x20000a64",
+      "flash_offset": "0xc58",
+      "length": 4,
+      "original_hex": "585c6144",
+      "candidate_hex": "02000103"
+    },
+    {
+      "name": "chord_pointer",
+      "ram_address": "0x200004cc",
+      "flash_offset": "0x6c0",
+      "length": 4,
+      "original_hex": "7a140000",
+      "candidate_hex": "d2020020"
+    },
+    {
+      "name": "chord_display",
+      "ram_address": "0x200009b6",
+      "flash_offset": "0xbaa",
+      "length": 32,
+      "original_hex": "4b465b880a21180098460cf0aefb3031cdb240460a210cf0a8fb30302900c0b2",
+      "candidate_hex": "4b465988042900d9002102a04900415ac8b2090a2be05332503537536d374d37"
+    },
+    {
+      "name": "voicing_table",
+      "ram_address": "0x200002d2",
+      "flash_offset": "0x4c6",
+      "length": 20,
+      "original_hex": "1be180221201944663440193009b5a1e0092a0e7",
+      "candidate_hex": "0002050700070c130002070a0003070a0004070b"
+    },
+    {
+      "name": "encoder",
+      "ram_address": "0x200041c8",
+      "flash_offset": "0x43bc",
+      "length": 86,
+      "original_hex": "002818d0538859180ad463291cdd0023538053780133602b00dd6023537012e0632353805378013b12d3602b00dd6023dbb2537007e053785918602906dccb43db171940517070475180fce76021f9e700235370f7e7",
+      "candidate_hex": "002802d15378243b00e05388042b00d900235b18002b00da0023042b00dd0423002802d1243353707047538070476a78243a042a00d90022042a03d0944205d20c3003e00122144200d00c306a88042a00d900227047"
+    },
+    {
+      "name": "display",
+      "ram_address": "0x20000a52",
+      "flash_offset": "0xc46",
+      "length": 18,
+      "original_hex": "4b460c2158780cf062fb1c4bc9b29c464900",
+      "candidate_hex": "4b4659782439042900d9002131315620dfe7"
+    },
+    {
+      "name": "reset_display",
+      "ram_address": "0x20000a1e",
+      "flash_offset": "0xc12",
+      "length": 4,
+      "original_hex": "20214320",
+      "candidate_hex": "31215620"
+    },
+    {
+      "name": "pitch_main",
+      "ram_address": "0x200001ee",
+      "flash_offset": "0x3e2",
+      "length": 88,
+      "original_hex": "b64b00249946b54bb64d984641466a78e01c00926b884b434946095d1b12715c0193002953d0802109018b4205dbad4901328c466344019300925f2a40dd60220023009201930199009803f0f2fa01002000013400f05bfd",
+      "candidate_hex": "b84d00242420009000200190b649095db248405c305c002804d0002c0ad0404649460de0c81c01f0c0fd020038006b4603f03bfb00980199002c08d18046894603f0e2ff92001219a54b9a5c8018ca1280184905490d33e0"
+    },
+    {
+      "name": "pitch_finish",
+      "ram_address": "0x200002ae",
+      "flash_offset": "0x4a2",
+      "length": 36,
+      "original_hex": "002ac0da0022002300920193bbe701f06cfd6b4602002100380003f0e6fa019b002b00db",
+      "candidate_hex": "0c2801da0c200021602801db6020002103f0affa0100200000f019fd0134042c90d1bbe7"
+    },
+    {
+      "name": "enable_voices",
+      "ram_address": "0x20013e5a",
+      "flash_offset": "0x14046",
+      "length": 2,
+      "original_hex": "2343",
+      "candidate_hex": "0023"
+    }
+  ]
+}
