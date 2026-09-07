@@ -28,7 +28,7 @@ Verify before flashing:
 shasum -a 256 lr_v2_0_EX6_SCOPE_R2_EXPERIMENTAL.bin
 ```
 
-An unofficial modification of centrevillage's LilaC Repeater v2.0 firmware, made by patching the official binary. Not a centrevillage release, not endorsed by them, and not tested on hardware. Flashing it may make a module unusable and may void your warranty.
+An unofficial modification of centrevillage's LilaC Repeater v2.0 firmware, made by patching the official binary. Not a centrevillage release, not endorsed by them, and not tested on hardware. Flashing it may make a module unusable and may void your warranty. Shared for non-commercial use only.
 
 </div>
 
