@@ -32,6 +32,9 @@ const formattedTime = data.date.toLocaleTimeString("en-US", {
 const videoUrls = data.videoUrl
   ? Array.isArray(data.videoUrl) ? data.videoUrl : [data.videoUrl]
   : [];
+const hasMixedVideoAspectRatios =
+  videoUrls.some((url) => url.includes("/shorts/")) &&
+  videoUrls.some((url) => !url.includes("/shorts/"));
 
 const rawAudio = data.audioUrl
   ? Array.isArray(data.audioUrl) ? data.audioUrl : [data.audioUrl]
@@ -54,7 +57,7 @@ const useGallery = fileItems.length > 4;
   </header>
 
   {videoUrls.length > 0 && (
-    <div class:list={["video-grid", { "single": videoUrls.length === 1 }]}>
+    <div class:list={["video-grid", { "single": videoUrls.length === 1, "mixed": hasMixedVideoAspectRatios }]}>
       {videoUrls.map((url) => <VideoEmbed url={url} />)}
     </div>
   )}
@@ -225,6 +228,10 @@ const useGallery = fileItems.length > 4;
   .video-grid.single {
     grid-template-columns: 1fr;
     max-width: 640px;
+  }
+
+  .video-grid.mixed {
+    grid-template-columns: 1fr;
   }
 
   .video-grid :global(.video-embed) {
