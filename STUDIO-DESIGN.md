@@ -24,7 +24,7 @@ This is the selected September 2026 redesign, superseding the earlier terminal-s
 - Short audio recordings have native no-JavaScript controls and enhanced play/pause/seek controls, explicit loading/error states, and a direct-file fallback.
 - Large sample collections retain the existing lazy audio gallery.
 - Players coordinate using `patchlog:play`; navigation pauses audio. Persistent playback is intentionally not enabled.
-- Component-based YouTube embeds load on request and retain an external fallback. Embedded HTML media in Markdown is preserved.
+- Component-based YouTube embeds display YouTube’s own player directly, with lazy loading and an external fallback. Embedded HTML media in Markdown is preserved.
 - Code blocks support copy, horizontal scrolling, and optional wrapping; tables get accessible scroll regions.
 - Same-origin firmware manifests have a download action. The HEX signal diagram is an explanatory rendering of existing controls.
 
