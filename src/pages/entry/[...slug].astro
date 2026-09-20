@@ -5,6 +5,7 @@ import AudioPlayer from "../../components/AudioPlayer.astro";
 import SoundCloudEmbed from "../../components/SoundCloudEmbed.astro";
 import MoodBoard from "../../components/MoodBoard.astro";
 import AudioGallery from "../../components/AudioGallery.astro";
+import ArticleTools from "../../components/ArticleTools.astro";
 import { getCollection, render } from "astro:content";
 import { SITE_TITLE, SITE_URL, AUTHOR } from "../../consts";
 import { toExcerpt } from "../../lib/excerpt";
@@ -20,6 +21,12 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
+const related = data.unlisted ? [] : (await getCollection("entries"))
+  .filter(other => !other.data.unlisted && other.id !== entry.id)
+  .map(other => ({ entry: other, score: (other.data.tags ?? []).filter(tag => data.tags?.includes(tag)).length }))
+  .filter(item => item.score > 0)
+  .sort((a,b) => b.score - a.score || b.entry.data.date.getTime() - a.entry.data.date.getTime())
+  .slice(0, 3);
 
 const description = toExcerpt(entry.body ?? "");
 
@@ -82,10 +89,11 @@ const useGallery = fileItems.length > 4;
   jsonLd={jsonLd}
   noindex={data.unlisted}
 >
+  <a class="back-link" href="/">&larr; Journal</a>
   <article class="entry-page">
     <header>
       <time datetime={data.date.toISOString()}>{formattedDate} · {formattedTime}</time>
-      <h2>{data.title}</h2>
+      <h1>{data.title}</h1>
       {data.tags && data.tags.length > 0 && (
         <div class="tags">
           {data.tags.map((tag) => (
@@ -121,6 +129,14 @@ const useGallery = fileItems.length > 4;
 
     <div class="entry-content">
       <Content />
+      {entry.id === "2026-09-07-hex-chord-drone-firmware" && <>
+        <h2 id="signal-path">Signal path</h2>
+        <figure class="signal-path" aria-label="Conceptual chord drone signal path">
+          <div class="signal-chain"><div>V/oct input 1<small>Plays / transposes</small></div><span aria-hidden="true">→</span><div class="core">Chord + voicing<small>Selected with the encoder</small></div><span aria-hidden="true">→</span><div>Four voices<small>Chord drone</small></div></div>
+          <p>V/oct inputs 2–4 override their corresponding voices individually. The synthesis engine, calibration, and settings storage are unchanged.</p>
+          <figcaption>Conceptual diagram based on the controls described above.</figcaption>
+        </figure>
+      </>}
     </div>
 
     {useGallery && fileItems.length > 0 && (
@@ -129,6 +145,8 @@ const useGallery = fileItems.length > 4;
       </div>
     )}
   </article>
+  <ArticleTools />
+  {related.length > 0 && <section class="related-entries"><h2>From the same workbench</h2>{related.map(({entry: other}) => <a href={`/entry/${other.id}`}><span>{other.data.date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}</span>{other.data.title} ↗</a>)}</section>}
 
   <a class="back-link" href="/">&larr; All entries</a>
 </Layout>

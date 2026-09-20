@@ -1,0 +1,17 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EntryCard from "../components/EntryCard.astro";
+import { getCollection } from "astro:content";
+import { isRecording, isExperiment } from "../lib/entry-kind";
+export async function getStaticPaths() {
+  return ["recordings", "experiments"].map(collection => ({ params: { collection } }));
+}
+const recording = Astro.params.collection === "recordings";
+const title = recording ? "Recordings" : "Experiments";
+const entries = (await getCollection("entries")).filter(entry => !entry.data.unlisted && (recording ? isRecording(entry) : isExperiment(entry))).sort((a,b) => b.data.date.getTime() - a.data.date.getTime());
+---
+<Layout title={`${title} — Viktor’s Patchlog`} description={`${title} from Viktor Kelemen’s modular synth diary.`}>
+  <header class="feed-heading"><h1>{title}</h1><span>{entries.length} entries</span></header>
+  {entries.map((entry, index) => <EntryCard entry={entry} lead={index === 0} compact={index > 2} />)}
+  {entries.length === 0 && <p>No entries here yet. <a href="/">Return to the journal.</a></p>}
+</Layout>

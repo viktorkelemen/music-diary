@@ -39,9 +39,9 @@ const newerHref = currentPage === 2 ? "/" : `/page/${currentPage - 1}`;
   title={`Page ${currentPage} — Viktor's Modular Synth Diary`}
   description={`More entries from Viktor's modular synth diary — page ${currentPage} of ${totalPages}.`}
 >
-  <p class="page-number">Page {currentPage} of {totalPages}</p>
+  <header class="feed-heading"><h1>Journal</h1><span>Page {currentPage} of {totalPages}</span></header>
 
-  {entries.map((entry) => <EntryCard entry={entry} />)}
+  {entries.map((entry) => <EntryCard entry={entry} compact />)}
 
   <nav class="pagination" aria-label="Journal pages">
     <a href={newerHref} rel="prev">&larr; Newer entries</a>

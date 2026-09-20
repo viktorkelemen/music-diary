@@ -223,6 +223,10 @@ for (const item of items) {
       this.playBtn.addEventListener("click", () => this.toggle());
       this.bar.addEventListener("click", (e) => this.seek(e as MouseEvent));
       this.bar.addEventListener("keydown", (e) => this.seekWithKeyboard(e as KeyboardEvent));
+      window.addEventListener("patchlog:play", (event) => {
+        if ((event as CustomEvent).detail !== this.audio) this.pause();
+      });
+      window.addEventListener("pagehide", () => this.pause());
     }
 
     private ensureAudio() {
@@ -258,7 +262,10 @@ for (const item of items) {
         if (activeTrack && activeTrack !== this) activeTrack.pause();
         activeTrack = this;
         this.setLoading(true);
-        audio.play().then(() => this.setPlaying(true)).catch(() => this.setLoading(false));
+        audio.play().then(() => {
+          window.dispatchEvent(new CustomEvent("patchlog:play", { detail: audio }));
+          this.setPlaying(true);
+        }).catch(() => { this.setLoading(false); this.timeEl.textContent = "RETRY"; });
       } else {
         this.pause();
       }

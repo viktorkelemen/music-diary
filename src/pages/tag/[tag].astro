@@ -21,11 +21,11 @@ const { tag, entries } = Astro.props;
 >
   <div class="tag-header">
     <a href="/" class="back">&larr; All entries</a>
-    <h2>#{tag}</h2>
+    <h1>#{tag}</h1>
     <p class="count">{entries.length} {entries.length === 1 ? "entry" : "entries"}</p>
   </div>
 
-  {entries.map((entry) => <EntryCard entry={entry} />)}
+  {entries.map((entry) => <EntryCard entry={entry} compact />)}
 </Layout>
 
 <style>

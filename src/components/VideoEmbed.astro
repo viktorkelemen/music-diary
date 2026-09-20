@@ -42,14 +42,14 @@ if (isSCPage) {
 ---
 
 {youtubeId && (
+  <div class="video-item">
   <div class:list={["video-embed", { short: isShort }]}>
-    <iframe
-      src={`https://www.youtube-nocookie.com/embed/${youtubeId}${youtubeStart ? `?start=${youtubeStart}` : ""}`}
-      title="YouTube video"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-      loading="lazy"
-    />
+    <button class="video-launch" type="button" data-embed={`https://www.youtube-nocookie.com/embed/${youtubeId}?playsinline=1${youtubeStart ? `&start=${youtubeStart}` : ""}`} aria-label="Load YouTube video">
+      <img src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`} alt="" loading="lazy" />
+      <span>▶ Load video</span>
+    </button>
+  </div>
+  <a class="video-fallback" href={url} target="_blank" rel="noopener">Watch on YouTube ↗</a>
   </div>
 )}
 
@@ -109,3 +109,15 @@ if (isSCPage) {
     border: 0;
   }
 </style>
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".video-launch").forEach(button => button.addEventListener("click", () => {
+    window.dispatchEvent(new CustomEvent("patchlog:play", { detail: null }));
+    const iframe = document.createElement("iframe");
+    iframe.src = button.dataset.embed!;
+    iframe.title = "YouTube video";
+    iframe.allow = "encrypted-media; picture-in-picture; fullscreen";
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+    button.replaceWith(iframe);
+  }));
+</script>

@@ -1,380 +1,56 @@
 ---
-interface Props {
-  url: string;
-}
-
+interface Props { url: string; }
 const { url } = Astro.props;
-const filename = decodeURIComponent(url.split("/").pop() || "");
+const filename = decodeURIComponent(url.split("/").pop()?.split("?")[0] || "Recording");
+const label = filename.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
 ---
-
-<div class="waveform-player" data-url={url}>
-  <button class="play-btn" aria-label="Play" disabled>
-    <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M8 5v14l11-7z" />
-    </svg>
-    <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
-      <rect x="6" y="5" width="4" height="14" />
-      <rect x="14" y="5" width="4" height="14" />
-    </svg>
-  </button>
-  <div class="waveform-right">
-    <p class="audio-filename">{filename}</p>
-    <canvas class="waveform-canvas" tabindex="0" role="slider" aria-label={`Seek ${filename}`} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></canvas>
-    <span class="time-display">0:00 / 0:00</span>
-    <div class="loading-skeleton" aria-hidden="true">
-      {Array.from({ length: 60 }).map(() => <span class="skel-bar" />)}
-    </div>
+<div class="waveform-player">
+  <audio src={url} preload="metadata" controls aria-label={label}></audio>
+  <div class="audio-custom" hidden>
+    <div class="audio-top"><button class="play-btn" type="button" aria-label={`Play ${label}`}>Play</button><p class="audio-title">{label}</p></div>
+    <label class="audio-seek-label">Playback position<input class="audio-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label={`Playback position: ${label}`} disabled /></label>
+    <div class="audio-times"><span class="elapsed">0:00</span><span class="duration">0:00</span></div>
+    <p class="audio-status" aria-live="polite">Ready to listen.</p>
   </div>
+  <a class="audio-file-link" href={url} target="_blank" rel="noopener">Open audio file ↗</a>
 </div>
-
-<style is:global>
-  .waveform-player {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: transparent;
-    border: 1px solid var(--border);
-    padding: 1rem;
-    margin: 0.75rem 0;
-  }
-
-  .play-btn {
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    border-radius: 0;
-    border: 1px solid var(--fg);
-    background: var(--fg);
-    color: var(--bg);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s;
-  }
-
-  .play-btn:hover:not(:disabled) {
-    background: var(--bg);
-    color: var(--fg);
-  }
-
-  .play-btn:disabled {
-    border-color: #aaa;
-    background: #aaa;
-    cursor: not-allowed;
-  }
-
-  .play-btn svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .waveform-right {
-    flex: 1;
-    min-width: 0;
-    position: relative;
-  }
-
-  .audio-filename {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin: 0 0 0.45rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .waveform-canvas {
-    display: block;
-    width: 100%;
-    height: 64px;
-    cursor: pointer;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .time-display {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-    margin-top: 0.35rem;
-    display: block;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Loading skeleton */
-  .loading-skeleton {
-    position: absolute;
-    top: 1.5rem;
-    left: 0;
-    right: 0;
-    height: 64px;
-    display: flex;
-    align-items: flex-end;
-    gap: 2px;
-    overflow: hidden;
-  }
-
-  .loading-skeleton.hidden {
-    display: none;
-  }
-
-  .skel-bar {
-    flex: 1;
-    background: var(--border);
-    animation: skel-pulse 1.2s ease-in-out infinite;
-  }
-
-  .skel-bar:nth-child(odd) { height: 60%; }
-  .skel-bar:nth-child(even) { height: 40%; }
-  .skel-bar:nth-child(3n) { height: 80%; }
-  .skel-bar:nth-child(5n) { height: 50%; }
-  .skel-bar:nth-child(7n) { height: 90%; }
-
-  @keyframes skel-pulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .skel-bar { animation: none; opacity: 0.65; }
-  }
+<style>
+  .waveform-player{margin:16px 0}audio{width:100%}.audio-top{display:flex;gap:18px;align-items:center}.play-btn{width:55px;height:55px;flex-shrink:0;border:0;border-radius:50%;background:var(--fg);color:var(--inverse);font:12px var(--mono)}.audio-title{font:500 19px/1.35 var(--display);margin:0;overflow-wrap:anywhere}.audio-seek-label{display:block;font:11px/1.5 var(--mono);margin-top:22px}.audio-seek{display:block;width:100%;min-height:30px;margin:0;accent-color:var(--fg)}.audio-times{display:flex;justify-content:space-between;font:11px var(--mono)}.audio-status{font:11px/1.6 var(--mono);min-height:18px;margin:15px 0 8px}.audio-file-link{font:11px/1.5 var(--mono)}
 </style>
-
 <script>
-  let activePlayer: WaveformPlayer | null = null;
-
-  class WaveformPlayer {
-    private container: HTMLElement;
-    private canvas: HTMLCanvasElement;
-    private ctx: CanvasRenderingContext2D;
-    private audio: HTMLAudioElement;
-    private playBtn: HTMLButtonElement;
-    private iconPlay: SVGElement;
-    private iconPause: SVGElement;
-    private timeDisplay: HTMLElement;
-    private skeleton: HTMLElement;
-    private peaks: number[] = [];
-    private animId: number | null = null;
-    private isDragging = false;
-
-    private readonly ACCENT = "#0055cc";
-    private readonly UNPLAYED = "#d4d0ca";
-    private readonly BAR_GAP = 2;
-
-    constructor(container: HTMLElement) {
-      this.container = container;
-      this.canvas = container.querySelector(".waveform-canvas")!;
-      this.ctx = this.canvas.getContext("2d")!;
-      this.playBtn = container.querySelector(".play-btn")!;
-      this.iconPlay = container.querySelector(".icon-play")!;
-      this.iconPause = container.querySelector(".icon-pause")!;
-      this.timeDisplay = container.querySelector(".time-display")!;
-      this.skeleton = container.querySelector(".loading-skeleton")!;
-
-      this.audio = new Audio();
-      this.audio.preload = "metadata";
-
-      this.bindEvents();
-      this.loadAudio();
-    }
-
-    private bindEvents() {
-      this.playBtn.addEventListener("click", () => this.togglePlay());
-
-      this.audio.addEventListener("ended", () => {
-        this.setPlaying(false);
-        this.drawWaveform();
-        if (activePlayer === this) activePlayer = null;
-      });
-
-      // Canvas seek (mouse)
-      this.canvas.addEventListener("mousedown", (e) => {
-        this.isDragging = true;
-        this.seek(e);
-      });
-      window.addEventListener("mousemove", (e) => {
-        if (this.isDragging) this.seek(e);
-      });
-      window.addEventListener("mouseup", () => {
-        this.isDragging = false;
-      });
-
-      // Canvas seek (touch)
-      this.canvas.addEventListener("touchstart", (e) => {
-        this.isDragging = true;
-        this.seekTouch(e);
-      }, { passive: false });
-      this.canvas.addEventListener("touchmove", (e) => {
-        if (this.isDragging) {
-          e.preventDefault();
-          this.seekTouch(e);
-        }
-      }, { passive: false });
-      this.canvas.addEventListener("touchend", () => {
-        this.isDragging = false;
-      });
-      this.canvas.addEventListener("keydown", (e) => {
-        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-        e.preventDefault();
-        if (!this.audio.duration) return;
-        this.audio.currentTime = Math.max(0, Math.min(this.audio.duration, this.audio.currentTime + (e.key === "ArrowRight" ? 5 : -5)));
-        this.updateTime();
-        this.drawWaveform();
-      });
-
-      // Responsive resize
-      const ro = new ResizeObserver(() => {
-        this.sizeCanvas();
-        if (this.peaks.length) this.drawWaveform();
-      });
-      ro.observe(this.canvas);
-    }
-
-    private loadAudio() {
-      const url = this.container.dataset.url!;
-
-      // Stream audio natively — don't download the whole file
-      this.audio.src = url;
-      this.audio.addEventListener("loadedmetadata", () => {
-        this.updateTime();
-        this.playBtn.disabled = false;
-        this.skeleton.classList.add("hidden");
-        this.peaks = Array(100).fill(0.3);
-        this.sizeCanvas();
-        this.drawWaveform();
-      });
-      this.audio.addEventListener("error", () => {
-        this.skeleton.classList.add("hidden");
-        this.playBtn.disabled = false;
-        this.playBtn.setAttribute("aria-label", "Retry audio");
-        this.timeDisplay.textContent = "Audio unavailable — press play to retry";
-      });
-    }
-
-    private sizeCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      const rect = this.canvas.getBoundingClientRect();
-      this.canvas.width = rect.width * dpr;
-      this.canvas.height = rect.height * dpr;
-      this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    private drawWaveform() {
-      const w = this.canvas.clientWidth;
-      const h = this.canvas.clientHeight;
-      this.ctx.clearRect(0, 0, w, h);
-
-      if (!this.peaks.length) return;
-
-      const numBars = this.peaks.length;
-      const barWidth = (w - (numBars - 1) * this.BAR_GAP) / numBars;
-      const progress = this.audio.duration
-        ? this.audio.currentTime / this.audio.duration
-        : 0;
-      const progressX = progress * w;
-      const minBarH = 2;
-
-      for (let i = 0; i < numBars; i++) {
-        const x = i * (barWidth + this.BAR_GAP);
-        const barH = Math.max(minBarH, this.peaks[i] * h * 0.9);
-        const y = (h - barH) / 2;
-
-        this.ctx.fillStyle = x + barWidth <= progressX ? this.ACCENT : this.UNPLAYED;
-        this.ctx.fillRect(x, y, barWidth, barH);
-      }
-    }
-
-    private seek(e: MouseEvent) {
-      const rect = this.canvas.getBoundingClientRect();
-      const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      if (this.audio.duration) {
-        this.audio.currentTime = ratio * this.audio.duration;
-        this.updateTime();
-        this.drawWaveform();
-      }
-    }
-
-    private seekTouch(e: TouchEvent) {
-      const touch = e.touches[0];
-      if (!touch) return;
-      const rect = this.canvas.getBoundingClientRect();
-      const ratio = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
-      if (this.audio.duration) {
-        this.audio.currentTime = ratio * this.audio.duration;
-        this.updateTime();
-        this.drawWaveform();
-      }
-    }
-
-    private togglePlay() {
-      if (this.audio.error) {
-        this.playBtn.disabled = true;
-        this.skeleton.classList.remove("hidden");
-        this.timeDisplay.textContent = "Retrying…";
-        this.audio.load();
-        return;
-      }
-      if (this.audio.paused) {
-        if (activePlayer && activePlayer !== this) {
-          activePlayer.audio.pause();
-          activePlayer.setPlaying(false);
-        }
-        activePlayer = this;
-        this.audio.play();
-        this.setPlaying(true);
-        this.startAnimation();
-      } else {
-        this.audio.pause();
-        this.setPlaying(false);
-        activePlayer = null;
-        this.stopAnimation();
-      }
-    }
-
-    private setPlaying(playing: boolean) {
-      this.iconPlay.style.display = playing ? "none" : "";
-      this.iconPause.style.display = playing ? "" : "none";
-      this.playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
-      if (!playing) this.stopAnimation();
-    }
-
-    private startAnimation() {
-      const tick = () => {
-        this.drawWaveform();
-        this.updateTime();
-        this.animId = requestAnimationFrame(tick);
-      };
-      this.animId = requestAnimationFrame(tick);
-    }
-
-    private stopAnimation() {
-      if (this.animId !== null) {
-        cancelAnimationFrame(this.animId);
-        this.animId = null;
-      }
-    }
-
-    private updateTime() {
-      const cur = this.audio.currentTime || 0;
-      const dur = this.audio.duration || 0;
-      this.timeDisplay.textContent = `${this.formatTime(cur)} / ${this.formatTime(dur)}`;
-      this.canvas.setAttribute("aria-valuenow", String(dur ? Math.round((cur / dur) * 100) : 0));
-    }
-
-    private formatTime(seconds: number): string {
-      if (!isFinite(seconds)) return "0:00";
-      const m = Math.floor(seconds / 60);
-      const s = Math.floor(seconds % 60);
-      return `${m}:${s.toString().padStart(2, "0")}`;
-    }
-  }
-
-  // Initialize all players on the page
-  document.querySelectorAll<HTMLElement>(".waveform-player").forEach((el) => {
-    new WaveformPlayer(el);
+  const fmt = (seconds: number) => Number.isFinite(seconds) ? `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2,"0")}` : "0:00";
+  document.querySelectorAll<HTMLElement>(".waveform-player").forEach(container => {
+    const audio = container.querySelector("audio")!;
+    const custom = container.querySelector<HTMLElement>(".audio-custom")!;
+    const button = container.querySelector<HTMLButtonElement>(".play-btn")!;
+    const seek = container.querySelector<HTMLInputElement>(".audio-seek")!;
+    const status = container.querySelector<HTMLElement>(".audio-status")!;
+    audio.controls = false; audio.hidden = true; custom.hidden = false;
+    const sync = () => {
+      const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
+      seek.disabled = duration <= 0;
+      seek.max = String(duration || 100); seek.value = String(audio.currentTime);
+      seek.setAttribute("aria-valuetext", `${fmt(audio.currentTime)} of ${fmt(duration)}`);
+      container.querySelector(".elapsed")!.textContent = fmt(audio.currentTime);
+      container.querySelector(".duration")!.textContent = fmt(duration);
+      button.textContent = audio.paused ? "Play" : "Pause";
+      button.setAttribute("aria-label", `${audio.paused ? "Play" : "Pause"} ${audio.getAttribute("aria-label")}`);
+    };
+    button.addEventListener("click", async () => {
+      if (!audio.paused) { audio.pause(); return; }
+      if (audio.error) audio.load();
+      status.textContent = "Loading…";
+      try { await audio.play(); } catch { status.textContent = "Could not play. Try again or open the audio file."; }
+    });
+    audio.addEventListener("play", () => { window.dispatchEvent(new CustomEvent("patchlog:play", { detail: audio })); sync(); });
+    audio.addEventListener("playing", () => status.textContent = "Playing.");
+    audio.addEventListener("pause", () => { status.textContent = "Paused."; sync(); });
+    audio.addEventListener("ended", () => { status.textContent = "Finished."; sync(); });
+    audio.addEventListener("error", () => status.textContent = "Audio unavailable. Try again or open the audio file.");
+    ["timeupdate","loadedmetadata","durationchange"].forEach(event => audio.addEventListener(event, sync));
+    seek.addEventListener("input", () => { if (Number.isFinite(audio.duration)) audio.currentTime = Number(seek.value); sync(); });
+    window.addEventListener("patchlog:play", event => { if ((event as CustomEvent).detail !== audio) audio.pause(); });
+    window.addEventListener("pagehide", () => audio.pause());
+    sync();
   });
 </script>

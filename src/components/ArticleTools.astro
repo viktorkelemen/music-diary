@@ -1,0 +1,72 @@
+<script>
+  const content = document.querySelector<HTMLElement>(".entry-content");
+  if (content) {
+    const headings = Array.from(content.querySelectorAll<HTMLElement>("h2"));
+    if (headings.length > 1) {
+      const details = document.createElement("details");
+      details.className = "entry-contents";
+      const summary = document.createElement("summary");
+      summary.textContent = "In this entry";
+      const nav = document.createElement("nav");
+      nav.setAttribute("aria-label", "Article contents");
+      headings.forEach((heading, index) => {
+        if (!heading.id) heading.id = `entry-section-${index}`;
+        const link = document.createElement("a");
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        nav.append(link);
+      });
+      details.append(summary, nav);
+      content.before(details);
+    }
+    content.querySelectorAll<HTMLPreElement>("pre").forEach((pre) => {
+      const code = pre.querySelector("code");
+      if (!code) return;
+      const wrapper = document.createElement("div");
+      wrapper.className = "code-example";
+      const toolbar = document.createElement("div");
+      toolbar.className = "code-tools";
+      const label = document.createElement("span");
+      label.textContent = (pre.dataset.language || "Code").toUpperCase();
+      const actions = document.createElement("div");
+      const wrap = document.createElement("button");
+      wrap.type = "button";
+      wrap.textContent = "Wrap lines";
+      wrap.setAttribute("aria-pressed", "false");
+      wrap.addEventListener("click", () => wrap.setAttribute("aria-pressed", String(pre.classList.toggle("wrapped"))));
+      const copy = document.createElement("button");
+      copy.type = "button";
+      copy.textContent = "Copy code";
+      const status = document.createElement("div");
+      status.className = "code-status";
+      status.setAttribute("aria-live", "polite");
+      status.textContent = "Scroll horizontally or turn on line wrapping.";
+      copy.addEventListener("click", async () => {
+        try { await navigator.clipboard.writeText(code.textContent || ""); status.textContent = "Code copied."; }
+        catch { const range = document.createRange(); range.selectNodeContents(code); const selection = window.getSelection(); selection?.removeAllRanges(); selection?.addRange(range); status.textContent = "Code selected. Press Ctrl+C or ⌘C to copy."; }
+      });
+      actions.append(wrap, copy); toolbar.append(label, actions);
+      pre.before(wrapper); pre.tabIndex = 0;
+      wrapper.append(toolbar, pre, status);
+    });
+    content.querySelectorAll<HTMLTableElement>("table").forEach((table) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-scroll";
+      wrapper.tabIndex = 0;
+      wrapper.setAttribute("role", "region");
+      wrapper.setAttribute("aria-label", table.caption?.textContent || "Reference table");
+      table.before(wrapper); wrapper.append(table);
+      table.querySelectorAll("thead th").forEach(th => th.setAttribute("scope", "col"));
+    });
+    content.querySelectorAll<HTMLAnchorElement>(".fw-download a[href]").forEach((link) => {
+      const url = new URL(link.href);
+      if (url.origin !== location.origin) return;
+      const action = document.createElement("a");
+      action.href = link.href;
+      action.download = url.pathname.split("/").pop() || "download";
+      action.className = "download-action";
+      action.textContent = "Download patch manifest ↓";
+      link.closest(".fw-download")?.append(action);
+    });
+  }
+</script>
