@@ -12,6 +12,6 @@ const entries = (await getCollection("entries")).filter(entry => !entry.data.unl
 ---
 <Layout title={`${title} — Viktor’s Patchlog`} description={`${title} from Viktor Kelemen’s modular synth diary.`}>
   <header class="feed-heading"><h1>{title}</h1><span>{entries.length} entries</span></header>
-  {entries.map((entry, index) => <EntryCard entry={entry} lead={index === 0} compact={index > 2} />)}
+  {entries.map((entry, index) => <EntryCard entry={entry} lead={index === 0} />)}
   {entries.length === 0 && <p>No entries here yet. <a href="/">Return to the journal.</a></p>}
 </Layout>

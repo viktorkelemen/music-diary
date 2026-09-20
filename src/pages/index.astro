@@ -35,7 +35,7 @@ const jsonLd = [
   {entries.length === 0 ? (
     <p class="empty">No entries yet. Add a markdown file to <code>src/content/entries/</code> to get started.</p>
   ) : (
-    pageEntries.map((entry, index) => <EntryCard entry={entry} lead={index === 0} compact={index > 2 && !entry.data.audioUrl} />)
+    pageEntries.map((entry, index) => <EntryCard entry={entry} lead={index === 0} />)
   )}
 
   {totalPages > 1 && (

@@ -41,7 +41,7 @@ const newerHref = currentPage === 2 ? "/" : `/page/${currentPage - 1}`;
 >
   <header class="feed-heading"><h1>Journal</h1><span>Page {currentPage} of {totalPages}</span></header>
 
-  {entries.map((entry) => <EntryCard entry={entry} compact />)}
+  {entries.map((entry) => <EntryCard entry={entry} />)}
 
   <nav class="pagination" aria-label="Journal pages">
     <a href={newerHref} rel="prev">&larr; Newer entries</a>
