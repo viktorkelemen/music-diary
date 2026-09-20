@@ -9,8 +9,6 @@ tags:
   - systems
 ---
 
-# Gábor Lázár: Composing the Instrument
-
 Gábor Lázár has been working in Max/MSP for around fifteen years, and in recent years it has become his entire studio. His approach to composition centers on "compositional interfaces" — systems he builds where sound emerges from the interactions within them rather than being engineered through traditional synthesis approaches.
 
 ## The Studio Environment
