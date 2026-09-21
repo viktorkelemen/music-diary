@@ -15,6 +15,7 @@ This is the selected September 2026 redesign, superseding the earlier terminal-s
 - Desktop identity rail and content column; stacked identity with horizontal navigation below 760px.
 - Latest entry leads the journal. All entries retain text excerpts and available media previews, including older entries and archive pages.
 - Reflection posts are labeled Reflection. Supporting media embedded in an essay does not make it a recording.
+- Individual audio uses the slim Editorial rule player: compact circular control, title and time on one line, and a seek rail beneath between quiet separators.
 - Recordings and Experiments are complete archive views derived from media and tags, not filters of only the current page.
 - Full content, media, tags, embedded experiments, RSS, calendar, pagination, canonical URLs, and unlisted-entry rules remain supported.
 - Articles have one page H1, an optional contents list, related entries, and comfortable reading type.

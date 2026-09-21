@@ -7,15 +7,16 @@ const label = filename.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
 <div class="waveform-player">
   <audio src={url} preload="metadata" controls aria-label={label}></audio>
   <div class="audio-custom" hidden>
-    <div class="audio-top"><button class="play-btn" type="button" aria-label={`Play ${label}`}>Play</button><p class="audio-title">{label}</p></div>
-    <label class="audio-seek-label">Playback position<input class="audio-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label={`Playback position: ${label}`} disabled /></label>
-    <div class="audio-times"><span class="elapsed">0:00</span><span class="duration">0:00</span></div>
-    <p class="audio-status" aria-live="polite">Ready to listen.</p>
+    <button class="play-btn" type="button" aria-label={`Play ${label}`}>▶</button>
+    <p class="audio-title">{label}</p>
+    <div class="audio-times"><span class="elapsed">0:00</span><span aria-hidden="true"> / </span><span class="duration">0:00</span></div>
+    <label class="audio-seek-label"><span class="visually-hidden">Playback position</span><input class="audio-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label={`Playback position: ${label}`} disabled /></label>
+    <p class="audio-status visually-hidden" aria-live="polite">Ready to listen.</p>
   </div>
   <a class="audio-file-link" href={url} target="_blank" rel="noopener">Open audio file ↗</a>
 </div>
 <style>
-  .waveform-player{margin:16px 0}audio{width:100%}.audio-top{display:flex;gap:18px;align-items:center}.play-btn{width:55px;height:55px;flex-shrink:0;border:0;border-radius:50%;background:var(--fg);color:var(--inverse);font:12px var(--mono)}.audio-title{font:500 19px/1.35 var(--display);margin:0;overflow-wrap:anywhere}.audio-seek-label{display:block;font:11px/1.5 var(--mono);margin-top:22px}.audio-seek{display:block;width:100%;min-height:30px;margin:0;accent-color:var(--fg)}.audio-times{display:flex;justify-content:space-between;font:11px var(--mono)}.audio-status{font:11px/1.6 var(--mono);min-height:18px;margin:15px 0 8px}.audio-file-link{font:11px/1.5 var(--mono)}
+  .waveform-player{margin:16px 0}audio{width:100%}.audio-custom{display:grid;grid-template-columns:32px minmax(0,1fr) auto;grid-template-areas:"play title time" "play seek seek";align-items:center;gap:1px 12px}.play-btn{grid-area:play;width:32px;height:32px;border:0;border-radius:50%;background:var(--accent-2);color:var(--fg);font:12px var(--mono);padding:0;cursor:pointer}.audio-title{grid-area:title;font:500 14px/1.35 var(--display);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.audio-seek-label{grid-area:seek;display:block;min-width:0}.audio-seek{display:block;width:100%;height:18px;margin:0;accent-color:var(--accent)}.audio-times{grid-area:time;display:flex;font:10px/1.4 var(--mono);white-space:nowrap}.audio-file-link{font:11px/1.5 var(--mono)}.enhanced>.audio-file-link{display:none}.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:520px){.audio-custom{grid-template-columns:32px minmax(0,1fr) auto;gap:1px 9px}.audio-title{font-size:13px}.audio-times{font-size:9px}}
 </style>
 <script>
   const fmt = (seconds: number) => Number.isFinite(seconds) ? `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2,"0")}` : "0:00";
@@ -25,6 +26,7 @@ const label = filename.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
     const button = container.querySelector<HTMLButtonElement>(".play-btn")!;
     const seek = container.querySelector<HTMLInputElement>(".audio-seek")!;
     const status = container.querySelector<HTMLElement>(".audio-status")!;
+    container.classList.add("enhanced");
     audio.controls = false; audio.hidden = true; custom.hidden = false;
     const sync = () => {
       const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
@@ -33,7 +35,7 @@ const label = filename.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
       seek.setAttribute("aria-valuetext", `${fmt(audio.currentTime)} of ${fmt(duration)}`);
       container.querySelector(".elapsed")!.textContent = fmt(audio.currentTime);
       container.querySelector(".duration")!.textContent = fmt(duration);
-      button.textContent = audio.paused ? "Play" : "Pause";
+      button.textContent = audio.paused ? "▶" : "Ⅱ";
       button.setAttribute("aria-label", `${audio.paused ? "Play" : "Pause"} ${audio.getAttribute("aria-label")}`);
     };
     button.addEventListener("click", async () => {
