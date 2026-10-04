@@ -2,14 +2,14 @@ import {CHORDS,WAVEFORMS,PARAMS,DEFAULTS,validatePatch,voiceFrequency} from './e
 let state=structuredClone(DEFAULTS),ctx,node,master,analyser,splitter,leftAnalyser,rightAnalyser,playing=false,positions=[0,0,0,0,0],volume=.65;
 const $=id=>document.getElementById(id);
 const groups=[
- ['Pitch & voicing','Six reel chords plus four new explorations.', ['chord','variation','octave','transpose','fine','tuning','tone']],
+ ['Pitch & voicing','Six reel chords plus four exploration families, each with four voicings.', ['chord','variation','octave','transpose','fine','tuning','tone']],
  ['Harmonic bloom','Choose a base wave, then let harmonics bloom.', ['waveform','bloom','bloomRate','partials','rolloff','bloomSpread']],
  ['Spatial movement','Give each note its own place and pace.', ['width','spatialRate','spatialSpread','staticWidth','pan']],
  ['Drift & breathing','Introduce small changes within the chord.', ['detune','detuneMix','life','drift','lifeRate']],
 ];
 const choices={waveform:WAVEFORMS.map((name,i)=>[i,name]),chord:CHORDS.map((c,i)=>[i,`${i+1} · ${c.name}`]),variation:['Original','First note up','First two up','First three up','Alternating up','Last note up','Last two up','Penultimate up'].map((s,i)=>[i,`V${i+1} · ${s}`]),octave:[[-1,'−1 octave'],[0,'Original register'],[1,'+1 octave']]};
 const optionMarkup=key=>key==='chord'
- ? `<optgroup label="Reel chords">${choices.chord.slice(0,6).map(([value,name])=>`<option value="${value}">${name}</option>`).join('')}</optgroup><optgroup label="New explorations">${choices.chord.slice(6).map(([value,name])=>`<option value="${value}">${name}</option>`).join('')}</optgroup>`
+ ? `<optgroup label="Reel chords">${choices.chord.slice(0,6).map(([value,name])=>`<option value="${value}">${name}</option>`).join('')}</optgroup>${['G A C D','C D F G A','G B♭ C D F','C D E G'].map((label,i)=>`<optgroup label="New · ${label}">${choices.chord.slice(6+i*4,10+i*4).map(([value,name])=>`<option value="${value}">${name}</option>`).join('')}</optgroup>`).join('')}`
  : choices[key].map(([value,name])=>`<option value="${value}">${name}</option>`).join('');
 function formatted(k,v){const d=PARAMS[k];if(d.unit==='%')return `${Math.round(v*100)}%`;if(d.unit==='pan')return v===0?'Center':`${Math.round(Math.abs(v)*100)}% ${v<0?'L':'R'}`;return `${Number(v.toFixed(2))}${d.unit?' '+d.unit:''}`}
 function fill(el){el.style.setProperty('--fill',`${(el.value-el.min)/(el.max-el.min)*100}%`)}

@@ -6,9 +6,21 @@ export const CHORDS = [
  {name:'Csus2sus4 · wide',notes:[98,146.83,174.61,261.63,523.25],harmonics:true,gain:.27806023},
  {name:'Fsus2 · wide',notes:[174.61,261.63,392,523.25],harmonics:true,gain:.24610728},
  {name:'G A C D · open',notes:[196,220,261.63,293.66],harmonics:false,gain:.25,justRoot:196,justRatios:[1,9/8,4/3,3/2]},
+ {name:'G A C D · close',notes:[220,261.63,293.66,392],harmonics:false,gain:.25,justRoot:196,justRatios:[9/8,4/3,3/2,2]},
+ {name:'G A C D · wide',notes:[98,146.83,220,261.63],harmonics:false,gain:.25,justRoot:196,justRatios:[1/2,3/4,9/8,4/3]},
+ {name:'G A C D · low',notes:[98,110,130.81,146.83],harmonics:false,gain:.25,justRoot:196,justRatios:[1/2,9/16,2/3,3/4]},
  {name:'C D F G A · warm',notes:[261.63,293.66,349.23,392,440],harmonics:false,gain:.267,justRoot:261.63,justRatios:[1,9/8,4/3,3/2,5/3]},
+ {name:'C D F G A · close',notes:[293.66,349.23,392,440,523.25],harmonics:false,gain:.267,justRoot:261.63,justRatios:[9/8,4/3,3/2,5/3,2]},
+ {name:'C D F G A · wide',notes:[130.81,196,293.66,349.23,440],harmonics:false,gain:.267,justRoot:261.63,justRatios:[1/2,3/4,9/8,4/3,5/3]},
+ {name:'C D F G A · low',notes:[130.81,146.83,174.61,196,220],harmonics:false,gain:.267,justRoot:261.63,justRatios:[1/2,9/16,2/3,3/4,5/6]},
  {name:'G B♭ C D F · dark',notes:[196,233.08,261.63,293.66,349.23],harmonics:false,gain:.267,justRoot:196,justRatios:[1,6/5,4/3,3/2,9/5]},
+ {name:'G B♭ C D F · close',notes:[233.08,261.63,293.66,349.23,392],harmonics:false,gain:.267,justRoot:196,justRatios:[6/5,4/3,3/2,9/5,2]},
+ {name:'G B♭ C D F · wide',notes:[98,146.83,233.08,261.63,349.23],harmonics:false,gain:.267,justRoot:196,justRatios:[1/2,3/4,6/5,4/3,9/5]},
+ {name:'G B♭ C D F · low',notes:[98,116.54,130.81,146.83,174.61],harmonics:false,gain:.267,justRoot:196,justRatios:[1/2,3/5,2/3,3/4,9/10]},
  {name:'C D E G · bright',notes:[261.63,293.66,329.63,392],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1,9/8,5/4,3/2]},
+ {name:'C D E G · close',notes:[293.66,329.63,392,523.25],harmonics:false,gain:.25,justRoot:261.63,justRatios:[9/8,5/4,3/2,2]},
+ {name:'C D E G · wide',notes:[130.81,196,293.66,329.63],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1/2,3/4,9/8,5/4]},
+ {name:'C D E G · low',notes:[130.81,146.83,164.81,196],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1/2,9/16,5/8,3/4]},
 ];
 export const WAVEFORMS = ['Original reel', 'Sine', 'Triangle', 'Saw', 'Square'];
 export const PARAMS = {
