@@ -5,6 +5,10 @@ export const CHORDS = [
  {name:'Gm · shell',notes:[98,146.83,261.63,349.23],harmonics:true,gain:.26539464},
  {name:'Csus2sus4 · wide',notes:[98,146.83,174.61,261.63,523.25],harmonics:true,gain:.27806023},
  {name:'Fsus2 · wide',notes:[174.61,261.63,392,523.25],harmonics:true,gain:.24610728},
+ {name:'G A C D · open',notes:[196,220,261.63,293.66],harmonics:false,gain:.25,justRoot:196,justRatios:[1,9/8,4/3,3/2]},
+ {name:'C D F G A · warm',notes:[261.63,293.66,349.23,392,440],harmonics:false,gain:.267,justRoot:261.63,justRatios:[1,9/8,4/3,3/2,5/3]},
+ {name:'G B♭ C D F · dark',notes:[196,233.08,261.63,293.66,349.23],harmonics:false,gain:.267,justRoot:196,justRatios:[1,6/5,4/3,3/2,9/5]},
+ {name:'C D E G · bright',notes:[261.63,293.66,329.63,392],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1,9/8,5/4,3/2]},
 ];
 export const WAVEFORMS = ['Original reel', 'Sine', 'Triangle', 'Saw', 'Square'];
 export const PARAMS = {
@@ -38,7 +42,7 @@ export function validatePatch(patch){
  const result={};
  for(const [key,value] of Object.entries(patch)){
   if(PARAMS[key]){const d=PARAMS[key];if(typeof value!=='number'||!Number.isFinite(value)||value<d.min||value>d.max||(d.step===1&&!Number.isInteger(value)))throw Error(`Invalid ${key}`);result[key]=value}
-  else if(['chord','variation','octave','waveform'].includes(key)){const bounds={chord:[0,5],variation:[0,7],octave:[-1,1],waveform:[0,WAVEFORMS.length-1]}[key];if(!Number.isInteger(value)||value<bounds[0]||value>bounds[1])throw Error(`Invalid ${key}`);result[key]=value}
+  else if(['chord','variation','octave','waveform'].includes(key)){const bounds={chord:[0,CHORDS.length-1],variation:[0,7],octave:[-1,1],waveform:[0,WAVEFORMS.length-1]}[key];if(!Number.isInteger(value)||value<bounds[0]||value>bounds[1])throw Error(`Invalid ${key}`);result[key]=value}
   else if(['levels','muted','solo'].includes(key)){if(!Array.isArray(value)||value.length!==5||!value.every(v=>key==='levels'?typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=1.5:typeof v==='boolean'))throw Error(`Invalid ${key}`);result[key]=[...value]}
   else throw Error(`Unknown parameter: ${key}`);
  }
@@ -47,9 +51,14 @@ export function validatePatch(patch){
 export function variationOctave(variation,v,count){return [false,v===0,v<2,v<3,v%2===1,v===count-1,v>=count-2,v===count-2][variation]?1:0}
 export function voiceFrequency(p,v){
  const chord=CHORDS[p.chord];if(v>=chord.notes.length)return 0;
- const hz=chord.notes[v];const midi=Math.round(69+12*Math.log2(hz/440));
- const pc=((midi%12)+12)%12;const ratios={0:1,2:9/8,5:4/3,7:3/2};
- const just=261.63*Math.pow(2,Math.floor(midi/12)-5)*ratios[pc];
+ const hz=chord.notes[v];
+ let just;
+ if(chord.justRatios)just=chord.justRoot*chord.justRatios[v];
+ else {
+  const midi=Math.round(69+12*Math.log2(hz/440));
+  const pc=((midi%12)+12)%12;const ratios={0:1,2:9/8,5:4/3,7:3/2};
+  just=261.63*Math.pow(2,Math.floor(midi/12)-5)*ratios[pc];
+ }
  return hz*Math.pow(just/hz,p.tuning)*Math.pow(2,(p.transpose+12*p.octave+12*variationOctave(p.variation,v,chord.notes.length)+p.fine/100)/12);
 }
 export class BloomEngine {

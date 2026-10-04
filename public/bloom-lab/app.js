@@ -2,20 +2,25 @@ import {CHORDS,WAVEFORMS,PARAMS,DEFAULTS,validatePatch,voiceFrequency} from './e
 let state=structuredClone(DEFAULTS),ctx,node,master,analyser,splitter,leftAnalyser,rightAnalyser,playing=false,positions=[0,0,0,0,0],volume=.65;
 const $=id=>document.getElementById(id);
 const groups=[
- ['Pitch & voicing','Six chords from the original reel.', ['chord','variation','octave','transpose','fine','tuning','tone']],
+ ['Pitch & voicing','Six reel chords plus four new explorations.', ['chord','variation','octave','transpose','fine','tuning','tone']],
  ['Harmonic bloom','Choose a base wave, then let harmonics bloom.', ['waveform','bloom','bloomRate','partials','rolloff','bloomSpread']],
  ['Spatial movement','Give each note its own place and pace.', ['width','spatialRate','spatialSpread','staticWidth','pan']],
  ['Drift & breathing','Introduce small changes within the chord.', ['detune','detuneMix','life','drift','lifeRate']],
 ];
 const choices={waveform:WAVEFORMS.map((name,i)=>[i,name]),chord:CHORDS.map((c,i)=>[i,`${i+1} · ${c.name}`]),variation:['Original','First note up','First two up','First three up','Alternating up','Last note up','Last two up','Penultimate up'].map((s,i)=>[i,`V${i+1} · ${s}`]),octave:[[-1,'−1 octave'],[0,'Original register'],[1,'+1 octave']]};
+const optionMarkup=key=>key==='chord'
+ ? `<optgroup label="Reel chords">${choices.chord.slice(0,6).map(([value,name])=>`<option value="${value}">${name}</option>`).join('')}</optgroup><optgroup label="New explorations">${choices.chord.slice(6).map(([value,name])=>`<option value="${value}">${name}</option>`).join('')}</optgroup>`
+ : choices[key].map(([value,name])=>`<option value="${value}">${name}</option>`).join('');
 function formatted(k,v){const d=PARAMS[k];if(d.unit==='%')return `${Math.round(v*100)}%`;if(d.unit==='pan')return v===0?'Center':`${Math.round(Math.abs(v)*100)}% ${v<0?'L':'R'}`;return `${Number(v.toFixed(2))}${d.unit?' '+d.unit:''}`}
 function fill(el){el.style.setProperty('--fill',`${(el.value-el.min)/(el.max-el.min)*100}%`)}
 function updateUI(){
  for(const [k,d]of Object.entries(PARAMS)){const input=$(k);input.value=state[k];$(`${k}-value`).textContent=formatted(k,state[k]);fill(input)}
  for(const k of Object.keys(choices))$(k).value=state[k];
- $('tone').disabled=state.waveform!==0;
- $('tone').closest('.control').style.opacity=state.waveform===0?'1':'.45';
- $('tone').title=state.waveform===0?'Adjust the original reel overtones':'Available with the Original reel waveform';
+ const reelTone=state.waveform===0&&state.chord<6;
+ $('tone').disabled=!reelTone;
+ $('tone').closest('.control').style.opacity=reelTone?'1':'.45';
+ $('tone').title=state.chord>=6?'New chords use a sine base in Original reel mode':state.waveform===0?'Adjust the original reel overtones':'Available with the Original reel waveform';
+ $('chord-note').textContent=state.chord>=6?'New chords use a sine base in Original reel mode. Bloom adds moving harmonics.':'';
  for(let v=0;v<5;v++){
   const hz=voiceFrequency(state,v),card=$(`voice-${v}`);card.classList.toggle('inactive',!hz);
   const midi=hz?Math.round(69+12*Math.log2(hz/440)):0;
@@ -28,7 +33,7 @@ function updateUI(){
 function applyPatch(patch,custom=true){const clean=validatePatch(patch);Object.assign(state,clean);node?.port.postMessage(clean);updateUI();if(custom){$('patch-state').textContent='Custom sound';document.querySelectorAll('[data-preset]').forEach(b=>b.classList.remove('selected'))}return structuredClone(state)}
 for(const [index,[title,description,keys]]of groups.entries()){
  const section=document.createElement('section');section.className='panel';section.innerHTML=`<div class="panel-heading"><span class="panel-index">0${index+1}</span><h3>${title}</h3></div><p>${description}</p>`;
- for(const key of keys){const div=document.createElement('div');div.className='control';if(choices[key]){const label={chord:'Chord',variation:'Octave variation',octave:'Register',waveform:'Base waveform'}[key];div.innerHTML=`<label for="${key}">${label}</label><select id="${key}">${choices[key].map(([value,name])=>`<option value="${value}">${name}</option>`).join('')}</select>`}
+ for(const key of keys){const div=document.createElement('div');div.className='control';if(choices[key]){const label={chord:'Chord',variation:'Octave variation',octave:'Register',waveform:'Base waveform'}[key];div.innerHTML=`<label for="${key}">${label}</label><select id="${key}">${optionMarkup(key)}</select>${key==='chord'?'<small id="chord-note" class="control-note" aria-live="polite"></small>':''}`}
   else{const d=PARAMS[key];div.innerHTML=`<label for="${key}">${d.label}<output id="${key}-value" for="${key}"></output></label><input type="range" id="${key}" min="${d.min}" max="${d.max}" step="${d.step}" value="${d.value}">`}
   section.append(div);
  }
@@ -78,7 +83,7 @@ updateUI();fill($('volume'));draw();
 // Feature-detected page tools configure the same live state as the controls.
 if(document.modelContext?.registerTool){
  const lifecycle=new AbortController();const properties=Object.fromEntries(Object.entries(PARAMS).map(([k,d])=>[k,{type:d.step===1?'integer':'number',minimum:d.min,maximum:d.max}]));
- Object.assign(properties,{chord:{type:'integer',minimum:0,maximum:5},variation:{type:'integer',minimum:0,maximum:7},octave:{type:'integer',minimum:-1,maximum:1},waveform:{type:'integer',minimum:0,maximum:WAVEFORMS.length-1,description:'0 original reel, 1 sine, 2 triangle, 3 saw, 4 square'}});
+ Object.assign(properties,{chord:{type:'integer',minimum:0,maximum:CHORDS.length-1},variation:{type:'integer',minimum:0,maximum:7},octave:{type:'integer',minimum:-1,maximum:1},waveform:{type:'integer',minimum:0,maximum:WAVEFORMS.length-1,description:'0 original reel, 1 sine, 2 triangle, 3 saw, 4 square'}});
  for(const tool of [
   {name:'read_synth_parameters',description:'Read the current drone parameters and playback state.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute:()=>({parameters:structuredClone(state),playing,volume})},
   {name:'configure_synth_parameters',description:'Adjust drone sound parameters. Does not start audio. Use the visible Play button to listen.',inputSchema:{type:'object',properties,additionalProperties:false},annotations:{readOnlyHint:false},execute:input=>({parameters:applyPatch(input)})},
