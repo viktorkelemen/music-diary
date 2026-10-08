@@ -1,5 +1,5 @@
 import {CHORDS,WAVEFORMS,PARAMS,DEFAULTS,validatePatch,voiceFrequency} from './engine.js';
-let state=structuredClone(DEFAULTS),ctx,node,master,analyser,splitter,leftAnalyser,rightAnalyser,playing=false,positions=[0,0,0,0,0],volume=.65;
+let state=structuredClone(DEFAULTS),ctx,node,master,analyser,splitter,leftAnalyser,rightAnalyser,outputRouter,outputRouted=false,playing=false,positions=[0,0,0,0,0],volume=.65,outputDeviceId='',outputPair=0;
 const $=id=>document.getElementById(id);
 const groups=[
  ['Pitch & voicing','Six reel chords plus four exploration families, each with four voicings.', ['chord','variation','octave','transpose','fine','tuning','tone']],
@@ -51,15 +51,91 @@ function preset(name){if(!Object.hasOwn(presets,name))throw Error('Unknown prese
 document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>preset(b.dataset.preset));
 $('reset').onclick=()=>preset('combined');
 $('volume').oninput=e=>{volume=Number(e.target.value);$('volume-value').textContent=`${Math.round(volume*100)}%`;fill(e.target);if(master)master.gain.setTargetAtTime(playing?volume:0,ctx.currentTime,.03)};
+const outputNote=message=>{$('output-note').textContent=message};
+function addOutputOption(device){
+ if(!device.deviceId||device.deviceId==='default')return;
+ let option=[...$('audio-output').options].find(o=>o.value===device.deviceId);
+ if(!option){option=new Option(device.label||'Audio output',device.deviceId);$('audio-output').add(option)}
+ else if(device.label)option.textContent=device.label;
+}
+function refreshOutputPairs(){
+ const max=ctx?Math.min(8,ctx.destination.maxChannelCount):2;
+ const menu=$('output-pair');menu.replaceChildren();
+ for(let first=0;first+1<max;first+=2)menu.add(new Option(`${first+1} + ${first+2}`,String(first)));
+ if(outputPair+1>=max)outputPair=0;
+ menu.value=String(outputPair);
+ menu.disabled=max<4;
+ if(ctx&&outputDeviceId&&max<4)outputNote('This browser exposes only outputs 1 + 2. Set the ES-8 as the system output if device selection fails.');
+}
+function routeOutput(){
+ if(!ctx||!master||!splitter)return;
+ if(outputRouted)master.disconnect(ctx.destination);
+ if(outputRouter){splitter.disconnect(outputRouter);outputRouter.disconnect();outputRouter=null}
+ outputRouted=false;
+ if(outputPair===0){ctx.destination.channelCount=2;master.connect(ctx.destination);outputRouted=true;return}
+ const channels=outputPair+2;
+ ctx.destination.channelCount=channels;
+ ctx.destination.channelInterpretation='discrete';
+ outputRouter=ctx.createChannelMerger(channels);
+ outputRouter.channelInterpretation='discrete';
+ splitter.connect(outputRouter,0,outputPair);
+ splitter.connect(outputRouter,1,outputPair+1);
+ outputRouter.connect(ctx.destination);
+}
+async function setOutputDevice(id){
+ if(ctx){
+  if(typeof ctx.setSinkId!=='function'&&id)throw Error('This browser cannot select an audio device. Set the ES-8 as your system output.');
+  if(typeof ctx.setSinkId==='function')await ctx.setSinkId(id);
+ }
+ outputDeviceId=id;
+ refreshOutputPairs();
+ routeOutput();
+ if(!ctx)outputNote(id?'Selected. Press Play to check available output pairs.':'Using the system default output.');
+ else if(ctx.destination.maxChannelCount>=4)outputNote('Start low and patch the chosen ES-8 outputs to your mixer.');
+}
+$('find-outputs').onclick=async()=>{
+ const button=$('find-outputs');button.disabled=true;
+ try{
+  if(!('setSinkId' in AudioContext.prototype))throw Error('This browser cannot select an audio device. Set the ES-8 as your system output.');
+  if(!navigator.mediaDevices)throw Error('Audio device selection requires a secure browser page.');
+  if(navigator.mediaDevices.selectAudioOutput){
+   const device=await navigator.mediaDevices.selectAudioOutput();
+   addOutputOption(device);$('audio-output').value=device.deviceId;
+   await setOutputDevice(device.deviceId);
+  }else{
+   // Some browsers expose named outputs only after a brief device permission grant.
+   let devices=await navigator.mediaDevices.enumerateDevices();
+   if(!devices.some(d=>d.kind==='audiooutput'&&d.deviceId!=='default'&&d.label)){
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    stream.getTracks().forEach(track=>track.stop());
+    devices=await navigator.mediaDevices.enumerateDevices();
+   }
+   for(const device of devices.filter(d=>d.kind==='audiooutput'))addOutputOption(device);
+   outputNote($('audio-output').options.length>1?'Choose the ES-8 above. Any temporary input stream was stopped.':'No separate output was found. Connect the ES-8, then try again.');
+  }
+ }catch(error){outputNote(error.name==='NotAllowedError'?'Device access was declined. You can set the ES-8 as the system output.':error.message)}
+ finally{button.disabled=false}
+};
+$('audio-output').onchange=async e=>{
+ const previous=outputDeviceId;
+ try{await setOutputDevice(e.target.value)}catch(error){e.target.value=previous;outputNote(error.message)}
+};
+$('output-pair').onchange=e=>{
+ const previous=outputPair;
+ try{outputPair=Number(e.target.value);routeOutput();outputNote(`Stereo routed to outputs ${outputPair+1} + ${outputPair+2}. Start low.`)}
+ catch(error){outputPair=previous;e.target.value=String(previous);routeOutput();outputNote(`Could not use that output pair: ${error.message}`)}
+};
 async function start(){
  if(!ctx){
   ctx=new AudioContext({latencyHint:'interactive'});
+  if(outputDeviceId)await ctx.setSinkId(outputDeviceId);
+  refreshOutputPairs();
   await ctx.audioWorklet.addModule(new URL('./processor.js',import.meta.url));
   node=new AudioWorkletNode(ctx,'legio-bloom',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[2]});
   const compressor=ctx.createDynamicsCompressor();compressor.threshold.value=-9;compressor.knee.value=9;compressor.ratio.value=8;compressor.attack.value=.004;compressor.release.value=.15;
   master=ctx.createGain();master.gain.value=0;analyser=ctx.createAnalyser();analyser.fftSize=2048;
   splitter=ctx.createChannelSplitter(2);leftAnalyser=ctx.createAnalyser();rightAnalyser=ctx.createAnalyser();leftAnalyser.fftSize=2048;rightAnalyser.fftSize=2048;
-  node.connect(compressor).connect(master);master.connect(analyser).connect(ctx.destination);master.connect(splitter);splitter.connect(leftAnalyser,0);splitter.connect(rightAnalyser,1);
+  node.connect(compressor).connect(master);master.connect(analyser);master.connect(splitter);splitter.connect(leftAnalyser,0);splitter.connect(rightAnalyser,1);routeOutput();
   node.port.onmessage=e=>{if(e.data.positions)positions=e.data.positions;if(e.data.error)$('status').textContent=e.data.error};
   node.onprocessorerror=()=>{$('status').textContent='Audio stopped. Reload to restart.';master.gain.value=0;playing=false;$('play').textContent='Reload required';$('play').disabled=true};
   node.port.postMessage(state);
@@ -67,7 +143,7 @@ async function start(){
  await ctx.resume();playing=true;master.gain.setTargetAtTime(volume,ctx.currentTime,.07);$('play').textContent='■ Stop';$('play').setAttribute('aria-pressed','true');$('status').textContent='Playing';
 }
 async function stop(){if(!ctx)return;playing=false;master.gain.setTargetAtTime(0,ctx.currentTime,.025);await new Promise(r=>setTimeout(r,160));await ctx.suspend();$('play').textContent='▶ Play';$('play').setAttribute('aria-pressed','false');$('status').textContent='Stopped'}
-$('play').onclick=async()=>{const b=$('play');b.disabled=true;try{await(playing?stop():start())}catch(error){$('status').textContent=`Audio unavailable: ${error.message}`;if(ctx){await ctx.close().catch(()=>{});ctx=null;node=null;master=null}playing=false;b.textContent='▶ Try again'}finally{b.disabled=false}};
+$('play').onclick=async()=>{const b=$('play');b.disabled=true;try{await(playing?stop():start())}catch(error){$('status').textContent=`Audio unavailable: ${error.message}`;if(ctx){await ctx.close().catch(()=>{});ctx=null;node=null;master=null;outputRouter=null;outputRouted=false}playing=false;b.textContent='▶ Try again'}finally{b.disabled=false}};
 const waveData=[new Float32Array(2048),new Float32Array(2048)];
 function canvasContext(id){const canvas=$(id),r=canvas.getBoundingClientRect(),dpr=devicePixelRatio||1;const w=Math.round(r.width*dpr),h=Math.round(r.height*dpr);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,r.width,r.height);return[c,r.width,r.height]}
 function draw(){
@@ -79,7 +155,7 @@ function draw(){
  for(let v=0;v<CHORDS[state.chord].notes.length;v++){const y=14+v*(ph-25)/5;const x=14+(positions[v]+1)/2*(pw-28);p.strokeStyle='#27343c';p.beginPath();p.moveTo(14,y);p.lineTo(pw-14,y);p.stroke();p.fillStyle=state.muted[v]||(state.solo.some(Boolean)&&!state.solo[v])?'#55616a':v%2?'#76c4d0':'#dfb56b';p.beginPath();p.arc(x,y,4,0,Math.PI*2);p.fill()}
  requestAnimationFrame(draw);
 }
-updateUI();fill($('volume'));draw();
+updateUI();fill($('volume'));refreshOutputPairs();draw();
 // Feature-detected page tools configure the same live state as the controls.
 if(document.modelContext?.registerTool){
  const lifecycle=new AbortController();const properties=Object.fromEntries(Object.entries(PARAMS).map(([k,d])=>[k,{type:d.step===1?'integer':'number',minimum:d.min,maximum:d.max}]));
