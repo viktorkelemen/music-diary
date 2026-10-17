@@ -51,6 +51,7 @@ const navigation = [
           {navigation.map((item, i) => <a href={item.href} aria-current={item.active ? "page" : undefined}>{item.label}<span aria-hidden="true">0{i + 1}</span></a>)}
         </nav>
         <nav class="side-links" aria-label="Archive and links">
+          <a href="/pulsar-lab/">Pulsar Lab ↗</a>
           <a href="/calendar" aria-current={currentPath.startsWith("/calendar") ? "page" : undefined}>Calendar</a>
           <a href="/rss.xml">RSS ↗</a>
           <a href="https://www.instagram.com/viktor.patchlog" target="_blank" rel="me noopener noreferrer">Instagram ↗</a>
