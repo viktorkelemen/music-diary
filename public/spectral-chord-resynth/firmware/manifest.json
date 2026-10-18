@@ -1,0 +1,38 @@
+{
+  "project": "Spectral Chord Resynth",
+  "version": "0.2.0",
+  "commit": "b594810c01beecb6a988e23e01a7e83ec267ca6f",
+  "hardware_tested": false,
+  "files": {
+    "spectral_chord_resynth_legio_v0.2.0.bin": {
+      "target": "legio",
+      "sha256": "f4000db6eca4c4d7da4579fdd432eb4485e0b139257ba82aa028e25e7bb09e72",
+      "bytes": 103012
+    },
+    "spectral_chord_resynth_legio_v0.2.0.elf": {
+      "target": "legio",
+      "sha256": "99712fc057aec658baf9a0cd53b0a3ca5350e035ba763fba60c223cdfcea611a",
+      "bytes": 1726364
+    },
+    "spectral_chord_resynth_legio_v0.2.0.hex": {
+      "target": "legio",
+      "sha256": "e6175c2efa92b5c58d00402da606647f7edd4b16feb664073976d1a0366af8e8",
+      "bytes": 289825
+    },
+    "spectral_chord_resynth_seed3_v0.2.0.bin": {
+      "target": "seed3",
+      "sha256": "539d004f3cc13b00ef8aac26e6a9c6ba5dcb69bf06bb93310f273e9bf3ff1c7d",
+      "bytes": 120928
+    },
+    "spectral_chord_resynth_seed3_v0.2.0.elf": {
+      "target": "seed3",
+      "sha256": "d1f57e2f27f0c8fc197bad4ff6c2a4987fbc33a48df6f0849e7a877809d08295",
+      "bytes": 1975096
+    },
+    "spectral_chord_resynth_seed3_v0.2.0.hex": {
+      "target": "seed3",
+      "sha256": "c13d159c15aeea05153bf109489ff6cf8907b7cec1eb5ddd0a70fa8bf1c19e4c",
+      "bytes": 340201
+    }
+  }
+}

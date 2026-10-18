@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A playable spectral chord resynthesizer. Six tuned analysis bands become pure sine chords; compare Resynth, Resonator and Both.">
+<link rel="canonical" href="https://viktorpatchlog.com/spectral-chord-resynth/">
+<title>Spectral Chord Resynth — Viktor’s Patchlog</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="/" aria-label="Viktor’s Patchlog"><span class="brand-mark" aria-hidden="true">◉</span> PATCHLOG <span class="brand-divider">/</span> <span class="edition">PLAYABLE EXPERIMENTS</span></a>
+  <div class="engine-status"><span id="status-dot" class="status-dot"></span><span id="status">Audio off</span><button id="power" class="power">Start audio <span aria-hidden="true">↗</span></button></div>
+</header>
+<main>
+  <div class="title-row"><div><p class="eyebrow">ANALYSE / FOLLOW / RESYNTHESISE</p><h1>Spectral chord <em>resynth.</em></h1></div><p class="intro">Send sound into six tuned bands.<br>Turn their envelopes into pure sine chords.</p></div>
+  <section class="instrument" aria-label="Spectral chord resynthesis instrument">
+    <div class="field-top"><span class="eyebrow">THE RESONANCE FIELD</span><div class="legend"><span class="left-dot"></span> LEFT / ODD <span class="right-dot"></span> RIGHT / EVEN</div><span id="freeze-indicator">LIVE</span></div>
+    <div class="field"><canvas id="field" aria-label="Live activity of six resonator bands"></canvas><div id="bands" class="band-labels"></div></div>
+    <div class="field-foot"><span>6 BANDS <i>·</i> 100% WET <i>·</i> 48 kHz</span><span id="voicing-label">HEX / S2</span></div>
+    <div class="control-grid">
+      <section class="control bank-control"><div class="control-title"><label for="bank">01 / CHORD BANK</label><span id="bank-number">01 / 15</span></div>
+        <div class="bank-select"><button id="bank-prev" class="arrow" aria-label="Previous chord bank">←</button><select id="bank" aria-label="Chord bank"></select><button id="bank-next" class="arrow" aria-label="Next chord bank">→</button></div>
+        <button id="rotate" class="rotate">Rotate chord <span aria-hidden="true">↻</span></button><p class="hint" id="rotation-info">S2 · chord 1 of 5</p>
+      </section>
+      <section class="control"><div class="control-title"><label for="root">02 / ROOT NOTE</label><span>CHROMATIC</span></div><output id="root-value" for="root" class="large-value">C<span>2</span></output><input id="root" type="range" min="24" max="48" value="36" step="1"><div class="range-labels"><span>C1</span><span id="root-hz">65.41 Hz</span><span>C3</span></div><div class="octaves" role="group" aria-label="Voicing octave"><span>OCTAVE</span><button data-octave="-1" aria-pressed="false">−1</button><button data-octave="0" aria-pressed="true">0</button><button data-octave="1" aria-pressed="false">+1</button></div></section>
+      <section class="control"><div class="control-title"><label for="resonance">03 / ANALYSIS Q</label><span>GLOBAL Q</span></div><output id="q-value" for="resonance" class="large-value">68<span>Q</span></output><input id="resonance" type="range" min="0" max="1" value="0.73" step="0.001"><div class="range-labels"><span>SHORT / 2</span><span>LONG / 250</span></div><p class="hint">Q sets the selectivity of the analysis bands.</p></section>
+      <section class="control freeze-control"><div class="control-title"><span>04 / HOLD THE MOMENT</span><span>GATE</span></div><button id="freeze" class="freeze" aria-pressed="false"><span class="freeze-icon" aria-hidden="true">❄</span><span>Freeze</span><span class="freeze-led"></span></button><p class="hint">Latch the tuning. Close the input.<br>Hold sine amplitudes exactly.</p><span class="key-hint"><kbd>SPACE</kbd> to toggle</span></section>
+    </div>
+  </section>
+  <section class="resynth-controls" aria-label="Output mode and envelope release">
+    <div class="mode-control"><label for="mode">OUTPUT MODE</label><select id="mode"><option value="0">Resynth · sine chord</option><option value="1">Resonator · raw bands</option><option value="2">Both · each at −3 dB</option></select><p>Switch freely while sound is running.</p></div>
+    <div class="release-control"><label for="release">SINE RELEASE <output id="release-value">1.067 s</output></label><input id="release" type="range" min="0" max="1" value="0.73" step="0.001"><div class="range-labels"><span>30 ms · PING</span><span>4 s · DRONE</span></div><label class="couple"><input id="couple-release" type="checkbox"> Couple release to Q (Legio controls)</label></div>
+  </section>
+  <section class="input-strip" aria-label="Excitation and output">
+    <div class="source-section"><p class="eyebrow">EXCITATION</p><div class="source-buttons" role="group" aria-label="Input source"><button data-source="ping" aria-pressed="true">Ping</button><button data-source="noise" aria-pressed="false">Noise</button><button data-source="file" aria-pressed="false">Audio file</button></div></div>
+    <div class="source-actions"><button id="ping" class="ping">↗ Send a ping <kbd>P</kbd></button><div id="file-controls" hidden><label class="file-label" for="audio-file">Choose audio<input id="audio-file" type="file" accept="audio/*"></label><button id="file-play" disabled>Play loop</button><span id="file-name">No file loaded</span></div></div>
+    <div class="volume"><label for="volume">OUTPUT <output id="volume-value">70%</output></label><input id="volume" type="range" min="0" max="1" value="0.7" step="0.01"></div>
+  </section>
+  <details class="patch"><summary>Patch a virtual rotation CV <span>0.42 V / step ↗</span></summary><div class="patch-content"><label for="cv">ROTATION CV <output id="cv-value">0.00 V</output></label><input id="cv" type="range" min="0" max="5" step="0.01" value="0"><p>Rising thresholds rotate; falling voltage re-arms. Moving the root resets rotation. In Chordery banks, rotation advances the key.</p></div></details>
+  <details class="patch firmware-downloads"><summary>Play it on your module <span>Legio / Seed 3 ↗</span></summary><div class="firmware-links"><p>Version 0.2.0 builds share this DSP and all 15 chord banks. The Seed 3 panel has independent Q and release; Legio couples them. Hardware listening and calibration checks remain pending.</p><a href="firmware/spectral_chord_resynth_seed3_v0.2.0.bin" download>Seed 3 Eurorack · firmware ↓</a><a href="firmware/spectral_chord_resynth_legio_v0.2.0.bin" download>Legio · firmware ↓</a><a href="firmware/SEED3.md">Seed 3 controls & flashing guide ↗</a><a href="firmware/manifest.json">Build hashes ↗</a><p>These direct-ROM DFU images replace the current firmware. Read the flashing instructions before use.</p></div></details>
+  <p class="instrument-note">Six resonant bands analyse your sound. Their envelopes drive six audible sine tones, split across stereo. Try a ping, extend the release, then freeze a chord. Audio files stay on your device.</p>
+  <p id="message" role="status" aria-live="polite">Start audio, then send a ping to hear the current voicing.</p>
+</main>
+<footer><span>SPECTRAL CHORD RESYNTH <i> / </i> V1</span><span>Legio · Seed 3 · Web Audio. <a href="https://github.com/viktorkelemen/spectral-chord-resynth" target="_blank" rel="noreferrer">Firmware & source ↗</a></span></footer>
+<script type="module" src="app.mjs"></script>
+</body>
+</html>
