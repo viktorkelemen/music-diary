@@ -1,29 +1,29 @@
-import {makeVoicing,frequency,chordCount,wrap} from './dsp.mjs';
+import {makeVoicing,frequency,chordCount,wrap} from './dsp.mjs?level=2';
 const $=id=>document.getElementById(id);
-const bankNames=['HEX','cvChord','14 · Oct Stack','15 · 4th Stack','16 · 5th Stack',...Array.from({length:10},(_,i)=>`${i+17} · Utility`)];
-const chordNames=[['S2','P5','7S','m7','M7'],['maj','min','maj7','min7','dom7','sus4','sus2','dim','aug']];
+const bankNames=["Csus2sus4 · close", "Quartal · G C F", "Dm7 · no fifth", "Gm · shell", "Csus2sus4 · wide", "Fsus2 · wide"];
+const variationNames=["Original", "First note up", "First two up", "First three up", "Alternating up", "Last note up", "Last two up", "Penultimate up"];
 const pitches=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
 const noteName=n=>pitches[wrap(Math.round(n),12)]+(Math.floor(Math.round(n)/12)-1);
-const state={bank:0,root:36,rotation:0,octave:0,resonance:.73,freeze:false,source:'ping',mode:0,release:.73,coupleRelease:false};
-try{const saved=JSON.parse(localStorage.getItem('spectral-chord-resynth-selection'));if(saved&&Number.isInteger(saved.bank)&&saved.bank>=0&&saved.bank<15&&[-1,0,1].includes(saved.octave)){state.bank=saved.bank;state.octave=saved.octave;if([0,1,2].includes(saved.mode))state.mode=saved.mode;}}catch{}
-let data,context,node,gain,buffer,sourceNode,loading=false,cvStep=0,notes=[],levels=Array(6).fill(0),visibleLevels=Array(6).fill(0);
+const state={bank:0,root:60,rotation:0,octave:0,resonance:.73,freeze:false,source:'ping',release:.73,coupleRelease:false,outputDb:24};
+try{const saved=JSON.parse(localStorage.getItem('spectral-chord-resynth-reel-selection'));if(saved&&Number.isInteger(saved.bank)&&saved.bank>=0&&saved.bank<6&&[-1,0,1].includes(saved.octave)){state.bank=saved.bank;state.octave=saved.octave;}}catch{}
+let data,context,node,buffer,sourceNode,loading=false,cvStep=0,notes=[],levels=Array(6).fill(0),visibleLevels=Array(6).fill(0);
 function message(text,error=false){$('message').textContent=text;$('message').classList.toggle('error',error);}
-function save(){try{localStorage.setItem('spectral-chord-resynth-selection',JSON.stringify({bank:state.bank,octave:state.octave,mode:state.mode}));}catch{}}
+function save(){try{localStorage.setItem('spectral-chord-resynth-reel-selection',JSON.stringify({bank:state.bank,octave:state.octave}));}catch{}}
 function updateNotes(){
-  document.querySelectorAll('.band-label').forEach((el,i)=>{el.querySelector('.band-note-name').textContent=noteName(notes[i]);el.querySelector('.band-hz').textContent=frequency(notes[i]).toFixed(1)+' Hz';});
+  document.querySelectorAll('.band-label').forEach((el,i)=>{const active=i<data.reel[state.bank].notes.length;el.querySelector('.band-note-name').textContent=active?noteName(notes[i]):'—';el.querySelector('.band-hz').textContent=active?frequency(notes[i]).toFixed(1)+' Hz':'Unused';});
 }
 function render(){
-  $('mode').value=state.mode;
+  $('variation').value=state.rotation;
   $('release').value=state.release;
   $('couple-release').checked=state.coupleRelease;
   $('release').disabled=state.coupleRelease;
   $('release-value').textContent=(.03*(4/.03)**(state.coupleRelease?state.resonance:state.release)).toFixed(3)+' s';
-  $('bank').value=state.bank;$('bank-number').textContent=String(state.bank+1).padStart(2,'0')+' / 15';
+  $('bank').value=state.bank;$('bank-number').textContent=String(state.bank+1).padStart(2,'0')+' / 6';
   $('root-value').innerHTML=pitches[state.root%12]+'<span>'+(Math.floor(state.root/12)-1)+'</span>';
   $('root-hz').textContent=frequency(state.root).toFixed(2)+' Hz';
   $('q-value').innerHTML=(state.freeze?'250':(2*125**state.resonance).toFixed(0))+'<span>Q</span>';
-  const chord=state.bank<2?chordNames[state.bank][state.rotation]:noteName(state.root+state.rotation)+' key';
-  $('rotation-info').textContent=`${chord} · ${state.bank<2?'chord':'key'} ${state.rotation+1} of ${chordCount(state.bank)}`;
+  const chord=variationNames[state.rotation];
+  $('rotation-info').textContent=`${chord} · voicing ${state.rotation+1} of 8`;
   $('voicing-label').textContent=bankNames[state.bank]+' / '+chord;
   $('freeze').setAttribute('aria-pressed',state.freeze);$('freeze-indicator').textContent=state.freeze?'FROZEN':'LIVE';$('freeze-indicator').classList.toggle('held',state.freeze);
   document.querySelectorAll('[data-octave]').forEach(el=>el.setAttribute('aria-pressed',Number(el.dataset.octave)===state.octave));
@@ -41,9 +41,9 @@ async function startAudio(){
     context=new AudioContext({sampleRate:48000,latencyHint:'interactive'});
     if(context.sampleRate!==48000){await context.close();context=null;throw new Error('This browser cannot create a 48 kHz audio context. Please try Chrome or Firefox.');}
     try{
-      await context.audioWorklet.addModule('./worklet.mjs');
+      await context.audioWorklet.addModule('./worklet.mjs?level=2');
       node=new AudioWorkletNode(context,'spectral-chord-resynth',{numberOfInputs:1,numberOfOutputs:1,outputChannelCount:[2],channelCount:2,channelCountMode:'explicit',processorOptions:{data}});
-      gain=context.createGain();gain.gain.value=Number($('volume').value);node.connect(gain).connect(context.destination);
+      node.connect(context.destination);
       node.onprocessorerror=()=>{message('The audio processor stopped. Reload the page to restart.',true);context.suspend();};
       node.port.onmessage=({data:p})=>{if(p.type==='meters'){levels=p.levels;notes=p.notes;updateNotes();}};
       context.onstatechange=audioStatus;render();
@@ -53,20 +53,20 @@ async function startAudio(){
 }
 async function withAudio(action){if(loading)return;loading=true;$('power').disabled=true;try{await startAudio();await action();}catch(error){message(error.message,true);}finally{loading=false;$('power').disabled=false;}}
 function stopFile(){if(sourceNode){sourceNode.stop();sourceNode.disconnect();sourceNode=null;}$('file-play').textContent='Play loop';}
-function setBank(bank){state.bank=wrap(bank,15);state.rotation=0;save();render();}
+function setBank(bank){state.bank=wrap(bank,6);state.rotation=0;save();render();}
 function rotate(){state.rotation=wrap(state.rotation+1,chordCount(state.bank));render();}
-function freeze(){state.freeze=!state.freeze;render();message(state.freeze?'Frozen: input closes over 5 ms. Sine amplitudes hold exactly; the raw tail rings out.':'Live: input is open and tuning follows the controls.');}
-$('power').onclick=()=>{if(context?.state==='running'){context.suspend().then(audioStatus);return;}withAudio(()=>{message('Audio running. P to ping, R to rotate, Space to freeze.');if(state.source==='ping')node.port.postMessage({type:'ping'});});};
-$('ping').onclick=()=>withAudio(()=>{node.port.postMessage({type:'ping'});message(state.freeze?'Input is frozen. Release Freeze to excite the bands.':'12 ms noise burst sent into the resonator.');});
+function freeze(){state.freeze=!state.freeze;render();message(state.freeze?'Frozen: input closes over 5 ms. Sine amplitudes hold exactly.':'Live: input is open and tuning follows the controls.');}
+$('power').onclick=()=>{if(context?.state==='running'){context.suspend().then(audioStatus);return;}withAudio(()=>{message('Audio running. P to ping, R for next voicing, Space to freeze.');if(state.source==='ping')node.port.postMessage({type:'ping'});});};
+$('ping').onclick=()=>withAudio(()=>{node.port.postMessage({type:'ping'});message(state.freeze?'Input is frozen. Release Freeze to excite the bands.':'12 ms noise burst sent into the resynthesizer.');});
 $('bank-prev').onclick=()=>setBank(state.bank-1);$('bank-next').onclick=()=>setBank(state.bank+1);$('bank').onchange=e=>setBank(Number(e.target.value));$('rotate').onclick=rotate;$('freeze').onclick=freeze;
+$('variation').onchange=e=>{state.rotation=Number(e.target.value);render();};
 $('root').oninput=e=>{state.root=Number(e.target.value);state.rotation=0;render();};
 $('release').oninput=e=>{state.release=Number(e.target.value);render();};
 $('couple-release').onchange=e=>{state.coupleRelease=e.target.checked;render();};
-$('mode').onchange=e=>{state.mode=Number(e.target.value);save();render();};
 $('resonance').oninput=e=>{state.resonance=Number(e.target.value);render();};
-$('volume').oninput=e=>{const volume=Number(e.target.value);$('volume-value').textContent=Math.round(volume*100)+'%';if(gain)gain.gain.setTargetAtTime(volume,context.currentTime,.01);};
+$('volume').oninput=e=>{state.outputDb=Number(e.target.value);$('volume-value').textContent=state.outputDb<=-60?'Mute':`${state.outputDb>0?'+':''}${state.outputDb} dB`;render();};
 for(const el of document.querySelectorAll('[data-octave]'))el.onclick=()=>{state.octave=Number(el.dataset.octave);save();render();};
-for(const el of document.querySelectorAll('[data-source]'))el.onclick=()=>{state.source=el.dataset.source;if(state.source!=='file')stopFile();render();message(state.source==='noise'?(context?.state==='running'?'Noise is feeding the resonator continuously.':'Noise exciter selected. Start audio to hear the resonator.'):state.source==='file'?'Choose an audio file, then play it through the resonator. Files stay on this device.':'Send short noise bursts with the ping button or P.');};
+for(const el of document.querySelectorAll('[data-source]'))el.onclick=()=>{state.source=el.dataset.source;if(state.source!=='file')stopFile();render();message(state.source==='noise'?(context?.state==='running'?'Noise is feeding the resynthesizer continuously.':'Noise exciter selected. Start audio to hear the resynthesizer.'):state.source==='file'?'Choose an audio file, then play it through the resynthesizer. Files stay on this device.':'Send short noise bursts with the ping button or P.');};
 $('cv').oninput=e=>{
   const volts=Number(e.target.value);$('cv-value').textContent=volts.toFixed(2)+' V';let next=cvStep;
   while(volts>=(next+1)*.42+.02)next++;
@@ -113,6 +113,7 @@ function draw(){
 }
 try{
   const response=await fetch('./chords.json');if(!response.ok)throw new Error('Could not load chord data. Run make web-data.');data=await response.json();
+  variationNames.forEach((name,i)=>{const option=document.createElement('option');option.value=i;option.textContent=name;$('variation').append(option);});
   bankNames.forEach((name,i)=>{const option=document.createElement('option');option.value=i;option.textContent=name;$('bank').append(option);});
   for(let i=0;i<6;i++){const el=document.createElement('div');el.className='band-label';el.innerHTML=`<div class="band-note"><span class="band-index">0${i+1}</span><span class="band-note-name"></span></div><div class="band-hz"></div>`;$('bands').append(el);}
   render();draw();

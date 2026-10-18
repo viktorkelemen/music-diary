@@ -1,13 +1,15 @@
-import {SpectralResynth,makeVoicing} from './dsp.mjs';
+import {SpectralResynth,makeVoicing} from './dsp.mjs?level=2';
 class LegioProcessor extends AudioWorkletProcessor {
   constructor(options){
     super();this.data=options.processorOptions.data;this.engine=new SpectralResynth(this.data);
+    this.gainSlew=1-Math.exp(-1/(.01*48000));this.outputGain=0;this.targetGain=10**(24/20);
     this.noise=false;this.ping=0;this.rng=0x938ad2;this.frames=0;this.levels=Array(6).fill(0);
     this.port.onmessage=({data:p})=>{
       if(p.type==='ping'){this.ping=576;return;}
       if(p.type==='controls'){
         this.noise=p.source==='noise';
-        this.engine.setMode(p.mode??0);
+        // Manual makeup BEFORE the one final limiter; no AGC or noise floor.
+        if(Number.isFinite(p.outputDb))this.targetGain=p.outputDb<=-60?0:10**(Math.max(-60,Math.min(36,p.outputDb))/20);
         this.engine.set(makeVoicing(this.data,p.bank,p.rotation,p.root,p.octave),2*125**p.resonance,p.freeze,p.coupleRelease===false?p.release:-1);
       }
     };
@@ -19,7 +21,8 @@ class LegioProcessor extends AudioWorkletProcessor {
       let excitation=0;
       if(this.noise)excitation=this.random();
       if(this.ping>0){excitation+=this.random()*(this.ping/576);this.ping--;}
-      this.engine.process((input[0]?.[i]??0)+excitation,(input[1]?.[i]??input[0]?.[i]??0)+excitation);
+      this.outputGain+=(this.targetGain-this.outputGain)*this.gainSlew;
+      this.engine.process((input[0]?.[i]??0)+excitation,(input[1]?.[i]??input[0]?.[i]??0)+excitation,this.outputGain);
       out[0][i]=this.engine.left;out[1][i]=this.engine.right;
       for(let b=0;b<6;b++)this.levels[b]=Math.max(this.levels[b],Math.abs(this.engine.lastBands[b]));
     }

@@ -5,8 +5,8 @@ export const OCTAVE_GAIN = 0.70794578;
 export const clamp = (x, lo, hi) => Math.max(lo, Math.min(x, hi));
 export const wrap = (x,n) => (x % n + n) % n;
 export const frequency = n => 440 * 2 ** ((n-69)/12);
-export const chordCount = bank => bank===0?5:bank===1?9:12;
-export function makeVoicing(data, bank, rotation, root, octave) {
+export const chordCount = () => 8;
+export function makeLegacyVoicing(data, bank, rotation, root, octave) {
   bank=wrap(bank,15); let offsets, originalCount=4;
   if(bank<2) {
     offsets=[...(bank===0?data.hex[wrap(rotation,5)]:data.cvChord[wrap(rotation,9)]),12,19];
@@ -30,7 +30,7 @@ class Band {
 }
 export class Resonator {
   constructor(data){
-    const initial=makeVoicing(data,0,0,36,0);
+    const initial=makeLegacyVoicing(data,0,0,36,0);
     this.current=[...initial.notes];this.target=[...initial.notes];this.weights=[...initial.gains];this.step=Array(6).fill(0);
     this.bands=Array.from({length:6},()=>[new Band(),new Band()]);this.lastBands=Array(6).fill(0);this.channels=Array.from({length:6},()=>[0,0]);
     this.slewLeft=0;this.phase=0;this.q=2;this.targetQ=2;this.feed=1;this.frozen=false;this.left=0;this.right=0;this.controlTick();
@@ -71,26 +71,21 @@ export class Resonator {
 // Numerical browser port of core/spectral.hpp; golden-vector tests use C++.
 export class SpectralResynth extends Resonator {
   constructor(data){
-    super(data);this.envelopes=Array.from({length:6},()=>[0,0]);this.oscPhases=Array.from({length:6},()=>[0,0]);
+    super(data);this.active=Array(6).fill(1);this.activeTarget=Array(6).fill(1);this.envelopes=Array.from({length:6},()=>[0,0]);this.oscPhases=Array.from({length:6},()=>[0,0]);
     this.sine=Float32Array.from({length:2049},(_,i)=>Math.sin(i*2*Math.PI/2048));this.sine[2048]=0;
     this.attack=1-Math.exp(-1/(.002*48000));this.release=1-Math.exp(-1/(.03*48000));
-    this.mode=0;this.rawGain=0;this.sineGain=1;this.fadeLeft=0;
   }
   set(voicing,q,freeze,releasePosition=-1){
     super.set(voicing,q,freeze);
+    if(!freeze)this.activeTarget=voicing.gains.map(g=>g>0?1:0);
     const position=releasePosition<0?Math.log(clamp(q,2,250)/2)/Math.log(125):clamp(releasePosition,0,1);
     const tau=.03*(4/.03)**position;
     this.release=1-Math.exp(-1/(tau*48000));
   }
-  setMode(mode){
-    if(![0,1,2].includes(mode)||mode===this.mode)return;
-    this.mode=mode;this.fadeLeft=240;
-    this.rawStep=((mode===1?1:mode===2?.707945784:0)-this.rawGain)/240;
-    this.sineStep=((mode===0?1:mode===2?.707945784:0)-this.sineGain)/240;
-  }
-  process(left,right){
+  process(left,right,outputGain=1){
     this.processRaw(Number.isFinite(left)?left:0,Number.isFinite(right)?right:0);
     let l=0,r=0;
+    if(!this.frozen)for(let i=0;i<6;i++)this.active[i]+=clamp(this.activeTarget[i]-this.active[i],-1/240,1/240);
     for(let i=0;i<6;i++)for(let ch=0;ch<2;ch++){
       const rectified=Math.abs(this.channels[i][ch]);let env=this.envelopes[i][ch];
       if(!this.frozen)env+=(rectified-env)*(rectified>env?this.attack:this.release);
@@ -99,13 +94,14 @@ export class SpectralResynth extends Resonator {
       const wave=this.sine[cell]+(this.sine[cell+1]-this.sine[cell])*(index-cell);
       let phase=Math.fround(this.oscPhases[i][ch]+Math.fround(Math.fround(frequency(Math.fround(this.current[i])))/48000));
       if(phase>=1)phase=Math.fround(phase-1);this.oscPhases[i][ch]=phase;
-      if(ch===0&&i%2===0)l+=wave*env;if(ch===1&&i%2===1)r+=wave*env;
+      if(ch===0&&i%2===0)l+=wave*env*this.active[i];if(ch===1&&i%2===1)r+=wave*env*this.active[i];
     }
-    if(this.fadeLeft>0){
-      this.rawGain+=this.rawStep;this.sineGain+=this.sineStep;
-      if(--this.fadeLeft===0){this.rawGain=this.mode===1?1:this.mode===2?.707945784:0;this.sineGain=this.mode===0?1:this.mode===2?.707945784:0;}
-    }
-    this.left=CEILING*Math.tanh((this.rawLeft*this.rawGain+l*this.sineGain)/CEILING);
-    this.right=CEILING*Math.tanh((this.rawRight*this.rawGain+r*this.sineGain)/CEILING);
+    this.left=CEILING*Math.tanh(l*outputGain/CEILING);
+    this.right=CEILING*Math.tanh(r*outputGain/CEILING);
   }
+}
+
+export function makeVoicing(data,chord,variation,root,octave) {
+ const notes=data.reel[wrap(chord,6)].notes,count=notes.length;
+ return {notes:Array.from({length:6},(_,v)=>v<count?69+12*Math.log2(notes[v]/440)+root-60+12*(octave+Number([false,v===0,v<2,v<3,v%2===1,v===count-1,v>=count-2,v===count-2][wrap(variation,8)])):root),gains:Array.from({length:6},(_,v)=>v<count?1:0)};
 }
