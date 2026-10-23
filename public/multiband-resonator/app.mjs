@@ -1,12 +1,12 @@
-import {makeVoicing,frequency,chordCount,wrap} from './dsp.mjs';
+import {makeVoicing,frequency,chordCount,wrap} from './dsp.mjs?v=ping1';
 const $=id=>document.getElementById(id);
 const bankNames=['HEX','cvChord','14 · Oct Stack','15 · 4th Stack','16 · 5th Stack',...Array.from({length:10},(_,i)=>`${i+17} · Utility`)];
 const chordNames=[['S2','P5','7S','m7','M7'],['maj','min','maj7','min7','dom7','sus4','sus2','dim','aug']];
 const pitches=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
 const noteName=n=>pitches[wrap(Math.round(n),12)]+(Math.floor(Math.round(n)/12)-1);
-const state={bank:0,root:36,rotation:0,octave:0,resonance:.73,freeze:false,source:'ping',monitor:false,bandGains:Array(6).fill(1)};
+const state={bank:0,root:60,rotation:0,octave:0,resonance:.95,freeze:false,source:'auto',monitor:false,wet:1,level:.5,bandGains:Array(6).fill(1)};
 try{const saved=JSON.parse(localStorage.getItem('legio-selection'));if(saved&&Number.isInteger(saved.bank)&&saved.bank>=0&&saved.bank<15&&[-1,0,1].includes(saved.octave)){state.bank=saved.bank;state.octave=saved.octave;}}catch{}
-let data,context,node,gain,buffer,sourceNode,liveStream,liveNode,loading=false,cvStep=0,notes=[],levels=Array(6).fill(0),visibleLevels=Array(6).fill(0);
+let data,context,node,buffer,sourceNode,liveStream,liveNode,loading=false,cvStep=0,notes=[],levels=Array(6).fill(0),visibleLevels=Array(6).fill(0);
 function message(text,error=false){$('message').textContent=text;$('message').classList.toggle('error',error);}
 function save(){try{localStorage.setItem('legio-selection',JSON.stringify({bank:state.bank,octave:state.octave}));}catch{}}
 function updateNotes(){
@@ -23,14 +23,14 @@ function render(){
   $('freeze').setAttribute('aria-pressed',state.freeze);$('freeze-indicator').textContent=state.monitor?'MONITOR':state.freeze?'FROZEN':'LIVE';$('freeze-indicator').classList.toggle('held',state.freeze);
   document.querySelectorAll('[data-octave]').forEach(el=>el.setAttribute('aria-pressed',Number(el.dataset.octave)===state.octave));
   document.querySelectorAll('[data-source]').forEach(el=>el.setAttribute('aria-pressed',el.dataset.source===state.source));
-  $('file-controls').hidden=state.source!=='file';$('live-controls').hidden=state.source!=='live';$('ping').hidden=['file','live'].includes(state.source);
-  $('monitor').disabled=!['file','live'].includes(state.source);$('monitor').setAttribute('aria-pressed',state.monitor);
-  $('routing-label').textContent=state.monitor?'INPUT MONITOR':'100% WET';
+  $('auto-controls').hidden=state.source!=='auto';$('file-controls').hidden=state.source!=='file';$('live-controls').hidden=state.source!=='live';$('ping').hidden=!['ping','noise'].includes(state.source);
+  $('monitor').disabled=false;$('monitor').setAttribute('aria-pressed',state.monitor);
+  $('routing-label').textContent=state.monitor?'INPUT MONITOR':Math.round(state.wet*100)+'% WET';
   if(!context||context.state!=='running'){notes=makeVoicing(data,state.bank,state.rotation,state.root,state.octave).notes;updateNotes();}
   node?.port.postMessage({type:'controls',...state});
 }
 function audioStatus(){
-  const active=context?.state==='running';$('status').textContent=active?'48 kHz · stereo':'Audio off';$('status-dot').classList.toggle('active',active);if(!active){$('input-dot').classList.remove('active');$('input-level').textContent='Audio paused';}$('power').innerHTML=active?'Pause audio <span>Ⅱ</span>':'Start audio <span>↗</span>';
+  const active=context?.state==='running';$('status').textContent=active?'48 kHz · stereo':'Audio off';$('status-dot').classList.toggle('active',active);if(!active){$('input-dot').classList.remove('active');$('input-level').textContent='Audio paused';$('output-level').textContent='Silent';}$('power').innerHTML=active?'Pause audio <span>Ⅱ</span>':'Start audio <span>↗</span>';
 }
 async function startAudio(){
   if(!data)throw new Error('Chord data is still loading.');
@@ -38,11 +38,13 @@ async function startAudio(){
     context=new AudioContext({sampleRate:48000,latencyHint:'interactive'});
     if(context.sampleRate!==48000){await context.close();context=null;throw new Error('This browser cannot create a 48 kHz audio context. Please try Chrome or Firefox.');}
     try{
-      await context.audioWorklet.addModule('./worklet.mjs');
+      const resume=context.resume();
+      await context.audioWorklet.addModule('./worklet.mjs?v=ping1');
+      await resume;
       node=new AudioWorkletNode(context,'legio-resonator',{numberOfInputs:1,numberOfOutputs:1,outputChannelCount:[2],channelCount:2,channelCountMode:'explicit',processorOptions:{data}});
-      gain=context.createGain();gain.gain.value=Number($('volume').value);node.connect(gain).connect(context.destination);
+      node.connect(context.destination);
       node.onprocessorerror=()=>{message('The audio processor stopped. Reload the page to restart.',true);context.suspend();};
-      node.port.onmessage=({data:p})=>{if(p.type==='meters'){levels=p.levels;notes=p.notes;updateNotes();const active=p.inputPeak>.001;$('input-dot').classList.toggle('active',active);$('input-level').textContent=p.inputPeak>0?Math.max(-120,20*Math.log10(p.inputPeak)).toFixed(1)+' dBFS':'No input';}};
+      node.port.onmessage=({data:p})=>{if(p.type==='meters'){levels=p.levels;notes=p.notes;updateNotes();const active=p.inputPeak>.001;$('input-dot').classList.toggle('active',active);$('input-level').textContent=p.inputPeak>0?Math.max(-120,20*Math.log10(p.inputPeak)).toFixed(1)+' dBFS':'No input';$('output-level').textContent=p.outputPeak>0?Math.max(-120,20*Math.log10(p.outputPeak)).toFixed(1)+' dBFS':'Silent';}};
       context.onstatechange=audioStatus;render();
     }catch(error){await context.close();context=null;node=null;throw error;}
   }
@@ -53,12 +55,13 @@ function stopFile(){if(sourceNode){sourceNode.stop();sourceNode.disconnect();sou
 function setBank(bank){state.bank=wrap(bank,15);state.rotation=0;save();render();}
 function rotate(){state.rotation=wrap(state.rotation+1,chordCount(state.bank));render();}
 function freeze(){state.freeze=!state.freeze;render();message(state.freeze?'Frozen: input closes over 5 ms. The held chord rings out.':'Live: input is open and tuning follows the controls.');}
-$('power').onclick=()=>{if(context?.state==='running'){context.suspend().then(audioStatus);return;}withAudio(()=>{message('Audio running. P to ping, R to rotate, Space to freeze.');if(state.source==='ping')node.port.postMessage({type:'ping'});});};
+$('power').onclick=()=>{if(context?.state==='running'){stopLive();context.suspend().then(audioStatus);return;}withAudio(()=>{message(state.source==='auto'?'Automatic ping every three seconds. Change the chord or resonance between strikes.':'Audio running. P to ping, R to rotate, Space to freeze.');if(state.source==='ping')node.port.postMessage({type:'ping'});});};
 $('ping').onclick=()=>withAudio(()=>{node.port.postMessage({type:'ping'});message(state.freeze?'Input is frozen. Release Freeze to excite the bands.':'12 ms noise burst sent into the resonator.');});
 $('bank-prev').onclick=()=>setBank(state.bank-1);$('bank-next').onclick=()=>setBank(state.bank+1);$('bank').onchange=e=>setBank(Number(e.target.value));$('rotate').onclick=rotate;$('freeze').onclick=freeze;
 $('root').oninput=e=>{state.root=Number(e.target.value);state.rotation=0;render();};
 $('resonance').oninput=e=>{state.resonance=Number(e.target.value);render();};
-$('volume').oninput=e=>{const volume=Number(e.target.value);$('volume-value').textContent=Math.round(volume*100)+'%';if(gain)gain.gain.setTargetAtTime(volume,context.currentTime,.01);};
+$('volume').oninput=e=>{state.level=Number(e.target.value);$('volume-value').textContent=state.level===0?'Mute':(20*Math.log10(4*state.level**2)).toFixed(1)+' dB';render();};
+$('wet').oninput=e=>{state.wet=Number(e.target.value);$('wet-value').textContent=Math.round(state.wet*100)+'% wet';render();};
 for(const el of document.querySelectorAll('[data-octave]'))el.onclick=()=>{state.octave=Number(el.dataset.octave);save();render();};
 function stopLive(){
   liveNode?.disconnect();liveNode=null;liveStream?.getTracks().forEach(track=>track.stop());liveStream=null;
@@ -76,7 +79,7 @@ for(const el of document.querySelectorAll('[data-source]'))el.onclick=()=>{
   const previous=state.source;state.source=el.dataset.source;state.monitor=false;
   if(previous!==state.source){stopFile();stopLive();}
   render();
-  message(state.source==='noise'?'Noise excites the bands continuously.':state.source==='file'?'Choose an audio file, then play it through the resonator. Files stay on this device.':state.source==='live'?'Connect an audio interface input. Use headphones when monitoring an open microphone.':'Send short noise bursts with the ping button or P.');
+  message(state.source==='auto'?'A short noise ping every three seconds. Start audio to hear it.':state.source==='noise'?'Noise excites the bands continuously.':state.source==='file'?'Choose an audio file, then play it through the resonator. Files stay on this device.':state.source==='live'?'Connect an audio interface input. Use headphones when monitoring an open microphone.':'Send short noise bursts with the ping button or P.');
 };
 $('monitor').onclick=()=>{
   state.monitor=!state.monitor;render();
@@ -94,7 +97,7 @@ $('input-connect').onclick=()=>withAudio(async()=>{
     message('Live audio feeds the resonator continuously. Input meter shows captured signal; Monitor input checks the raw sound.');
   }catch(error){stream.getTracks().forEach(track=>track.stop());throw error;}
 });
-window.addEventListener('pagehide',stopLive);
+window.addEventListener('pagehide',()=>{stopLive();stopFile();context?.suspend().catch(()=>{});});
 $('cv').oninput=e=>{
   const volts=Number(e.target.value);$('cv-value').textContent=volts.toFixed(2)+' V';let next=cvStep;
   while(volts>=(next+1)*.42+.02)next++;

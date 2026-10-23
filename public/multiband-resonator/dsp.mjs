@@ -60,6 +60,7 @@ export class Resonator {
       const a=this.bands[i][0].process(mono*this.weights[i]),b=this.bands[i][1].process(mono*this.weights[i]);
       this.lastBands[i]=a;if(i%2===0)l+=a;else r+=b;
     }
+    this.preLeft=l;this.preRight=r;
     this.left=CEILING*Math.tanh(l/CEILING);this.right=CEILING*Math.tanh(r/CEILING);
   }
 }
