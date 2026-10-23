@@ -1,5 +1,5 @@
 ---
-title: "Fluid Particles — light that listens"
+title: "Fluid Particles"
 date: 2026-10-23T00:00:00-04:00
 tags:
   - generative-art
