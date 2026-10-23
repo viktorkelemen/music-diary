@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 870 820" role="img" aria-labelledby="title desc"><title id="title">Spectral resynth — Daisy Seed 3 control map</title><desc id="desc">Seed 3 Eurorack Dev Kit, front view. VR1: Root, C2–C6. VR2: Brightness, dark ↔ bright. VR3: Attack, 2–500 ms. VR4: Detail, 1–12 partials. VR5: Dry / wet, input ↔ synth. VR6: Level, noon = unity. VR7: Morph, sine → square. VR8: Release, 25 ms–4 s. SW1: Next chord. SW2: Next voicing. SW3: Unused. SW4: Freeze. Gate 1: freeze. Gate 2 and all CV connections unused. MIDI and SD unused. Stereo audio inputs and outputs at lower right.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#f4f4f4;text-anchor:middle}.id{font:12px monospace;fill:#adb7bb;letter-spacing:1px}.name{font-size:17px;font-weight:600}.sub{font-size:12px;fill:#adb7bb}.muted text{fill:#97a1a7}.muted{opacity:.78}</style>
+<rect x="5" y="5" width="860" height="810" rx="18" fill="#1d2027" stroke="#51565d" stroke-width="2"/>
+<rect x="21" y="22" width="26" height="10" rx="5" fill="#f4f4f4"/>
+<rect x="21" y="788" width="26" height="10" rx="5" fill="#f4f4f4"/>
+<rect x="823" y="22" width="26" height="10" rx="5" fill="#f4f4f4"/>
+<rect x="823" y="788" width="26" height="10" rx="5" fill="#f4f4f4"/>
+<text x="435" y="34" class="id">DAISY SEED 3 · EURORACK DEV KIT</text>
+<path d="M32 74h232" stroke="#f29aa5" stroke-width="3"/>
+<text x="32" y="109" class="id" style="text-anchor:start">02 / SPECTRAL</text>
+<text x="32" y="140" class="name" style="text-anchor:start">Resynth</text>
+<text x="32" y="168" class="sub" style="text-anchor:start">Up to 12 voices</text>
+<text x="32" y="192" class="sub" style="text-anchor:start">Global sound controls</text>
+<text x="455" y="79" class="id">VR1</text>
+<circle cx="455" cy="120" r="28" fill="#30363e" stroke="#7c878f" stroke-width="2"/><path d="M455 100v14" stroke="#f29aa5" stroke-width="4" stroke-linecap="round"/>
+<text x="455" y="173" class="name">Root</text>
+<text x="455" y="193" class="sub">C2–C6</text>
+<text x="565" y="79" class="id">VR2</text>
+<circle cx="565" cy="120" r="28" fill="#30363e" stroke="#7c878f" stroke-width="2"/><path d="M565 100v14" stroke="#f29aa5" stroke-width="4" stroke-linecap="round"/>
+<text x="565" y="173" class="name">Brightness</text>
+<text x="565" y="193" class="sub">dark ↔ bright</text>
+<text x="675" y="79" class="id">VR3</text>
+<circle cx="675" cy="120" r="28" fill="#30363e" stroke="#7c878f" stroke-width="2"/><path d="M675 100v14" stroke="#f29aa5" stroke-width="4" stroke-linecap="round"/>
+<text x="675" y="173" class="name">Attack</text>
+<text x="675" y="193" class="sub">2–500 ms</text>
+<text x="785" y="79" class="id">VR4</text>
+<circle cx="785" cy="120" r="28" fill="#30363e" stroke="#7c878f" stroke-width="2"/><path d="M785 100v14" stroke="#f29aa5" stroke-width="4" stroke-linecap="round"/>
+<text x="785" y="173" class="name">Detail</text>
+<text x="785" y="193" class="sub">1–12 partials</text>
+<text x="455" y="214" class="id">VR5</text>
+<circle cx="455" cy="255" r="28" fill="#30363e" stroke="#7c878f" stroke-width="2"/><path d="M455 235v14" stroke="#f29aa5" stroke-width="4" stroke-linecap="round"/>
+<text x="455" y="308" class="name">Dry / wet</text>
+<text x="455" y="328" class="sub">input ↔ synth</text>
+<text x="565" y="214" class="id">VR6</text>
+<circle cx="565" cy="255" r="28" fill="#30363e" stroke="#7c878f" stroke-width="2"/><path d="M565 235v14" stroke="#f29aa5" stroke-width="4" stroke-linecap="round"/>
+<text x="565" y="308" class="name">Level</text>
+<text x="565" y="328" class="sub">noon = unity</text>
+<text x="675" y="214" class="id">VR7</text>
+<circle cx="675" cy="255" r="28" fill="#30363e" stroke="#7c878f" stroke-width="2"/><path d="M675 235v14" stroke="#f29aa5" stroke-width="4" stroke-linecap="round"/>
+<text x="675" y="308" class="name">Morph</text>
+<text x="675" y="328" class="sub">sine → square</text>
+<text x="785" y="214" class="id">VR8</text>
+<circle cx="785" cy="255" r="28" fill="#30363e" stroke="#7c878f" stroke-width="2"/><path d="M785 235v14" stroke="#f29aa5" stroke-width="4" stroke-linecap="round"/>
+<text x="785" y="308" class="name">Release</text>
+<text x="785" y="328" class="sub">25 ms–4 s</text>
+<g class="muted">
+<text x="345" y="82" class="id">MIDI IN</text>
+<rect x="322" y="95" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="345" cy="120" r="18" fill="#adb7bb"/><circle cx="345" cy="120" r="12" fill="#101317"/>
+<text x="345" y="167" class="sub">unused</text>
+</g>
+<g class="muted">
+<text x="345" y="217" class="id">MIDI THRU</text>
+<rect x="322" y="230" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="345" cy="255" r="18" fill="#adb7bb"/><circle cx="345" cy="255" r="12" fill="#101317"/>
+<text x="345" y="302" class="sub">unused</text>
+</g>
+<g class="muted">
+<text x="345" y="352" class="id">MIDI OUT</text>
+<rect x="322" y="365" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="345" cy="390" r="18" fill="#adb7bb"/><circle cx="345" cy="390" r="12" fill="#101317"/>
+<text x="345" y="437" class="sub">unused</text>
+</g>
+<g class="muted">
+<text x="455" y="352" class="id">CV IN 1</text>
+<rect x="432" y="365" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="455" cy="390" r="18" fill="#adb7bb"/><circle cx="455" cy="390" r="12" fill="#101317"/>
+<text x="455" y="437" class="sub">unused</text>
+</g>
+<g class="muted">
+<text x="565" y="352" class="id">CV IN 2</text>
+<rect x="542" y="365" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="565" cy="390" r="18" fill="#adb7bb"/><circle cx="565" cy="390" r="12" fill="#101317"/>
+<text x="565" y="437" class="sub">unused</text>
+</g>
+<g class="muted">
+<text x="675" y="352" class="id">CV IN 3</text>
+<rect x="652" y="365" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="675" cy="390" r="18" fill="#adb7bb"/><circle cx="675" cy="390" r="12" fill="#101317"/>
+<text x="675" y="437" class="sub">unused</text>
+</g>
+<g class="muted">
+<text x="785" y="352" class="id">CV IN 4</text>
+<rect x="762" y="365" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="785" cy="390" r="18" fill="#adb7bb"/><circle cx="785" cy="390" r="12" fill="#101317"/>
+<text x="785" y="437" class="sub">unused</text>
+</g>
+<g class="muted">
+<text x="455" y="482" class="id">CV OUT 1</text>
+<rect x="432" y="495" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="455" cy="520" r="18" fill="#adb7bb"/><circle cx="455" cy="520" r="12" fill="#101317"/>
+<text x="455" y="567" class="sub">unused</text>
+</g>
+<g class="muted">
+<text x="565" y="482" class="id">CV OUT 2</text>
+<rect x="542" y="495" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="565" cy="520" r="18" fill="#adb7bb"/><circle cx="565" cy="520" r="12" fill="#101317"/>
+<text x="565" y="567" class="sub">unused</text>
+</g>
+<g>
+<text x="675" y="482" class="id">AUDIO IN L</text>
+<rect x="652" y="495" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="675" cy="520" r="18" fill="#adb7bb"/><circle cx="675" cy="520" r="12" fill="#101317"/>
+<text x="675" y="567" class="sub">input</text>
+</g>
+<g>
+<text x="785" y="482" class="id">AUDIO OUT L</text>
+<rect x="762" y="495" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="785" cy="520" r="18" fill="#adb7bb"/><circle cx="785" cy="520" r="12" fill="#101317"/>
+<text x="785" y="567" class="sub">output</text>
+</g>
+<g>
+<text x="455" y="612" class="id">GATE 1</text>
+<rect x="432" y="625" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="455" cy="650" r="18" fill="#adb7bb"/><circle cx="455" cy="650" r="12" fill="#101317"/>
+<text x="455" y="697" class="sub">Freeze</text>
+</g>
+<g class="muted">
+<text x="565" y="612" class="id">GATE 2</text>
+<rect x="542" y="625" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="565" cy="650" r="18" fill="#adb7bb"/><circle cx="565" cy="650" r="12" fill="#101317"/>
+<text x="565" y="697" class="sub">unused</text>
+</g>
+<g>
+<text x="675" y="612" class="id">AUDIO IN R</text>
+<rect x="652" y="625" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="675" cy="650" r="18" fill="#adb7bb"/><circle cx="675" cy="650" r="12" fill="#101317"/>
+<text x="675" y="697" class="sub">input</text>
+</g>
+<g>
+<text x="785" y="612" class="id">AUDIO OUT R</text>
+<rect x="762" y="625" width="46" height="50" rx="4" fill="#30363e" stroke="#6c757e"/><circle cx="785" cy="650" r="18" fill="#adb7bb"/><circle cx="785" cy="650" r="12" fill="#101317"/>
+<text x="785" y="697" class="sub">output</text>
+</g>
+<rect x="32" y="484" width="245" height="95" rx="6" fill="#293238" stroke="#6c757e"/><rect x="32" y="514" width="28" height="29" rx="3" fill="#adb7bb"/>
+<text x="161" y="526" class="id">DAISY SEED 3</text>
+<text x="161" y="551" class="sub">USB</text>
+<rect x="32" y="600" width="66" height="70" rx="4" fill="#30363e" stroke="#6c757e"/>
+<text x="65" y="629" class="id">SD</text>
+<text x="65" y="650" class="sub">unused</text>
+<circle cx="235" cy="650" r="12" fill="#30363e" stroke="#6c757e"/>
+<text x="235" y="622" class="id">LED 1</text>
+<text x="235" y="682" class="sub">unused</text>
+<circle cx="345" cy="650" r="12" fill="#f29aa5" stroke="#6c757e"/>
+<text x="345" y="622" class="id">LED 2</text>
+<text x="345" y="682" class="sub">Freeze</text>
+<text x="235" y="712" class="id">SW1</text>
+<rect x="213" y="729" width="44" height="38" rx="5" fill="#30363e" stroke="#6c757e"/>
+<circle cx="235" cy="748" r="12" fill="#f29aa5"/>
+<text x="235" y="789" class="sub">Next chord</text>
+<text x="345" y="712" class="id">SW2</text>
+<rect x="323" y="729" width="44" height="38" rx="5" fill="#30363e" stroke="#6c757e"/>
+<circle cx="345" cy="748" r="12" fill="#f29aa5"/>
+<text x="345" y="789" class="sub">Next voicing</text>
+<text x="455" y="712" class="id">SW3</text>
+<rect x="433" y="729" width="44" height="38" rx="5" fill="#30363e" stroke="#6c757e"/>
+<circle cx="455" cy="748" r="12" fill="#adb7bb"/><path d="M455 749l7 -20" stroke="#f4f4f4" stroke-width="6" stroke-linecap="round"/>
+<text x="455" y="789" class="sub">Unused</text>
+<text x="565" y="712" class="id">SW4</text>
+<rect x="543" y="729" width="44" height="38" rx="5" fill="#30363e" stroke="#6c757e"/>
+<circle cx="565" cy="748" r="12" fill="#adb7bb"/><path d="M565 749l7 -20" stroke="#f4f4f4" stroke-width="6" stroke-linecap="round"/>
+<text x="565" y="789" class="sub">Freeze</text>
+<text x="32" y="743" class="id" style="text-anchor:start">FRONT VIEW</text>
+<text x="32" y="766" class="sub" style="text-anchor:start">Control positions</text>
+<text x="32" y="786" class="sub" style="text-anchor:start">match the kit.</text>
+</svg>
