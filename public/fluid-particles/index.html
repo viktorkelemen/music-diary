@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#08080b" />
+    <title>Fluid Particles — Viktor’s Patchlog</title>
+    <meta name="description" content="Audio-reactive particles in the browser: breathing silk, cymatic fluid, ink in milk, Chladni sand and horizontal lines, each driven by the same short track." />
+    <link rel="canonical" href="https://viktorpatchlog.com/fluid-particles/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <base href="/fluid-particles/" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #08080b;
+        font-family: ui-sans-serif, -apple-system, 'Helvetica Neue', sans-serif;
+      }
+      #c {
+        position: fixed;
+        display: block;
+      }
+      #progress {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 6px;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.15);
+      }
+      #progress > div {
+        height: 100%;
+        width: 0;
+        background: rgba(255, 255, 255, 0.8);
+      }
+      #progress:hover {
+        height: 10px;
+      }
+      #start {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.55), rgba(233, 207, 219, 0.85));
+        color: #3a2230;
+        text-align: center;
+        transition: opacity 0.8s;
+        z-index: 10;
+      }
+      #start.gone {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #start h1 {
+        font-weight: 300;
+        letter-spacing: 0.3em;
+        font-size: 28px;
+        margin: 0 0 12px;
+      }
+      #start p {
+        margin: 4px 0;
+        opacity: 0.7;
+        font-size: 13px;
+        letter-spacing: 0.05em;
+      }
+      #start .err {
+        color: #8a1030;
+        opacity: 1;
+      }
+      body.drag::after {
+        content: 'drop audio or preset json';
+        position: fixed;
+        inset: 16px;
+        border: 2px dashed rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        color: white;
+        font-size: 20px;
+        letter-spacing: 0.1em;
+        pointer-events: none;
+      }
+      body.rec::before {
+        content: '● RENDERING VIDEO — click render again to cancel';
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        color: #e0245e;
+        font: 600 12px ui-monospace, Menlo, monospace;
+        z-index: 5;
+      }
+      .return-link {
+        position: fixed;
+        left: 14px;
+        bottom: 16px;
+        z-index: 4;
+        font: 12px ui-sans-serif, -apple-system, 'Helvetica Neue', sans-serif;
+        letter-spacing: 0.04em;
+      }
+      .return-link a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+      }
+      .return-link a:hover {
+        color: #fff;
+      }
+      .lil-gui.root {
+        --background-color: rgba(38, 24, 33, 0.82);
+        --widget-color: rgba(255, 255, 255, 0.12);
+        --hover-color: rgba(255, 255, 255, 0.2);
+        --focus-color: rgba(255, 255, 255, 0.28);
+        --number-color: #f7a8c8;
+        --string-color: #f7d0e0;
+        --title-background-color: rgba(20, 12, 18, 0.9);
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+        backdrop-filter: blur(6px);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <div id="progress"><div></div></div>
+    <p class="return-link"><a href="/experiments">← Back to experiments</a></p>
+    <input id="file" type="file" accept="audio/*,.json" hidden />
+    <div id="start">
+      <div>
+        <h1>FLUID · PARTICLES</h1>
+        <p>click to start with fluid.wav</p>
+        <p>1–5 modes · space play/pause · G hide panel · F fullscreen</p>
+        <p>D drop ink · X reseed · C clear fluid · drop any audio file</p>
+      </div>
+    </div>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
