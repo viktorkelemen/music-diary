@@ -1,48 +1,35 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A playable spectral chord resynthesizer. Six tuned analysis bands become pure sine chords.">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Turn incoming audio into chords. A playable spectral resynth with twelve voices, waveform morphing, and the Daisy Seed 3 v0.10 controls.">
 <link rel="canonical" href="https://viktorpatchlog.com/spectral-chord-resynth/">
 <title>Spectral Chord Resynth — Viktor’s Patchlog</title>
-<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=010-web1">
 </head>
 <body>
-<header>
-  <a class="brand" href="/" aria-label="Viktor’s Patchlog"><span class="brand-mark" aria-hidden="true">◉</span> PATCHLOG <span class="brand-divider">/</span> <span class="edition">PLAYABLE EXPERIMENTS</span></a>
-  <div class="engine-status"><span id="status-dot" class="status-dot"></span><span id="status">Audio off</span><button id="power" class="power">Start audio <span aria-hidden="true">↗</span></button></div>
-</header>
+<header class="site-header"><a href="/" class="brand">Viktor’s <strong>patchlog.</strong></a><a href="/entry/2026-10-18-multiband-resonator-listening-notes/">About this instrument <span aria-hidden="true">↗</span></a></header>
 <main>
-  <div class="title-row"><div><p class="eyebrow">ANALYSE / FOLLOW / RESYNTHESISE</p><h1>Spectral chord <em>resynth.</em></h1></div><p class="intro">Send sound into six tuned bands.<br>Turn their envelopes into pure sine chords.</p></div>
-  <section class="instrument" aria-label="Spectral chord resynthesis instrument">
-    <div class="field-top"><span class="eyebrow">THE RESONANCE FIELD</span><div class="legend"><span class="left-dot"></span> LEFT / ODD <span class="right-dot"></span> RIGHT / EVEN</div><span id="freeze-indicator">LIVE</span></div>
-    <div class="field"><canvas id="field" aria-label="Live activity of six analysis bands"></canvas><div id="bands" class="band-labels"></div></div>
-    <div class="field-foot"><span>6 BANDS <i>·</i> 100% WET <i>·</i> 48 kHz</span><span id="voicing-label">Csus2sus4 · close / Original</span></div>
-    <div class="control-grid">
-      <section class="control bank-control"><div class="control-title"><label for="bank">01 / CHORD</label><span id="bank-number">01 / 6</span></div>
-        <div class="bank-select"><button id="bank-prev" class="arrow" aria-label="Previous chord">←</button><select id="bank" aria-label="Chord"></select><button id="bank-next" class="arrow" aria-label="Next chord">→</button></div>
-        <label for="variation">VOICING</label><select id="variation" aria-label="Voicing variation"></select>
-        <button id="rotate" class="rotate">Next voicing <span aria-hidden="true">↻</span></button><p class="hint" id="rotation-info">Original · voicing 1 of 8</p>
-      </section>
-      <section class="control"><div class="control-title"><label for="root">02 / ROOT NOTE</label><span>CHROMATIC</span></div><output id="root-value" for="root" class="large-value">C<span>4</span></output><input id="root" type="range" min="12" max="84" value="60" step="1"><div class="range-labels"><span>C0</span><span id="root-hz">261.63 Hz</span><span>C6</span></div><div class="octaves" role="group" aria-label="Voicing octave"><span>OCTAVE</span><button data-octave="-1" aria-pressed="false">−1</button><button data-octave="0" aria-pressed="true">0</button><button data-octave="1" aria-pressed="false">+1</button></div></section>
-      <section class="control"><div class="control-title"><label for="resonance">03 / ANALYSIS Q</label><span>GLOBAL Q</span></div><output id="q-value" for="resonance" class="large-value">68<span>Q</span></output><input id="resonance" type="range" min="0" max="1" value="0.73" step="0.001"><div class="range-labels"><span>SHORT / 2</span><span>LONG / 250</span></div><p class="hint">Q sets the selectivity of the analysis bands.</p></section>
-      <section class="control freeze-control"><div class="control-title"><span>04 / HOLD THE MOMENT</span><span>GATE</span></div><button id="freeze" class="freeze" aria-pressed="false"><span class="freeze-icon" aria-hidden="true">❄</span><span>Freeze</span><span class="freeze-led"></span></button><p class="hint">Latch the tuning. Close the input.<br>Hold sine amplitudes exactly.</p><span class="key-hint"><kbd>SPACE</kbd> to toggle</span></section>
-    </div>
-  </section>
-  <section class="resynth-controls" aria-label="Envelope release">
-    <div class="release-control"><label for="release">SINE RELEASE <output id="release-value">1.067 s</output></label><input id="release" type="range" min="0" max="1" value="0.73" step="0.001"><div class="range-labels"><span>30 ms · PING</span><span>4 s · DRONE</span></div><label class="couple"><input id="couple-release" type="checkbox"> Couple release to Q (Legio controls)</label></div>
-  </section>
-  <section class="input-strip" aria-label="Excitation and output">
-    <div class="source-section"><p class="eyebrow">EXCITATION</p><div class="source-buttons" role="group" aria-label="Input source"><button data-source="ping" aria-pressed="true">Ping</button><button data-source="noise" aria-pressed="false">Noise</button><button data-source="file" aria-pressed="false">Audio file</button></div></div>
-    <div class="source-actions"><button id="ping" class="ping">↗ Send a ping <kbd>P</kbd></button><div id="file-controls" hidden><label class="file-label" for="audio-file">Choose audio<input id="audio-file" type="file" accept="audio/*"></label><button id="file-play" disabled>Play loop</button><span id="file-name">No file loaded</span></div></div>
-    <div class="volume"><label for="volume">OUTPUT GAIN <output id="volume-value">+24 dB</output></label><input id="volume" type="range" min="-60" max="36" value="24" step="1"></div>
-  </section>
-  <details class="patch"><summary>Patch a virtual voicing CV <span>0.42 V / step ↗</span></summary><div class="patch-content"><label for="cv">VOICING CV <output id="cv-value">0.00 V</output></label><input id="cv" type="range" min="0" max="5" step="0.01" value="0"><p>Rising thresholds select the next voicing variation; falling voltage re-arms. Moving the root resets to Original. C4 reproduces Bloom Lab’s original register.</p></div></details>
-  <p class="patch">Six reel chords with Bloom Lab voicing variations. Updated firmware downloads are pending packaging.</p>
-  <p class="instrument-note">Six resonant bands analyse your sound. Their envelopes drive six audible sine tones, split across stereo. Try a ping, extend the release, then freeze a chord. Output gain restores the quiet analysis envelopes: +24 dB by default, adjustable up to +36 dB. Reduce it if strong input sounds saturated. Audio files stay on your device.</p>
-  <p id="message" role="status" aria-live="polite">Start audio, then send a ping to hear the current voicing.</p>
+<div class="intro"><div><p class="eyebrow">PLAYABLE EXPERIMENT / 010</p><h1>Spectral chord<br><span>resynth.</span></h1></div><div class="intro-side"><p>Turn incoming audio into chord tones.<br>Try the demo, a recording, or a live input.</p><button id="power" class="power">Start audio <span aria-hidden="true">↗</span></button><p id="status" class="status" role="status">Audio off · start with the demo</p></div></div>
+<section class="instrument" aria-label="Spectral chord resynth">
+<div class="instrument-top"><span class="eyebrow">INPUT PARTIALS</span><span id="voice-count">0 / 12 VOICES</span><span id="hold-status">LIVE</span></div>
+<div class="display"><canvas id="spectrum" aria-label="Measured input partials, from low to high frequency"></canvas><div class="display-empty" id="display-empty">Start audio to explore the demo</div><div class="frequency-axis"><span>60 Hz</span><span>250</span><span>1k</span><span>4k</span><span>16k</span></div></div>
+<div class="display-footer"><div class="meter"><span>IN</span><meter id="input-meter" min="0" max="1" value="0" aria-label="Input peak"></meter></div><div class="meter"><span>OUT</span><meter id="output-meter" min="0" max="1" value="0" aria-label="Output peak"></meter></div><span id="sounding-note">Listening for input</span></div>
+<div class="selection-row"><div class="selection"><label for="chord">CHORD</label><div class="select-wrap"><select id="chord" aria-label="Chord"></select><button id="next-chord" aria-label="Next chord">→</button></div></div><div class="selection"><label for="voicing">VOICING</label><div class="select-wrap"><select id="voicing" aria-label="Voicing"></select><button id="next-voicing" aria-label="Next voicing">→</button></div></div><button id="freeze" class="freeze" aria-pressed="false"><span class="freeze-dot"></span> Freeze <kbd>SPACE</kbd></button></div>
+<div class="chord-preview"><span>CHORD TONES</span><output id="chord-notes">C4 · D4 · F4 · G4</output><span class="preview-note">Input decides which notes sound.</span></div>
+<div id="controls" class="controls" aria-label="Eight instrument controls"></div>
+</section>
+<section class="source-panel" aria-label="Audio source">
+<div class="source-heading"><div><p class="eyebrow">FEED THE INSTRUMENT</p><h2>Choose your source.</h2></div><div class="source-buttons" role="group" aria-label="Input source"><button data-source="demo" aria-pressed="true">Demo</button><button data-source="live" aria-pressed="false">Live input</button><button data-source="file" aria-pressed="false">Audio file</button></div></div>
+<div id="demo-panel" class="source-detail"><span class="source-icon" aria-hidden="true">∿</span><p>A slow four-tone pattern with a few overtones. Start audio, then try the controls.</p></div>
+<div id="live-panel" class="source-detail" hidden><div class="live-actions"><label for="input-device">Audio input</label><select id="input-device"><option value="">Default input</option></select><button id="connect-input">Connect input</button></div><p>Choose an audio interface or microphone. Headphones help prevent feedback. Audio stays in your browser.</p></div>
+<div id="file-panel" class="source-detail" hidden><div class="file-actions"><label class="file-button" for="audio-file">Choose audio file<input id="audio-file" type="file" accept="audio/*"></label><button id="file-play" disabled>Play loop</button><span id="file-name">No file selected</span></div><p>Load a recording and loop it through the resynth. The file stays on your device.</p></div>
+<p id="message" class="message" role="status" aria-live="polite">Demo selected. Audio starts only when you press Start audio.</p>
+</section>
+<details class="guide"><summary>A few things to try <span>+</span></summary><div class="guide-grid"><p><strong>Hear the chord.</strong> Set Dry/wet fully right, Detail high, Level around noon, and Morph fully left.</p><p><strong>Hold and reshape.</strong> Freeze a sound, then turn Brightness and Morph. Release Freeze to follow the input again.</p><p><strong>Keep the original.</strong> Blend back some dry audio for its attack and texture. Level controls both paths.</p></div><p class="engine-note">Same v0.10 DSP as the Daisy Seed 3. Up to 12 main voices; note transitions can overlap. Live input and files stay on your device. The demo is a browser-only source.</p><button id="reset">Reset controls</button></details>
 </main>
-<footer><span>SPECTRAL CHORD RESYNTH <i> / </i> V1</span><span>Legio · Seed 3 · Web Audio. <a href="https://github.com/viktorkelemen/spectral-chord-resynth" target="_blank" rel="noreferrer">Firmware & source ↗</a></span></footer>
-<script type="module" src="app.mjs?level=2"></script>
-</body>
-</html>
+<footer><span>VIKTOR’S PATCHLOG <i>/</i> SPECTRAL CHORD RESYNTH</span><a href="/multiband-resonator/">The earlier multiband resonator ↗</a></footer>
+<script type="module" src="app.mjs?v=010-web1"></script>
+</body></html>

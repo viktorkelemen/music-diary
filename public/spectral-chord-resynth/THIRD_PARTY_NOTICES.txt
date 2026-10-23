@@ -1,0 +1,5 @@
+Spectral Chord Resynth WebAssembly engine includes CMSIS-DSP.
+Copyright (C) 2010-2021 ARM Limited or its affiliates.
+Licensed under Apache License 2.0; see LICENSE-CMSIS.txt.
+Source: https://github.com/ARM-software/CMSIS-DSP
+Instrument source: https://github.com/viktorkelemen/spectral-chord-resynth

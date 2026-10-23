@@ -1,0 +1,11 @@
+{
+  "engine": "Seed 3 v0.10.0",
+  "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.13 (e13ee988ce3d87a738dd8f3661d02223308c412a)",
+  "wasm_sha256": "4f10e701220ed3a8bdd2ca10e9c3abdeae3207281f55f9b4f51a1e2030374365",
+  "bytes": 46115,
+  "core_sha256": {
+    "fft_resynth.hpp": "9c1cfb41db7369fc849fd4a3d9cf1f0308e9026641f6bd2dc45b78127fd5750e",
+    "instrument_controls.hpp": "5ebd6894536b7379f427230f3a9a1906f32f0c2cc46f2dcb5f17f19510a49841",
+    "morph_waves.hpp": "42b22d0b99cccca0a10f1ed6d92b1fd46a466bff7bac5f0d88d1864b1c20b1dd"
+  }
+}
