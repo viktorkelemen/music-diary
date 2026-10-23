@@ -18,6 +18,4 @@ Everything listens to one analysis of the sound: five auto-gained frequency band
 
 **Horizontal lines** is the quietest of the five: rows of particles lifted by a smoothed spectrum, bass in the middle and the highs toward the edges.
 
-The palettes started from Rik Oostenbroek’s gradient work, especially [*Echoes*](https://rikoostenbroek.com/echoes) and the [Layer.com loops](https://rikoostenbroek.com/layer). In the end I kept coming back to **Bright white**: glowing white strands on near-black, a few black particles for depth, and a little colour fringing at the edges, like light through a lens.
-
 Settings can be saved and loaded as files, the frame defaults to 9:16, and **render video** records the whole track straight from the canvas.
