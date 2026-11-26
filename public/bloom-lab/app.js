@@ -1,52 +1,67 @@
 import {CHORDS,WAVEFORMS,PARAMS,DEFAULTS,validatePatch,voiceFrequency} from './engine.js';
+import {createChordPicker,noteName} from './chord-picker.js';
 let state=structuredClone(DEFAULTS),ctx,node,master,analyser,splitter,leftAnalyser,rightAnalyser,outputRouter,outputRouted=false,playing=false,positions=[0,0,0,0,0],volume=.65,outputDeviceId='',outputPair=0;
 const $=id=>document.getElementById(id);
+let chordPicker,melodyIndex=0;
 const groups=[
- ['Pitch & voicing','Six reel chords plus four exploration families, each with four voicings.', ['chord','variation','octave','transpose','fine','tuning','tone']],
+ ['Pitch & voicing','Reel chords, exploration families, and open quartal voicings built from fourths.', ['chord','variation','octave','transpose','fine','tuning','tone']],
  ['Harmonic bloom','Choose a base wave, then let harmonics bloom.', ['waveform','bloom','bloomRate','partials','rolloff','bloomSpread']],
  ['Spatial movement','Give each note its own place and pace.', ['width','spatialRate','spatialSpread','staticWidth','pan']],
- ['Drift & breathing','Introduce small changes within the chord.', ['detune','detuneMix','life','drift','lifeRate']],
+ ['Drift & breathing','Introduce small changes within the chord.', ['detune','detuneMix','life','drift','lifeRate','melodyStep']],
 ];
 const choices={waveform:WAVEFORMS.map((name,i)=>[i,name]),chord:CHORDS.map((c,i)=>[i,`${i+1} · ${c.name}`]),variation:['Original','First note up','First two up','First three up','Alternating up','Last note up','Last two up','Penultimate up'].map((s,i)=>[i,`V${i+1} · ${s}`]),octave:[[-1,'−1 octave'],[0,'Original register'],[1,'+1 octave']]};
-const optionMarkup=key=>key==='chord'
- ? `<optgroup label="Reel chords">${choices.chord.slice(0,6).map(([value,name])=>`<option value="${value}">${name}</option>`).join('')}</optgroup>${['G A C D','C D F G A','G B♭ C D F','C D E G'].map((label,i)=>`<optgroup label="New · ${label}">${choices.chord.slice(6+i*4,10+i*4).map(([value,name])=>`<option value="${value}">${name}</option>`).join('')}</optgroup>`).join('')}`
- : choices[key].map(([value,name])=>`<option value="${value}">${name}</option>`).join('');
+const optionMarkup=key=>choices[key].map(([value,name])=>`<option value="${value}">${name}</option>`).join('');
 function formatted(k,v){const d=PARAMS[k];if(d.unit==='%')return `${Math.round(v*100)}%`;if(d.unit==='pan')return v===0?'Center':`${Math.round(Math.abs(v)*100)}% ${v<0?'L':'R'}`;return `${Number(v.toFixed(2))}${d.unit?' '+d.unit:''}`}
 function fill(el){el.style.setProperty('--fill',`${(el.value-el.min)/(el.max-el.min)*100}%`)}
+function updateVoicePitch(v){
+ const hz=voiceFrequency(state,v,melodyIndex);
+ $(`note-${v}`).textContent=noteName(hz);$(`freq-${v}`).textContent=hz?`${hz.toFixed(1)} Hz`:'Inactive';
+ for(let step=0;step<4;step++)$(`melody-step-${v}-${step}`).classList.toggle('current-step',playing&&!!hz&&state.melodyEnabled[v]&&step===melodyIndex);
+}
 function updateUI(){
  for(const [k,d]of Object.entries(PARAMS)){const input=$(k);input.value=state[k];$(`${k}-value`).textContent=formatted(k,state[k]);fill(input)}
- for(const k of Object.keys(choices))$(k).value=state[k];
+ for(const k of Object.keys(choices))if(k!=='chord')$(k).value=state[k];
+ chordPicker.update(state.chord);
  const reelTone=state.waveform===0&&state.chord<6;
  $('tone').disabled=!reelTone;
  $('tone').closest('.control').style.opacity=reelTone?'1':'.45';
  $('tone').title=state.chord>=6?'New chords use a sine base in Original reel mode':state.waveform===0?'Adjust the original reel overtones':'Available with the Original reel waveform';
- $('chord-note').textContent=state.chord>=6?'New chords use a sine base in Original reel mode. Bloom adds moving harmonics.':'';
+ $('chord-note').textContent=chordPicker.description(state.chord);
  for(let v=0;v<5;v++){
-  const hz=voiceFrequency(state,v),card=$(`voice-${v}`);card.classList.toggle('inactive',!hz);
-  const midi=hz?Math.round(69+12*Math.log2(hz/440)):0;
-  $(`note-${v}`).textContent=hz?['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B♭','B'][((midi%12)+12)%12]+(Math.floor(midi/12)-1):'—';
-  $(`freq-${v}`).textContent=hz?`${hz.toFixed(1)} Hz`:'Inactive';
+  const hz=voiceFrequency(state,v,melodyIndex),card=$(`voice-${v}`);card.classList.toggle('inactive',!hz);updateVoicePitch(v);
   $(`gain-${v}`).value=state.levels[v];$(`gain-${v}`).disabled=!hz;fill($(`gain-${v}`));$(`gain-value-${v}`).textContent=`${Math.round(state.levels[v]*100)}%`;
   for(const action of ['muted','solo']){const b=$(`${action}-${v}`);b.classList.toggle('selected',state[action][v]);b.setAttribute('aria-pressed',String(state[action][v]));b.disabled=!hz}
+  const pitch=$(`pitch-${v}`);pitch.value=state.voiceOffsets[v];pitch.disabled=!hz;fill(pitch);$(`pitch-value-${v}`).textContent=`${state.voiceOffsets[v]>0?'+':''}${state.voiceOffsets[v]} st`;
+  const toggle=$(`melody-${v}`);toggle.disabled=!hz;toggle.setAttribute('aria-pressed',String(state.melodyEnabled[v]));toggle.textContent=state.melodyEnabled[v]?'Melody on':'Hold note';
+  for(let step=0;step<4;step++){const input=$(`melody-step-${v}-${step}`);input.value=state.melodySteps[v][step];input.disabled=!hz||!state.melodyEnabled[v]}
  }
 }
 function applyPatch(patch,custom=true){const clean=validatePatch(patch);Object.assign(state,clean);node?.port.postMessage(clean);updateUI();if(custom){$('patch-state').textContent='Custom sound';document.querySelectorAll('[data-preset]').forEach(b=>b.classList.remove('selected'))}return structuredClone(state)}
 for(const [index,[title,description,keys]]of groups.entries()){
  const section=document.createElement('section');section.className='panel';section.innerHTML=`<div class="panel-heading"><span class="panel-index">0${index+1}</span><h3>${title}</h3></div><p>${description}</p>`;
- for(const key of keys){const div=document.createElement('div');div.className='control';if(choices[key]){const label={chord:'Chord',variation:'Octave variation',octave:'Register',waveform:'Base waveform'}[key];div.innerHTML=`<label for="${key}">${label}</label><select id="${key}">${optionMarkup(key)}</select>${key==='chord'?'<small id="chord-note" class="control-note" aria-live="polite"></small>':''}`}
+ for(const key of keys){const div=document.createElement('div');div.className='control';if(key==='chord'){div.innerHTML='<label for="chord">Chord</label><button type="button" id="chord" class="chord-trigger"><span class="chord-trigger-name"></span><span class="chord-trigger-notes"></span><span class="chord-trigger-action">Browse voicings</span></button><small id="chord-note" class="control-note" aria-live="polite"></small>'}
+  else if(choices[key]){const label={variation:'Octave variation',octave:'Register',waveform:'Base waveform'}[key];div.innerHTML=`<label for="${key}">${label}</label><select id="${key}">${optionMarkup(key)}</select>`}
   else{const d=PARAMS[key];div.innerHTML=`<label for="${key}">${d.label}<output id="${key}-value" for="${key}"></output></label><input type="range" id="${key}" min="${d.min}" max="${d.max}" step="${d.step}" value="${d.value}">`}
   section.append(div);
  }
  $('rack').append(section);
- for(const key of keys){$(key).addEventListener('input',e=>applyPatch({[key]:Number(e.target.value)}));$(key).addEventListener('dblclick',()=>applyPatch({[key]:DEFAULTS[key]}))}
+ for(const key of keys){if(key==='chord')continue;$(key).addEventListener('input',e=>applyPatch({[key]:Number(e.target.value)}));$(key).addEventListener('dblclick',()=>applyPatch({[key]:DEFAULTS[key]}))}
 }
+chordPicker=createChordPicker($('chord'),index=>applyPatch({chord:index}));
 for(let v=0;v<5;v++){
- const card=document.createElement('div');card.className='voice';card.id=`voice-${v}`;card.innerHTML=`<div class="voice-top"><strong id="note-${v}"></strong><span id="freq-${v}"></span></div><label for="gain-${v}">Voice ${v+1} <output id="gain-value-${v}"></output></label><input id="gain-${v}" type="range" min="0" max="1.5" step=".01" value="1"><div class="voice-actions"><button id="muted-${v}" aria-label="Mute voice ${v+1}" aria-pressed="false">Mute</button><button id="solo-${v}" aria-label="Solo voice ${v+1}" aria-pressed="false">Solo</button></div>`;$('voice-controls').append(card);
+ const card=document.createElement('div');card.className='voice';card.id=`voice-${v}`;card.innerHTML=`<div class="voice-top"><strong id="note-${v}"></strong><span id="freq-${v}"></span></div><label for="gain-${v}">Voice ${v+1} <output id="gain-value-${v}"></output></label><input id="gain-${v}" type="range" min="0" max="1.5" step=".01" value="1"><div class="voice-actions"><button id="muted-${v}" aria-label="Mute voice ${v+1}" aria-pressed="false">Mute</button><button id="solo-${v}" aria-label="Solo voice ${v+1}" aria-pressed="false">Solo</button></div><div class="voice-pitch"><label for="pitch-${v}">Note shift <output id="pitch-value-${v}"></output></label><input type="range" id="pitch-${v}" min="-12" max="12" step="1" value="0" aria-label="Voice ${v+1} note shift"><button type="button" id="melody-${v}" class="melody-toggle" aria-label="Toggle melody for voice ${v+1}" aria-pressed="false">Hold note</button><div class="melody-steps" role="group" aria-label="Voice ${v+1} melody steps">${Array.from({length:4},(_,step)=>`<label><span>${step+1}</span><input id="melody-step-${v}-${step}" type="number" min="-12" max="12" step="1" aria-label="Voice ${v+1} step ${step+1} semitone offset"></label>`).join('')}</div><small>Step offsets in semitones</small></div>`;$('voice-controls').append(card);
  $(`gain-${v}`).addEventListener('input',e=>{const levels=[...state.levels];levels[v]=Number(e.target.value);applyPatch({levels})});
  $(`gain-${v}`).addEventListener('dblclick',()=>{const levels=[...state.levels];levels[v]=1;applyPatch({levels})});
  for(const action of ['muted','solo'])$(`${action}-${v}`).onclick=()=>{const value=[...state[action]];value[v]=!value[v];applyPatch({[action]:value})};
+ $(`pitch-${v}`).addEventListener('input',e=>{const voiceOffsets=[...state.voiceOffsets];voiceOffsets[v]=Number(e.target.value);applyPatch({voiceOffsets})});
+ $(`pitch-${v}`).addEventListener('dblclick',()=>{const voiceOffsets=[...state.voiceOffsets];voiceOffsets[v]=0;applyPatch({voiceOffsets})});
+ $(`melody-${v}`).onclick=()=>{const melodyEnabled=[...state.melodyEnabled];melodyEnabled[v]=!melodyEnabled[v];applyPatch({melodyEnabled})};
+ for(let step=0;step<4;step++)$(`melody-step-${v}-${step}`).addEventListener('change',e=>{
+  if(!e.target.value||!e.target.validity.valid){e.target.value=state.melodySteps[v][step];return}
+  const melodySteps=state.melodySteps.map(steps=>[...steps]);melodySteps[v][step]=Number(e.target.value);applyPatch({melodySteps});
+ });
 }
-const presets={reference:{bloom:0,width:0},bloom:{width:0},combined:{},slow:{bloom:.85,bloomRate:.35,spatialRate:.3,width:.9,detuneMix:.15,life:.12},bright:{bloom:1.5,partials:18,rolloff:.7,bloomRate:1.4,width:.7,spatialRate:.7}};
+const presets={reference:{bloom:0,width:0},bloom:{width:0},combined:{},slow:{bloom:.85,bloomRate:.35,spatialRate:.3,width:.9,detuneMix:.15,life:.12},bright:{bloom:1.5,partials:18,rolloff:.7,bloomRate:1.4,width:.7,spatialRate:.7},quartal:{chord:23,bloom:.85,bloomRate:.35,spatialRate:.3,width:.9,detuneMix:.15,life:.12},stillness:{chord:22,bloom:.35,bloomRate:.2,width:.15,spatialRate:.2,life:.08},expansion:{chord:23,bloom:.8,bloomRate:.3,width:.6,spatialRate:.3,life:.12},tension:{chord:27,waveform:2,bloom:.75,rolloff:.65,width:.5,staticWidth:.2,detuneMix:.1,life:.08},inner:{chord:23,bloom:.6,bloomRate:.25,width:.5,spatialRate:.3,life:.08,melodyEnabled:[false,false,false,true,false]}};
 function preset(name){if(!Object.hasOwn(presets,name))throw Error('Unknown preset');state=structuredClone(DEFAULTS);applyPatch({...state,...presets[name]},false);document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('selected',b.dataset.preset===name));$('patch-state').textContent=document.querySelector(`[data-preset="${name}"]`).textContent}
 document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>preset(b.dataset.preset));
 $('reset').onclick=()=>preset('combined');
@@ -136,13 +151,13 @@ async function start(){
   master=ctx.createGain();master.gain.value=0;analyser=ctx.createAnalyser();analyser.fftSize=2048;
   splitter=ctx.createChannelSplitter(2);leftAnalyser=ctx.createAnalyser();rightAnalyser=ctx.createAnalyser();leftAnalyser.fftSize=2048;rightAnalyser.fftSize=2048;
   node.connect(compressor).connect(master);master.connect(analyser);master.connect(splitter);splitter.connect(leftAnalyser,0);splitter.connect(rightAnalyser,1);routeOutput();
-  node.port.onmessage=e=>{if(e.data.positions)positions=e.data.positions;if(e.data.error)$('status').textContent=e.data.error};
+  node.port.onmessage=e=>{if(e.data.positions)positions=e.data.positions;if(Number.isInteger(e.data.melodyIndex)&&e.data.melodyIndex!==melodyIndex){melodyIndex=e.data.melodyIndex;for(let v=0;v<5;v++)updateVoicePitch(v)}if(e.data.error)$('status').textContent=e.data.error};
   node.onprocessorerror=()=>{$('status').textContent='Audio stopped. Reload to restart.';master.gain.value=0;playing=false;$('play').textContent='Reload required';$('play').disabled=true};
   node.port.postMessage(state);
  }
- await ctx.resume();playing=true;master.gain.setTargetAtTime(volume,ctx.currentTime,.07);$('play').textContent='■ Stop';$('play').setAttribute('aria-pressed','true');$('status').textContent='Playing';
+ await ctx.resume();playing=true;for(let v=0;v<5;v++)updateVoicePitch(v);master.gain.setTargetAtTime(volume,ctx.currentTime,.07);$('play').textContent='■ Stop';$('play').setAttribute('aria-pressed','true');$('status').textContent='Playing';
 }
-async function stop(){if(!ctx)return;playing=false;master.gain.setTargetAtTime(0,ctx.currentTime,.025);await new Promise(r=>setTimeout(r,160));await ctx.suspend();$('play').textContent='▶ Play';$('play').setAttribute('aria-pressed','false');$('status').textContent='Stopped'}
+async function stop(){if(!ctx)return;playing=false;for(let v=0;v<5;v++)updateVoicePitch(v);master.gain.setTargetAtTime(0,ctx.currentTime,.025);await new Promise(r=>setTimeout(r,160));await ctx.suspend();$('play').textContent='▶ Play';$('play').setAttribute('aria-pressed','false');$('status').textContent='Stopped'}
 $('play').onclick=async()=>{const b=$('play');b.disabled=true;try{await(playing?stop():start())}catch(error){$('status').textContent=`Audio unavailable: ${error.message}`;if(ctx){await ctx.close().catch(()=>{});ctx=null;node=null;master=null;outputRouter=null;outputRouted=false}playing=false;b.textContent='▶ Try again'}finally{b.disabled=false}};
 const waveData=[new Float32Array(2048),new Float32Array(2048)];
 function canvasContext(id){const canvas=$(id),r=canvas.getBoundingClientRect(),dpr=devicePixelRatio||1;const w=Math.round(r.width*dpr),h=Math.round(r.height*dpr);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,r.width,r.height);return[c,r.width,r.height]}
@@ -152,7 +167,8 @@ function draw(){
  for(let ch=0;ch<2;ch++){if(playing)(ch?rightAnalyser:leftAnalyser)?.getFloatTimeDomainData(waveData[ch]);else waveData[ch].fill(0);c.strokeStyle=ch?'#76c4d0aa':'#dfb56bcc';c.lineWidth=1.3;c.beginPath();for(let i=0;i<1024;i++){const sample=waveData[ch][i];peak=Math.max(peak,Math.abs(sample));const x=i/1023*w,y=h/2-sample*h*1.4;i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}
  $('level').textContent=peak>1e-5?`${(20*Math.log10(peak)).toFixed(1)} dB`:'−∞ dB';
  const[p,pw,ph]=canvasContext('positions');p.strokeStyle='#33414a';p.beginPath();p.moveTo(pw/2,6);p.lineTo(pw/2,ph-8);p.stroke();
- for(let v=0;v<CHORDS[state.chord].notes.length;v++){const y=14+v*(ph-25)/5;const x=14+(positions[v]+1)/2*(pw-28);p.strokeStyle='#27343c';p.beginPath();p.moveTo(14,y);p.lineTo(pw-14,y);p.stroke();p.fillStyle=state.muted[v]||(state.solo.some(Boolean)&&!state.solo[v])?'#55616a':v%2?'#76c4d0':'#dfb56b';p.beginPath();p.arc(x,y,4,0,Math.PI*2);p.fill()}
+ const voiceCount=CHORDS[state.chord].notes.length,anySolo=state.solo.some((solo,v)=>solo&&v<voiceCount);
+ for(let v=0;v<voiceCount;v++){const y=14+v*(ph-25)/5;const x=14+(positions[v]+1)/2*(pw-28);p.strokeStyle='#27343c';p.beginPath();p.moveTo(14,y);p.lineTo(pw-14,y);p.stroke();p.fillStyle=state.muted[v]||(anySolo&&!state.solo[v])?'#55616a':v%2?'#76c4d0':'#dfb56b';p.beginPath();p.arc(x,y,4,0,Math.PI*2);p.fill()}
  requestAnimationFrame(draw);
 }
 updateUI();fill($('volume'));refreshOutputPairs();draw();
@@ -160,6 +176,7 @@ updateUI();fill($('volume'));refreshOutputPairs();draw();
 if(document.modelContext?.registerTool){
  const lifecycle=new AbortController();const properties=Object.fromEntries(Object.entries(PARAMS).map(([k,d])=>[k,{type:d.step===1?'integer':'number',minimum:d.min,maximum:d.max}]));
  Object.assign(properties,{chord:{type:'integer',minimum:0,maximum:CHORDS.length-1},variation:{type:'integer',minimum:0,maximum:7},octave:{type:'integer',minimum:-1,maximum:1},waveform:{type:'integer',minimum:0,maximum:WAVEFORMS.length-1,description:'0 original reel, 1 sine, 2 triangle, 3 saw, 4 square'}});
+ Object.assign(properties,{voiceOffsets:{type:'array',minItems:5,maxItems:5,items:{type:'integer',minimum:-12,maximum:12}},melodyEnabled:{type:'array',minItems:5,maxItems:5,items:{type:'boolean'}},melodySteps:{type:'array',minItems:5,maxItems:5,items:{type:'array',minItems:4,maxItems:4,items:{type:'integer',minimum:-12,maximum:12}}}});
  for(const tool of [
   {name:'read_synth_parameters',description:'Read the current drone parameters and playback state.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute:()=>({parameters:structuredClone(state),playing,volume})},
   {name:'configure_synth_parameters',description:'Adjust drone sound parameters. Does not start audio. Use the visible Play button to listen.',inputSchema:{type:'object',properties,additionalProperties:false},annotations:{readOnlyHint:false},execute:input=>({parameters:applyPatch(input)})},

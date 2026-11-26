@@ -21,6 +21,25 @@ export const CHORDS = [
  {name:'C D E G · close',notes:[293.66,329.63,392,523.25],harmonics:false,gain:.25,justRoot:261.63,justRatios:[9/8,5/4,3/2,2]},
  {name:'C D E G · wide',notes:[130.81,196,293.66,329.63],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1/2,3/4,9/8,5/4]},
  {name:'C D E G · low',notes:[130.81,146.83,164.81,196],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1/2,9/16,5/8,3/4]},
+ // Stacked perfect fourths; just tuning uses successive 4:3 ratios.
+ {name:'Quartal · C F B♭ · 3 notes',notes:[261.63,349.23,466.16],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1,4/3,16/9]},
+ {name:'Quartal · C F B♭ E♭ · 4 notes',notes:[261.63,349.23,466.16,622.25],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1,4/3,16/9,64/27]},
+ {name:'Quartal · C F B♭ E♭ A♭ · 5 notes',notes:[261.63,349.23,466.16,622.25,830.61],harmonics:false,gain:.267,justRoot:261.63,justRatios:[1,4/3,16/9,64/27,256/81]},
+ {name:'Quartal · C B♭ F E♭ · wide',notes:[130.81,233.08,349.23,622.25],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1/2,8/9,4/3,64/27]},
+ {name:'Quartal · C F B♭ E♭ · low',notes:[130.81,174.61,233.08,311.13],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1/2,2/3,8/9,32/27]},
+ {name:'Tension · C F♯ B',notes:[261.63,369.99,493.88],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1,45/32,15/8],description:'A tritone followed by a perfect fourth. Uneasy and open; just tuning makes the upper fourth pure.'},
+ {name:'Double tritone · C F♯ C',notes:[261.63,369.99,523.25],harmonics:false,gain:.25,justRoot:261.63,justRatios:[1,Math.SQRT2,2],description:'Two equal tritones divide the octave. The tuning blend preserves that symmetric division.'},
+ {name:'Quartal · D G C · sparse high',notes:[293.66,392,523.25],harmonics:false,gain:.25,justRoot:293.66,justRatios:[1,4/3,16/9],description:'Two stacked fourths in a light, high register.'},
+];
+const chordRange=(start,count)=>Array.from({length:count},(_,i)=>start+i);
+export const CHORD_GROUPS = [
+ {id:'quartal',name:'Quartal',description:'Stacked perfect fourths, with wide and low alternatives.',chords:[...chordRange(22,5),29]},
+ {id:'tension',name:'Tension',description:'Tritones introduce a colder, more unstable atmosphere.',chords:chordRange(27,2)},
+ {id:'gacd',name:'G A C D',description:'An open four-note collection, without a major or minor third.',chords:chordRange(6,4)},
+ {id:'cdfga',name:'C D F G A',description:'A warm five-note collection with room to move.',chords:chordRange(10,4)},
+ {id:'gbcdf',name:'G B♭ C D F',description:'A dark five-note collection, with close and spread voicings.',chords:chordRange(14,4)},
+ {id:'cdeg',name:'C D E G',description:'A brighter four-note collection built around C.',chords:chordRange(18,4)},
+ {id:'reel',name:'Reel chords',description:'The six original voicings, including the G–C–F quartal chord.',chords:chordRange(0,6)},
 ];
 export const WAVEFORMS = ['Original reel', 'Sine', 'Triangle', 'Saw', 'Square'];
 export const PARAMS = {
@@ -43,8 +62,9 @@ export const PARAMS = {
  life:{label:'Voice breathing',min:0,max:.6,step:.01,value:0,unit:'%'},
  drift:{label:'Pitch drift',min:0,max:6,step:.1,value:0,unit:'ct'},
  lifeRate:{label:'Breathing speed',min:.1,max:4,step:.01,value:1,unit:'×'},
+ melodyStep:{label:'Melody step length',min:.5,max:30,step:.5,value:8,unit:'s'},
 };
-export const DEFAULTS = {...Object.fromEntries(Object.entries(PARAMS).map(([k,v])=>[k,v.value])),chord:4,variation:0,octave:0,waveform:0,levels:[1,1,1,1,1],muted:[false,false,false,false,false],solo:[false,false,false,false,false]};
+export const DEFAULTS = {...Object.fromEntries(Object.entries(PARAMS).map(([k,v])=>[k,v.value])),chord:4,variation:0,octave:0,waveform:0,levels:[1,1,1,1,1],muted:[false,false,false,false,false],solo:[false,false,false,false,false],voiceOffsets:[0,0,0,0,0],melodyEnabled:[false,false,false,false,false],melodySteps:Array.from({length:5},()=>[0,1,0,-1])};
 const TAU = Math.PI*2, SIZE=4096, H=24;
 const TABLE=Float64Array.from({length:SIZE+1},(_,i)=>Math.sin(TAU*i/SIZE));
 function sine(p){const x=(p-Math.floor(p))*SIZE;const i=x|0;return TABLE[i]+(TABLE[i+1]-TABLE[i])*(x-i)}
@@ -55,13 +75,14 @@ export function validatePatch(patch){
  for(const [key,value] of Object.entries(patch)){
   if(PARAMS[key]){const d=PARAMS[key];if(typeof value!=='number'||!Number.isFinite(value)||value<d.min||value>d.max||(d.step===1&&!Number.isInteger(value)))throw Error(`Invalid ${key}`);result[key]=value}
   else if(['chord','variation','octave','waveform'].includes(key)){const bounds={chord:[0,CHORDS.length-1],variation:[0,7],octave:[-1,1],waveform:[0,WAVEFORMS.length-1]}[key];if(!Number.isInteger(value)||value<bounds[0]||value>bounds[1])throw Error(`Invalid ${key}`);result[key]=value}
-  else if(['levels','muted','solo'].includes(key)){if(!Array.isArray(value)||value.length!==5||!value.every(v=>key==='levels'?typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=1.5:typeof v==='boolean'))throw Error(`Invalid ${key}`);result[key]=[...value]}
+  else if(['levels','muted','solo','voiceOffsets','melodyEnabled'].includes(key)){if(!Array.isArray(value)||value.length!==5||!Array.from(value).every(v=>key==='levels'?typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=1.5:key==='voiceOffsets'?Number.isInteger(v)&&v>=-12&&v<=12:typeof v==='boolean'))throw Error(`Invalid ${key}`);result[key]=[...value]}
+  else if(key==='melodySteps'){if(!Array.isArray(value)||value.length!==5||!Array.from(value).every(steps=>Array.isArray(steps)&&steps.length===4&&Array.from(steps).every(v=>Number.isInteger(v)&&v>=-12&&v<=12)))throw Error('Invalid melodySteps');result[key]=value.map(steps=>[...steps])}
   else throw Error(`Unknown parameter: ${key}`);
  }
  return result;
 }
 export function variationOctave(variation,v,count){return [false,v===0,v<2,v<3,v%2===1,v===count-1,v>=count-2,v===count-2][variation]?1:0}
-export function voiceFrequency(p,v){
+export function voiceFrequency(p,v,melodyIndex=0){
  const chord=CHORDS[p.chord];if(v>=chord.notes.length)return 0;
  const hz=chord.notes[v];
  let just;
@@ -71,17 +92,19 @@ export function voiceFrequency(p,v){
   const pc=((midi%12)+12)%12;const ratios={0:1,2:9/8,5:4/3,7:3/2};
   just=261.63*Math.pow(2,Math.floor(midi/12)-5)*ratios[pc];
  }
- return hz*Math.pow(just/hz,p.tuning)*Math.pow(2,(p.transpose+12*p.octave+12*variationOctave(p.variation,v,chord.notes.length)+p.fine/100)/12);
+ const movement=(p.voiceOffsets?.[v]??0)+(p.melodyEnabled?.[v]?p.melodySteps[v][melodyIndex]:0);
+ return hz*Math.pow(just/hz,p.tuning)*Math.pow(2,(p.transpose+12*p.octave+12*variationOctave(p.variation,v,chord.notes.length)+p.fine/100+movement)/12);
 }
 export class BloomEngine {
- constructor(sampleRate=48000){this.sr=sampleRate;this.p=JSON.parse(JSON.stringify(DEFAULTS));this.time=0;this.bloomClock=0;this.spatialClock=0;this.lifeClock=0;this.positions=Array(5).fill(0);this.voices=Array.from({length:5},()=>({ph:new Float64Array(3),inc:new Float64Array(3),gain:new Float64Array(H),pan:0,amp:0,wet:0}));}
+ constructor(sampleRate=48000){this.sr=sampleRate;this.p=JSON.parse(JSON.stringify(DEFAULTS));this.time=0;this.bloomClock=0;this.spatialClock=0;this.lifeClock=0;this.melodyClock=0;this.positions=Array(5).fill(0);this.voices=Array.from({length:5},()=>({ph:new Float64Array(3),inc:new Float64Array(3),gain:new Float64Array(H),pan:0,amp:0,wet:0}));}
+ get melodyIndex(){return Math.floor(this.melodyClock)%4}
  update(patch){Object.assign(this.p,validatePatch(patch))}
  render(left,right){
-  const p=this.p,n=left.length,sr=this.sr,chord=CHORDS[p.chord],anySolo=p.solo.some(Boolean);
+  const p=this.p,n=left.length,sr=this.sr,chord=CHORDS[p.chord],anySolo=p.solo.some((solo,v)=>solo&&v<chord.notes.length);
   left.fill(0);right.fill(0);
   for(let v=0;v<5;v++){
    const voice=this.voices[v],active=v<chord.notes.length;
-   let hz=voiceFrequency(p,v);
+   let hz=voiceFrequency(p,v,this.melodyIndex);
    const lifePhase=TAU*this.lifeClock/(7.5+1.8*v)+1.3*v;
    hz*=Math.pow(2,p.drift*(.7*Math.sin(TAU*this.lifeClock/(11+2.7*v)+v)+.3*Math.sin(TAU*this.lifeClock/(6.3+v)+.7*v))/1200);
    const targetAmp=active&&!p.muted[v]&&(!anySolo||p.solo[v])?chord.gain/chord.notes.length*p.levels[v]*(1+p.life*Math.sin(lifePhase)):0;
@@ -125,5 +148,6 @@ export class BloomEngine {
    voice.inc.set(increments);voice.gain.set(gains);voice.amp=targetAmp;voice.pan=targetPan;voice.wet=p.detuneMix;
   }
   this.time+=n/sr;this.bloomClock+=n/sr*p.bloomRate;this.spatialClock+=n/sr*p.spatialRate;this.lifeClock+=n/sr*p.lifeRate;
+  if(p.melodyEnabled.some((enabled,v)=>enabled&&v<chord.notes.length))this.melodyClock=(this.melodyClock+n/sr/p.melodyStep)%4;
  }
 }
