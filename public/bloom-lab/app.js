@@ -1,7 +1,9 @@
-import {CHORDS,WAVEFORMS,PARAMS,DEFAULTS,validatePatch,voiceFrequency} from './engine.js';
+import './cv-audio-selector.js';
+import {BloomEngine,CHORDS,WAVEFORMS,PARAMS,DEFAULTS,validatePatch,voiceFrequency} from './engine.js';
 import {createChordPicker,noteName} from './chord-picker.js';
 let state=structuredClone(DEFAULTS),ctx,node,master,analyser,splitter,leftAnalyser,rightAnalyser,outputRouter,outputRouted=false,playing=false,positions=[0,0,0,0,0],volume=.65,outputDeviceId='',outputPair=0;
 const $=id=>document.getElementById(id);
+let fallbackEngine;
 let chordPicker,melodyIndex=0;
 const groups=[
  ['Pitch & voicing','Reel chords, exploration families, and open quartal voicings built from fourths.', ['chord','variation','octave','transpose','fine','tuning','tone']],
@@ -36,7 +38,7 @@ function updateUI(){
   for(let step=0;step<4;step++){const input=$(`melody-step-${v}-${step}`);input.value=state.melodySteps[v][step];input.disabled=!hz||!state.melodyEnabled[v]}
  }
 }
-function applyPatch(patch,custom=true){const clean=validatePatch(patch);Object.assign(state,clean);node?.port.postMessage(clean);updateUI();if(custom){$('patch-state').textContent='Custom sound';document.querySelectorAll('[data-preset]').forEach(b=>b.classList.remove('selected'))}return structuredClone(state)}
+function applyPatch(patch,custom=true){const clean=validatePatch(patch);Object.assign(state,clean);node?.port?.postMessage(clean);fallbackEngine?.update(clean);updateUI();if(custom){$('patch-state').textContent='Custom sound';document.querySelectorAll('[data-preset]').forEach(b=>b.classList.remove('selected'))}return structuredClone(state)}
 for(const [index,[title,description,keys]]of groups.entries()){
  const section=document.createElement('section');section.className='panel';section.innerHTML=`<div class="panel-heading"><span class="panel-index">0${index+1}</span><h3>${title}</h3></div><p>${description}</p>`;
  for(const key of keys){const div=document.createElement('div');div.className='control';if(key==='chord'){div.innerHTML='<label for="chord">Chord</label><button type="button" id="chord" class="chord-trigger"><span class="chord-trigger-name"></span><span class="chord-trigger-notes"></span><span class="chord-trigger-action">Browse voicings</span></button><small id="chord-note" class="control-note" aria-live="polite"></small>'}
@@ -67,12 +69,10 @@ document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>preset(b.dat
 $('reset').onclick=()=>preset('combined');
 $('volume').oninput=e=>{volume=Number(e.target.value);$('volume-value').textContent=`${Math.round(volume*100)}%`;fill(e.target);if(master)master.gain.setTargetAtTime(playing?volume:0,ctx.currentTime,.03)};
 const outputNote=message=>{$('output-note').textContent=message};
-function addOutputOption(device){
- if(!device.deviceId||device.deviceId==='default')return;
- let option=[...$('audio-output').options].find(o=>o.value===device.deviceId);
- if(!option){option=new Option(device.label||'Audio output',device.deviceId);$('audio-output').add(option)}
- else if(device.label)option.textContent=device.label;
-}
+const deviceSelector=$('audio-output');
+const systemOutput={deviceId:'',label:'System default'};
+let outputDevices=[systemOutput];
+deviceSelector.populateDevices(outputDevices,'');
 function refreshOutputPairs(){
  const max=ctx?Math.min(8,ctx.destination.maxChannelCount):2;
  const menu=$('output-pair');menu.replaceChildren();
@@ -115,7 +115,8 @@ $('find-outputs').onclick=async()=>{
   if(!navigator.mediaDevices)throw Error('Audio device selection requires a secure browser page.');
   if(navigator.mediaDevices.selectAudioOutput){
    const device=await navigator.mediaDevices.selectAudioOutput();
-   addOutputOption(device);$('audio-output').value=device.deviceId;
+   outputDevices=[...outputDevices.filter(d=>d.deviceId!==device.deviceId),device];
+   deviceSelector.populateDevices(outputDevices,device.deviceId);
    await setOutputDevice(device.deviceId);
   }else{
    // Some browsers expose named outputs only after a brief device permission grant.
@@ -125,40 +126,57 @@ $('find-outputs').onclick=async()=>{
     stream.getTracks().forEach(track=>track.stop());
     devices=await navigator.mediaDevices.enumerateDevices();
    }
-   for(const device of devices.filter(d=>d.kind==='audiooutput'))addOutputOption(device);
-   outputNote($('audio-output').options.length>1?'Choose the ES-8 above. Any temporary input stream was stopped.':'No separate output was found. Connect the ES-8, then try again.');
+   outputDevices=[systemOutput,...devices.filter(d=>d.kind==='audiooutput'&&d.deviceId&&d.deviceId!=='default')];
+   deviceSelector.populateDevices(outputDevices,outputDeviceId);
+   outputNote(outputDevices.length>1?'Choose the ES-8 above. Any temporary input stream was stopped.':'No separate output was found. Connect the ES-8, then try again.');
   }
- }catch(error){outputNote(error.name==='NotAllowedError'?'Device access was declined. You can set the ES-8 as the system output.':error.message)}
+ }catch(error){deviceSelector.populateDevices(outputDevices,outputDeviceId);outputNote(error.name==='NotAllowedError'?'Device access was declined. You can set the ES-8 as the system output.':error.message)}
  finally{button.disabled=false}
 };
-$('audio-output').onchange=async e=>{
+deviceSelector.onchange=async e=>{
  const previous=outputDeviceId;
- try{await setOutputDevice(e.target.value)}catch(error){e.target.value=previous;outputNote(error.message)}
+ try{await setOutputDevice(e.detail?.deviceId||'')}catch(error){deviceSelector.populateDevices(outputDevices,previous);outputNote(error.message)}
 };
 $('output-pair').onchange=e=>{
  const previous=outputPair;
  try{outputPair=Number(e.target.value);routeOutput();outputNote(`Stereo routed to outputs ${outputPair+1} + ${outputPair+2}. Start low.`)}
  catch(error){outputPair=previous;e.target.value=String(previous);routeOutput();outputNote(`Could not use that output pair: ${error.message}`)}
 };
+function updateAudioFeedback(data){if(data.positions)positions=data.positions;if(Number.isInteger(data.melodyIndex)&&data.melodyIndex!==melodyIndex){melodyIndex=data.melodyIndex;for(let v=0;v<5;v++)updateVoicePitch(v)}if(data.error)$('status').textContent=data.error}
 async function start(){
  if(!ctx){
   ctx=new AudioContext({latencyHint:'interactive'});
   if(outputDeviceId)await ctx.setSinkId(outputDeviceId);
   refreshOutputPairs();
-  await ctx.audioWorklet.addModule(new URL('./processor.js',import.meta.url));
-  node=new AudioWorkletNode(ctx,'legio-bloom',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[2]});
+  try{
+   await ctx.audioWorklet.addModule(new URL('./processor.js',import.meta.url));
+   node=new AudioWorkletNode(ctx,'legio-bloom',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[2]});
+  }catch(error){
+   if(typeof ctx.createScriptProcessor!=='function')throw error;
+   console.warn('Bloom Lab is using main-thread audio processing.',error);
+   fallbackEngine=new BloomEngine(ctx.sampleRate);
+   fallbackEngine.update(state);
+   node=ctx.createScriptProcessor(1024,0,2);
+   node.onaudioprocess=({outputBuffer})=>{
+    const left=outputBuffer.getChannelData(0),right=outputBuffer.getChannelData(1);
+    for(let i=0;i<left.length;i+=128)fallbackEngine.render(left.subarray(i,i+128),right.subarray(i,i+128));
+    updateAudioFeedback(fallbackEngine);
+   };
+  }
   const compressor=ctx.createDynamicsCompressor();compressor.threshold.value=-9;compressor.knee.value=9;compressor.ratio.value=8;compressor.attack.value=.004;compressor.release.value=.15;
   master=ctx.createGain();master.gain.value=0;analyser=ctx.createAnalyser();analyser.fftSize=2048;
   splitter=ctx.createChannelSplitter(2);leftAnalyser=ctx.createAnalyser();rightAnalyser=ctx.createAnalyser();leftAnalyser.fftSize=2048;rightAnalyser.fftSize=2048;
   node.connect(compressor).connect(master);master.connect(analyser);master.connect(splitter);splitter.connect(leftAnalyser,0);splitter.connect(rightAnalyser,1);routeOutput();
-  node.port.onmessage=e=>{if(e.data.positions)positions=e.data.positions;if(Number.isInteger(e.data.melodyIndex)&&e.data.melodyIndex!==melodyIndex){melodyIndex=e.data.melodyIndex;for(let v=0;v<5;v++)updateVoicePitch(v)}if(e.data.error)$('status').textContent=e.data.error};
+  if(node.port){
+   node.port.onmessage=e=>updateAudioFeedback(e.data);
   node.onprocessorerror=()=>{$('status').textContent='Audio stopped. Reload to restart.';master.gain.value=0;playing=false;$('play').textContent='Reload required';$('play').disabled=true};
   node.port.postMessage(state);
+  }
  }
  await ctx.resume();playing=true;for(let v=0;v<5;v++)updateVoicePitch(v);master.gain.setTargetAtTime(volume,ctx.currentTime,.07);$('play').textContent='■ Stop';$('play').setAttribute('aria-pressed','true');$('status').textContent='Playing';
 }
 async function stop(){if(!ctx)return;playing=false;for(let v=0;v<5;v++)updateVoicePitch(v);master.gain.setTargetAtTime(0,ctx.currentTime,.025);await new Promise(r=>setTimeout(r,160));await ctx.suspend();$('play').textContent='▶ Play';$('play').setAttribute('aria-pressed','false');$('status').textContent='Stopped'}
-$('play').onclick=async()=>{const b=$('play');b.disabled=true;try{await(playing?stop():start())}catch(error){$('status').textContent=`Audio unavailable: ${error.message}`;if(ctx){await ctx.close().catch(()=>{});ctx=null;node=null;master=null;outputRouter=null;outputRouted=false}playing=false;b.textContent='▶ Try again'}finally{b.disabled=false}};
+$('play').onclick=async()=>{const b=$('play');b.disabled=true;try{await(playing?stop():start())}catch(error){$('status').textContent=`Audio unavailable: ${error.message}`;if(ctx){await ctx.close().catch(()=>{});ctx=null;node=null;fallbackEngine=null;master=null;outputRouter=null;outputRouted=false}playing=false;b.textContent='▶ Try again'}finally{b.disabled=false}};
 const waveData=[new Float32Array(2048),new Float32Array(2048)];
 function canvasContext(id){const canvas=$(id),r=canvas.getBoundingClientRect(),dpr=devicePixelRatio||1;const w=Math.round(r.width*dpr),h=Math.round(r.height*dpr);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,r.width,r.height);return[c,r.width,r.height]}
 function draw(){
